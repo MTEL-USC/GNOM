@@ -1,0 +1,8 @@
+*html
+*mat
+*bson
+*svg
+*png
+output/
+cluster_output/
+data/

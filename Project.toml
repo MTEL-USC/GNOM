@@ -1,0 +1,4 @@
+name = "GNOM"
+uuid = "00242ee3-fd59-45cf-91ad-af2f6975ef27"
+authors = ["Benoit Pasquier <briochemc@gmail.com>"]
+version = "0.1.0"

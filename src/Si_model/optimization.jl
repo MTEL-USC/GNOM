@@ -34,7 +34,7 @@ gradient(λ) = F1Method.gradient(f, F, ∇ₓf, ∇ₓF, mem, λ, CTKAlg(), prep
 hessian(λ) = F1Method.hessian(f, F, ∇ₓf, ∇ₓF, mem, λ, CTKAlg(), preprint="hess ", τstop=τstop)
 
 # Reduced g_tol for optimization
-opt = Optim.Options(store_trace=false, show_trace=true, extended_trace=false, g_tol=1e-3)
+opt = Optim.Options(store_trace=false, show_trace=true, extended_trace=false, g_tol=1e-5)
 
 #================================================
 Optimization run

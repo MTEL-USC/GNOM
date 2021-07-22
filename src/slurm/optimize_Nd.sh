@@ -19,4 +19,4 @@ export LD_LIBRARY_PATH=~/Applications/julia-1.6.2/lib
 cd /home/geovault-06/pasquier/Projects/GNOM
 
 # Optimize it!
-julia src/Nd_model/optimize.jl
+julia src/Nd_model/run.jl

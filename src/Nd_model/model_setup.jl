@@ -94,20 +94,18 @@ const POC = vnormalize(vectorize(matread(joinpath(AO_data, "WJ18/POC_WJ18.mat"))
 const AEOLIAN = let
     s_A_2D = AeolianSources.load()
     tmp = Any[]
-    for k in keys(AeolianSources.Chien_AEROSOLTYPE_NAMES)
-        v = s_A_2D[k]
+    for k in AeolianSources.Chien_AEROSOLTYPE_NAMES
+        v_2D = s_A_2D[k]
         # Take annual mean
-        v_annual = permutedims(dropdims(mean(v, dims=3), dims=3), (2,1))
+        v_2D_annual = permutedims(dropdims(mean(v_2D, dims=3), dims=3), (2,1))
         # Regrid to OCIM2 grid
-        v_regridded = regrid(v_annual, s_A_2D[:lat], s_A_2D[:lon], grd)
+        v_2D_annual_regridded = regrid(v_2D_annual, s_A_2D[:lat], s_A_2D[:lon], grd)
         # Paint the top layer
         v_3D = zeros(size(grd)...)
-        for i in 1:size(grd)[3]
-            v_3D[:,:,i] .= ustrip.(upreferred.(v_regridded * u"kg/m^2/s" / grd.δdepth[i]))
-        end
+        v_3D[:,:,1] .= ustrip.(upreferred.(v_2D_annual_regridded * u"kg/m^2/s" / grd.δdepth[1]))
         # Add surface-only aeolian source
-        v_surface_only = vectorize(v_3D, grd) .* (depthvec(grd) .== depthvec(grd)[1])
-        push!(tmp, (aeolian_sources[k], vnormalize(v_surface_only)))
+        v = vnormalize(vectorize(v_3D, grd))
+        push!(tmp, (k, v))
         # Add seafloor-located aeolian-inferred sediment source
         #v_seafloor_only = v_3D[iwet] .* isseafloorvec(grd)
         #push!(tmp, (Symbol(aeolian_sources[k], "sed"), vnormalize(v_seafloor_only)))

@@ -2,9 +2,9 @@
 
 [[AIBECS]]
 deps = ["Bijectors", "CodecZlib", "DataDeps", "DataFrames", "Dates", "DiffEqBase", "Distances", "Distributions", "Downloads", "FieldMetadata", "Flatten", "ForwardDiff", "ImageFiltering", "Interpolations", "JLD2", "LinearAlgebra", "MetadataArrays", "NCDatasets", "NearestNeighbors", "OceanGrids", "Printf", "RecipesBase", "Reexport", "Shapefile", "SparseArrays", "StringDistances", "SuiteSparse", "UnPack", "Unitful", "UnitfulRecipes"]
-git-tree-sha1 = "db7f464702dd129329733e19d08e2b4ef6c2388a"
+git-tree-sha1 = "5d4eb337d6953bb9494b2126f1167e3a035729a9"
 uuid = "ace601d6-714c-11e9-04e5-89b7fad23838"
-version = "0.10.1"
+version = "0.10.2"
 
 [[AbstractFFTs]]
 deps = ["LinearAlgebra"]
@@ -570,9 +570,9 @@ version = "1.3.14+0"
 
 [[GridLayoutBase]]
 deps = ["GeometryBasics", "InteractiveUtils", "Match", "Observables"]
-git-tree-sha1 = "97b481deb387775da2ca751cc542610750bcdfc3"
+git-tree-sha1 = "d44945bdc7a462fa68bb847759294669352bd0a4"
 uuid = "3955a311-db13-416c-9275-1d80ed98e5e9"
-version = "0.5.6"
+version = "0.5.7"
 
 [[Grisu]]
 git-tree-sha1 = "53bb909d1151e57e2484c3d1b53e19552b887fb2"
@@ -1605,9 +1605,9 @@ version = "1.4.0"
 
 [[VectorizationBase]]
 deps = ["ArrayInterface", "Hwloc", "IfElse", "Libdl", "LinearAlgebra", "Static"]
-git-tree-sha1 = "b609848b41158b8cc13a72dc6deb9511f9a96187"
+git-tree-sha1 = "ddeac5d8aad03c17bdc8efd45246e82fc52d12f4"
 uuid = "3d5dd08c-fd9d-11e8-17fa-ed2836048c2f"
-version = "0.20.22"
+version = "0.20.24"
 
 [[WeakRefStrings]]
 deps = ["DataAPI", "Random", "Test"]

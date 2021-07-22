@@ -70,7 +70,7 @@ const grd, T = let
         Circulation.load()
     end
 end
-circname = debug ? "debug" : string(Circulation)
+circname = debug ? "debug" : split(string(Circulation), '.')[2]
 const nb = count(iswet(grd))
 # He is tehcnically not required for the Si model
 # but having it here reduces boilerplate.

@@ -2,9 +2,9 @@
 
 [[AIBECS]]
 deps = ["Bijectors", "CodecZlib", "DataDeps", "DataFrames", "Dates", "DiffEqBase", "Distances", "Distributions", "Downloads", "FieldMetadata", "Flatten", "ForwardDiff", "ImageFiltering", "Interpolations", "JLD2", "LinearAlgebra", "MetadataArrays", "NCDatasets", "NearestNeighbors", "OceanGrids", "Printf", "RecipesBase", "Reexport", "Shapefile", "SparseArrays", "StringDistances", "SuiteSparse", "UnPack", "Unitful", "UnitfulRecipes"]
-git-tree-sha1 = "5d4eb337d6953bb9494b2126f1167e3a035729a9"
+git-tree-sha1 = "b7d49b4697c28966338b819a5771f70b1da5d068"
 uuid = "ace601d6-714c-11e9-04e5-89b7fad23838"
-version = "0.10.2"
+version = "0.10.3"
 
 [[AbstractFFTs]]
 deps = ["LinearAlgebra"]
@@ -927,9 +927,9 @@ uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 
 [[LoopVectorization]]
 deps = ["ArrayInterface", "DocStringExtensions", "IfElse", "LinearAlgebra", "OffsetArrays", "Polyester", "Requires", "SLEEFPirates", "Static", "StrideArraysCore", "ThreadingUtilities", "UnPack", "VectorizationBase"]
-git-tree-sha1 = "0df87659132a077b3f7e9f7fca8c9c59d4965071"
+git-tree-sha1 = "06c91d5495c32bca6b843551a1331c3cd2fb23d0"
 uuid = "bdcacae8-1622-11e9-2a5c-532679323890"
-version = "0.12.52"
+version = "0.12.53"
 
 [[Lz4_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1381,9 +1381,9 @@ version = "0.3.0"
 
 [[SciMLBase]]
 deps = ["ArrayInterface", "CommonSolve", "ConstructionBase", "Distributed", "DocStringExtensions", "IteratorInterfaceExtensions", "LinearAlgebra", "Logging", "RecipesBase", "RecursiveArrayTools", "StaticArrays", "Statistics", "Tables", "TreeViews"]
-git-tree-sha1 = "afa011b411259faa53ccf95b8f18f1e704535c3d"
+git-tree-sha1 = "f0bf114650476709dd04e690ab2e36d88368955e"
 uuid = "0bca4576-84f4-4d90-8ffe-ffa030f20462"
-version = "1.18.1"
+version = "1.18.2"
 
 [[Serialization]]
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
@@ -1596,6 +1596,12 @@ deps = ["ConstructionBase", "Dates", "LinearAlgebra", "Random"]
 git-tree-sha1 = "a981a8ef8714cba2fd9780b22fd7a469e7aaf56d"
 uuid = "1986cc42-f94f-5a68-af5c-568840ba703d"
 version = "1.9.0"
+
+[[UnitfulMoles]]
+deps = ["Unitful"]
+git-tree-sha1 = "0ce82f066f57a9c2dd00ee5c47c9a3677be61e70"
+uuid = "999f2bd7-36bf-5ba7-9bc1-c9473aa75374"
+version = "0.1.0"
 
 [[UnitfulRecipes]]
 deps = ["RecipesBase", "Unitful"]

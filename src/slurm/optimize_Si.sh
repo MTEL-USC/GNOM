@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#SBATCH --job-name=Ndopt
-#SBATCH --output=cluster_output/Ndopt%j.out
-#SBATCH --error=cluster_output/Ndopt%j.err
+#SBATCH --job-name=Siopt
+#SBATCH --output=cluster_output/Siopt%j.out
+#SBATCH --error=cluster_output/Siopt%j.err
 #SBATCH --time=20:00:00
 #SBATCH --nodes=1
 #SBATCH --mem=64GB

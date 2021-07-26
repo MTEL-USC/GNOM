@@ -116,7 +116,7 @@ const AEOL_Chienetal = let
         v_2D_annual_regridded = regrid(v_2D_annual, s_A_2D[:lat], s_A_2D[:lon], grd)
         # Paint the top layer only, with units
         OneHot3rdDim = reshape(grd.depth .== grd.depth[1], (1,1,size(grd)[3]))
-        v_3D = (v_2D_annual_regridded * u"kg/m^2/yr" * DustNd / grd.δdepth[1]) .* OneHot3rdDim
+        v_3D = (v_2D_annual_regridded * u"kg/m^2/s" * DustNd / grd.δdepth[1]) .* OneHot3rdDim
         # Convert to moles of Nd and vectorize
         v = vectorize(ustrip.(u"molNd/m^3/s", v_3D), grd)
         push!(tmp, (k, v))
@@ -142,21 +142,22 @@ const AEOL_Koketal = let
     end
     Dict(tmp)
 end
+# For dust particles, use the Kok et al data (from all regions)
 const dustparticles = let # Repeat the dust field throughout the water column
     dust_tot_Kok = sum(v for (r,v) in pairs(AEOL_Koketal))
     dust3D = repeat(rearrange_into_3Darray(dust_tot_Kok, grd)[:,:,1], outer=(1,1,24))
     vnormalize(vectorize(dust3D, grd))
 end
 # Opal (bSi) from side Si-cycle model
-# TODO: Add option to run it here, so that changes can be made to the grid.
+# Note: The Si model optimization must have been run before for this data to be used!
 const bSi = jldopen(joinpath(output_path, "optimized_Simodel_$circname.jld2")) do file
     vnormalize(file["PSi"])
 end
-# sparsitty pattern of scavenging transport operators
-const iscav, jscav, _ = findnz(buildIabove(grd) + I)
 # Instead of simply building the matrices with tranposrtoperator, to speed things up, these are constant
 # vectors of the values that go into the matrices. This is much more complicated now, but it is much faster, too
-# so you know...
+# so better for optimization...
+# sparsitty pattern of scavenging transport operators
+const iscav, jscav, _ = findnz(buildIabove(grd) + I)
 const v_scav_noremin_dict, v_scav_justremin_dict = let
     ijscav = findall(!iszero, buildIabove(grd) + I)
     δz = ustrip.(grd.δz_3D[iswet(grd)])
@@ -215,42 +216,30 @@ s_tot_iso(p) = sum(sₖ(p) for sₖ in (s_dust_iso, s_aeol_iso, s_sed_iso, s_riv
 # Aeolian sources
 
 # 1. Dust sources
-# Load dust-deposition fields from Hamilton data
-include(joinpath(root_path, "src", "Julia", "data_processing", "Hamilton_dust_dep.jl"))
-const σ_raw_dust = sum(∫dV(yearly_dust_dep(r, grd), grd) for r in DUST_SOURCE_REGIONS[!,:region])
-# Julia way of regions
+# Dust-deposition fields from Kok et al
 const DUST_REGIONS = AeolianSources.Kok_REGIONS_NAMES
+# functions to unpack ε values and solubilities
 ε_dust(r, p) = AIBECS.UnPack.unpack(p, Val(Symbol(:ε_, r, :_dust)))
-α_dust(r, p) = AIBECS.UnPack.unpack(p, Val(Symbol(:α_, r, :_dust)))
 ε_dust(p) = [ε_dust(r, p) for r in DUST_REGIONS]
-α_dust(p) = [α_dust(r, p) for r in DUST_REGIONS]
-
-
-σ_dust(p) = AIBECS.UnPack.unpack(p, Val(:σ_dust)) # only one σ_dust
-to_dust_region_string(r) = filter(:reg2 => isequal(Symbol(r)), DUST_SOURCE_REGIONS)[1,:region]
-s_dust_normalized_tmp(r) = ustrip.(yearly_dust_dep(to_dust_region_string(r), grd) / σ_raw_dust)
-const s_dust_normalized_arr = reduce(hcat, s_dust_normalized_tmp(r) for r in instances(DustRegion))
-const s_dust_tot_arr = dropdims(sum(s_dust_normalized_arr, dims=2), dims=2)
-#s_dust(p) = s_dust_tot_arr * σ_dust(p)
-s_dust(p) = s_dust_normalized_arr * (α_dust(p) * σ_dust(p))
-s_dust_iso(p) = s_dust_normalized_arr * (R.(ε_dust(p)) .* α_dust(p) * σ_dust(p))
-# not fast but for diagnosis:
-s_dust(r, p) = σ_dust(p) * α_dust(r, p) * view(s_dust_normalized_arr, :, Int(r))
-s_dust_iso(r, p) = R(ε_dust(r, p)) * s_dust(r, p)
-
+sol_dust(r, p) = AIBECS.UnPack.unpack(p, Val(Symbol(:sol_, r, :_dust)))
+sol_dust(p) = [sol_dust(r, p) for r in DUST_REGIONS]
+# constant Matrix of dust-deposited Nd (before dissolution) per region
+const s_dust_arr = reduce(hcat, v for (r,v) in AEOL_Koketal)
+# Dust source is then the sum of soluble Nd from each region
+s_dust(p) = s_dust_arr * sol_dust(p)
+s_dust_iso(p) = s_dust_arr * (R.(ε_dust(p)) .* sol_dust(p))
+# not used in optimization (slower) but useful for inspection
+s_dust(r, p) = AEOL_Koketal[r] * sol_dust(r, p)
+s_dust_iso(r, p) = AEOL_Koketal[r] * R(ε_dust(r, p)) * sol_dust(r, p)
 
 # 2. Volc source
-# Each aeolian source
-@enum AerosolType volc=1 # Just volcano used here
-const σ_t_aeol_val = [Val(Symbol(:σ_, t)) for t in instances(AerosolType)]
-σ_aeol(t, p) = AIBECS.UnPack.unpack(p, σ_t_aeol_val[Int(t)])
-v_aeol(t) = AEOL_Chienetal[Symbol(t)]
-s_aeol(t, p) = σ_aeol(t, p) * v_aeol(t)
-s_aeol(p) = sum(s_aeol(t, p) for t in instances(AerosolType))
-# isotopes
-ε_aeol(t, p) = AIBECS.UnPack.unpack(p, Val(Symbol(:ε_, t)))
-s_aeol_iso(t, p) = R(ε_aeol(t, p)) * s_aeol(t, p)
-s_aeol_iso(p) = sum(s_aeol_iso(t, p) for t in instances(AerosolType))
+# Only use the volcanic ash here source from Chien et al.
+# The assumption being that volcanic ash is more soluble therefore
+# it's the only aerosol type other than dust that we consider.
+sol_volc(p) = AIBECS.UnPack.unpack(p, Val(:sol_volc))
+s_volc(p) = sol_volc(p) * AEOL_Chienetal[:volc]
+s_volc_iso(p) =  (R(ε_volc(p)) * sol_volc(p)) * AEOL_Chienetal[:volc]
+
 
 # 3. Sedimentary source
 # Using the Robinson et al data for sedimentary εNd

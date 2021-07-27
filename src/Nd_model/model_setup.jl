@@ -238,6 +238,7 @@ s_dust_iso(r, p) = AEOL_Koketal[r] * R(ε_dust(r, p)) * sol_dust(r, p)
 # it's the only aerosol type other than dust that we consider.
 sol_volc(p) = AIBECS.UnPack.unpack(p, Val(:sol_volc))
 s_volc(p) = sol_volc(p) * AEOL_Chienetal[:volc]
+ε_volc(p) = AIBECS.UnPack.unpack(p, Val(:ε_volc))
 s_volc_iso(p) =  (R(ε_volc(p)) * sol_volc(p)) * AEOL_Chienetal[:volc]
 
 

@@ -71,13 +71,12 @@ tp_opt = AIBECS.table(p_optimized)
 
 
 
-jldsave(joinpath(output_path, "optimized_output.jld2"); DNd, εNd, εNdobs, DNdobs, s_optimized, tp_opt)
-jldsave(joinpath(archive_path, "optimized_output_$(headcommit)_run$(run_num).jld2"); DNd, εNd, εNdobs, DNdobs, s_optimized, tp_opt)
+jldsave(joinpath(archive_path, "optimized_output_$(headcommit)_run$(run_num)_$(circname).jld2"); DNd, εNd, εNdobs, DNdobs, s_optimized, tp_opt)
 
 println("Done!")
 
 # print optimized parameters in md table
-open(joinpath(archive_path, "optimized_parameters_$(headcommit)_run$(run_num).md"), "w") do f
+open(joinpath(archive_path, "optimized_parameters_$(headcommit)_run$(run_num)_$(circname).md"), "w") do f
     pretty_table(f, AIBECS.table(p_optimized)[:,[[1,2,3,4];6:end]], nosubheader=true, tf=tf_markdown)
 end
 

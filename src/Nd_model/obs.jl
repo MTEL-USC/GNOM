@@ -9,7 +9,6 @@ using DataFrames
 using DataDeps
 using Unitful: kg, L
 
-data_dir = "data/extra_eNd_and_Nd_data"
 
 
 # GEOTRACES data
@@ -81,7 +80,6 @@ const DNdobs, εNdobs = let
         DNdobs2, εNdobs2
     end
 
-    # TODO swap names 1 <-> 2
     println("Adding GEOTRACES IDP17 data...")
     DNdobs1, εNdobs1 = let
         DNdobs1 = GEOTRACES.observations("Nd")
@@ -97,6 +95,27 @@ const DNdobs, εNdobs = let
 
     println("Adding post GEOTRACES IDP17 data...")
     DNdobs3, εNdobs3 = let
+        # register our compilation of post-IDP17 Nd and εNd data
+        register(
+            DataDep(
+                "posd-IDP17_Nd_data",
+                """
+                TODO: This description is a draft and will be updated soon.
+
+                Marine neodymium and epsilon data taken from the literature after GEOTRACES IDP-17.
+
+                Compilation of data from the Indian Ocean (Amakawaet al., 2019), the Barents Sea (Laukert et al., 2018; Lauk-ert et al., 2019), the northern Iceland Basin (Morrison et al.,2019), the Northwestern Pacific (Che and Zhang, 2018), the Kerguelen Plateau (Grenier et al., 2018), the southeastern At-lantic Ocean (GA08, Rahlf et al., 2020; Rahlf et al., 2019;Rahlf et al., 2021; Rahlf et al., 2020), the Bay of Biscay (Dausmann et al., 2020; Dausmann et al., 2019), the Western North Atlantic (Stichel et al., 2020; Stichel et al., 2020), the arctic (Laukert et al., 2017; Laukert et al., 2017a, d), and theBermuda Atlantic Time-series Study (BATS; Laukert et al.,2017; Laukert et al., 2017b, c)
+
+                See Pasquier et al. (in prep) for more details
+                """,
+                "https://ndownloader.figshare.com/files/28958076",
+                sha2_256,
+                fetch_method = fallback_download,
+                post_fetch_method = unpack
+            )
+        )
+        # path to post-IDP17 Nd and εNd data
+        data3_dir = datadep"posd-IDP17_Nd_data"
         DNdobs3 = Vector{Float64}[]
         εNdobs3 = Vector{Float64}[]
         lat = Vector{Float64}[]
@@ -105,9 +124,9 @@ const DNdobs, εNdobs = let
         εlat = Vector{Float64}[]
         εlon = Vector{Float64}[]
         εdepth = Vector{Float64}[]
-        for f in readdir(data_dir)
+        for f in readdir(data3_dir)
             print("  $f")
-            Nd_df = XLSX.openxlsx(joinpath(data_dir, f)) do xf
+            Nd_df = XLSX.openxlsx(joinpath(data3_dir, f)) do xf
                 DataFrame(XLSX.gettable(xf["Nd_LLD"])...)
             end
             Nd_label = names(Nd_df)[findfirst(occursin.("Nd", names(Nd_df)))]
@@ -122,7 +141,7 @@ const DNdobs, εNdobs = let
             push!(depth, Nddepth[ikeep])
             print(" +$(length(Nd[ikeep])) Nd obs,")
 
-            εNd_df = XLSX.openxlsx(joinpath(data_dir, f)) do xf
+            εNd_df = XLSX.openxlsx(joinpath(data3_dir, f)) do xf
                 DataFrame(XLSX.gettable(xf["eNd_LLD"])...)
             end
             εNd_label = names(εNd_df)[findfirst(occursin.("εNd", names(εNd_df)))]

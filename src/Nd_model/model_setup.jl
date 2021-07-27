@@ -210,8 +210,8 @@ T_D(p) = LinearOperators((T, T_D(_prec, p), T_D(_dust, p), T_D(_POC, p), T_D(_bS
 #         Gu et al.
 
 # The total source is the sum of all sources
-s_tot(p) = sum(sₖ(p) for sₖ in (s_dust, s_aeol, s_sed, s_river, s_gw, s_hydro))
-s_tot_iso(p) = sum(sₖ(p) for sₖ in (s_dust_iso, s_aeol_iso, s_sed_iso, s_river_iso, s_gw_iso, s_hydro_iso))
+s_tot(p) = sum(sₖ(p) for sₖ in (s_dust, s_volc, s_sed, s_river, s_gw, s_hydro))
+s_tot_iso(p) = sum(sₖ(p) for sₖ in (s_dust_iso, s_volc_iso, s_sed_iso, s_river_iso, s_gw_iso, s_hydro_iso))
 
 # Aeolian sources
 
@@ -244,8 +244,24 @@ s_volc_iso(p) =  (R(ε_volc(p)) * sol_volc(p)) * AEOL_Chienetal[:volc]
 # 3. Sedimentary source
 # Using the Robinson et al data for sedimentary εNd
 const ε_sed = let
-    eNdmap_data_path, k = joinpath(data_path, "globalSedimentEpsilon.nc"), "globalsedimentepsilonnd"
-    #eNdmap_data_path, k = joinpath(data_path, "seafloorEpsilonNd.nc"), "seafloor_end" # <- "raw" seafloor eNd
+    # Register the dataset from Robinson et al with DataDeps.jl
+    register(
+        DataDep(
+            "GlobalSedimentEpsilonNd",
+            """
+            Reference:
+            Robinson, Suzanne and Ivanovic, Ruza and van de Flierdt, Tina and Blanchet, Cécile L. and Tachikawa, Kazuyo and Martin, Ellen E. and Falko, Carys and Williams, Trevor and Gregoire, Lauren and Plancherel, Yves and Jeandel, Catherine and Arsouze, Thomas (2021) Supplementary: Global continental and marine detrital εNd: an updated compilation for use in understanding marine Nd cycling. University of Leeds. [Dataset] https://doi.org/10.5518/928
+            """,
+            "https://archive.researchdata.leeds.ac.uk/815/10/GlobalSedimentEpsilonNd.zip",
+            "1df05fd464034ffde75827b1a76a3e4a8e737c944b2ef34bbc2a263855396e27",
+            fetch_method = fallback_download,
+            post_fetch_method = unpack
+        )
+    )
+    # file name
+    eNdmap_data_path = joinpath(datadep"GlobalSedimentEpsilonNd", "GlobalSedimentEpsilonNd", "gridded", "globalSedimentEpsilon.nc")
+    #
+    k = "globalsedimentepsilonnd" # key for eNd data in the NetCDF file
     lat, lon, eNd = Dataset(eNdmap_data_path, "r") do ds
         @show keys(ds)
         @info "Reordering lat because Robinson data goes from +90 down to -90 and that's bad for Plots.jl"
@@ -284,7 +300,7 @@ end
 # Enhanced Greenland Nd release
 const GIC_mask = let
     GREENLAND = GeoRegion("AR6_GIC")
-    BitVector([isPointinGeoRegion(Point2(lon,lat), GREENLAND, throw=false) for (lon,lat) in zip(lonvec(grd),latvec(grd))])
+    BitVector([isinGeoRegion(Point2(lon,lat), GREENLAND, throw=false) for (lon,lat) in zip(lonvec(grd),latvec(grd))])
 end
 function α_GIC(p)
     @unpack α_GIC = p
@@ -313,7 +329,7 @@ s_sed_iso(p) = R_sed(p) .* α_quad(p) .* α_GIC(p) .* v_sed_multiplier .* s_sed_
 # and regrid it to the circulation.
 const ϕ_He = let
     grd_OCIM2, _, ϕ_He, _ = OCIM2.load()
-    (debug || Circulation ≠ OCIM2) ? ϕ_He = regrid(ϕ_He, grd_OCIM2, grd) : ϕ_He
+    (debug || Circulation ≠ OCIM2) ? ϕ_He = regrid(ϕ_He, latvec(grd_OCIM2), lonvec(grd_OCIM2), depthvec(grd_OCIM2), grd) : ϕ_He
 end
 const v_hydro = vnormalize(@. ϕ_He * (z_top > 0))
 function s_hydro(p)
@@ -353,14 +369,14 @@ function s_gw(p)
     return σ_gw * s_gw0
 end
 # Isotope groundwater source
-const R_gw = let
-    Z2D = matread(joinpath(data_path, "Jeandel_DIVAnd_interpolated_topcore_1200km.mat"))["interpolated_Jeandel_eNd"]
-    Z3D = zeros(size(grd))
-    Z3D[:,:,1] .= Z2D
-    εNd_gw_tmp = vectorize(Z3D, grd)
-    R.(ustrip.(upreferred.(εNd_gw_tmp * εunit)))
-end
-s_gw_iso(p) = R_gw .* s_gw(p)
+#const R_gw = let
+#    Z2D = matread(joinpath(data_path, "Jeandel_DIVAnd_interpolated_topcore_1200km.mat"))["interpolated_Jeandel_eNd"]
+#    Z3D = zeros(size(grd))
+#    Z3D[:,:,1] .= Z2D
+#    εNd_gw_tmp = vectorize(Z3D, grd)
+#    R.(ustrip.(upreferred.(εNd_gw_tmp * εunit)))
+#end
+s_gw_iso(p) = R_sed(p) .* s_gw(p)
 
 
 #================================================

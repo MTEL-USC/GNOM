@@ -40,6 +40,8 @@ using Optim
 using PrettyTables
 using LaTeXStrings
 using DataFrames
+using DataDeps
+using Downloads
 
 # Load some unit variables from unitful (for more readable code)
 using Unitful: pM, g, mg, kg, L, mol, mmol, μmol, pmol, Mmol, yr, kyr, Myr, d, m, km, cm
@@ -60,7 +62,7 @@ const Circulation = OCIM2
 # if debug=true, use an unpublished coarse OCIM (faster)
 # Note to external users: You will not be able to use this debug version
 # because the matrix exists in my local data and is not public (and not mine to share!)
-const debug = false # set to false to run with full circulation
+const debug = true # set to false to run with full circulation
 const grd, T = let
     if debug
         circ_file = joinpath("/Users/benoitpasquier/Data/OceanGrids/OCIM0.1-lowres.jld2")
@@ -114,4 +116,14 @@ end
 prior(::T, s::Symbol) where {T<:AbstractParameters} = prior(T,s)
 prior(::Type{T}) where {T<:AbstractParameters} = Tuple(prior(T,s) for s in AIBECS.symbols(T))
 prior(::T) where {T<:AbstractParameters} = prior(T)
+
+# fallbaclk download function (for DataDeps)
+function fallback_download(remotepath, localdir)
+    @assert(isdir(localdir))
+    filename = basename(remotepath)  # only works for URLs with filename as last part of name
+    localpath = joinpath(localdir, filename)
+    Downloads.download(remotepath, localpath)
+    return localpath
+end
+
 

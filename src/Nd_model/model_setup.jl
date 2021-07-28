@@ -288,7 +288,7 @@ const ε_sed = let
 end
 
 # bundle the 1/δz and f_topo together to convert from
-# `s_sed_per_area` to `s_sed` (which is per volume)
+# `ϕ_bot` to `s_sed` (which is per volume)
 const v_sed_multiplier = f_topo ./ ustrip.(vectorize(grd.δz_3D, grd))
 
 # Reactivity α as a quadratic function of ε
@@ -315,14 +315,14 @@ function shifted_ε_sed(p)
 end
 R_sed(p) = R.(shifted_ε_sed(p))
 
-function s_sed_per_area_fun(p)
+function ϕ(p)
     @unpack ϕ_0, ϕ_∞, z_0 = p
     z -> (ϕ_0 - ϕ_∞) * exp(-z / z_0) + ϕ_∞
 end
-s_sed_per_area(p) = s_sed_per_area_fun(p).(z_bot)
+ϕ_bot(p) = ϕ(p).(z_bot)
 
-s_sed(p) = α_quad(p) .* α_GIC(p) .* v_sed_multiplier .* s_sed_per_area(p)
-s_sed_iso(p) = R_sed(p) .* α_quad(p) .* α_GIC(p) .* v_sed_multiplier .* s_sed_per_area(p)
+s_sed(p) = α_quad(p) .* α_GIC(p) .* v_sed_multiplier .* ϕ_bot(p)
+s_sed_iso(p) = R_sed(p) .* α_quad(p) .* α_GIC(p) .* v_sed_multiplier .* ϕ_bot(p)
 
 # 4. Hydrothermal source
 # In case the circulation is not OCIM2,
@@ -383,9 +383,14 @@ s_gw_iso(p) = R_sed(p) .* s_gw(p)
 #================================================
 Bottom sink
 ================================================#
+function ϕ_normalized(p)
+    @unpack ϕ_∞ = p
+    z -> ϕ(p)(z) / ϕ_∞
+end
+ϕ_bot_normalized(p) = ϕ_normalized(p).(z_bot)
 function neph_sink(x, p)
     @unpack τ_ns = p
-    @. f_topo * x / τ_ns
+    @. f_topo * $ϕ_bot_normalized(p) * x / τ_ns
 end
 
 

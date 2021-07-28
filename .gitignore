@@ -6,3 +6,5 @@
 output/
 cluster_output/
 data/
+
+src/plots/private/*

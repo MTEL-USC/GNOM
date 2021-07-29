@@ -62,7 +62,7 @@ function plot_εNd_sources!(fig, fun)
 end
 
 for fun in (log10, identity)
-    fig = Figure(resolution = (1500, 1800), backgroundcolor=:white)
+    local fig = Figure(resolution = (1500, 1800), backgroundcolor=:white)
     plot_εNd_sources!(fig, fun)
     trim!(fig.layout)
     if use_GLMakie

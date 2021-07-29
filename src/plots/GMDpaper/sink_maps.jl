@@ -62,7 +62,7 @@ function plot_εNd_sinks!(fig, fun)
 end
 
 for fun in (log10, identity)
-    fig = Figure(resolution = (1000, 1500), backgroundcolor=:white)
+    local fig = Figure(resolution = (1000, 1500), backgroundcolor=:white)
     plot_εNd_sinks!(fig, fun)
     trim!(fig.layout)
     if use_GLMakie

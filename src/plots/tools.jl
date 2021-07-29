@@ -153,8 +153,15 @@ function generic_ZA!(ax, x2D::Array{T,2}, lat, depth; kwargs...) where T
     u = Unitful.unit(T)
     x2D = ustrip.(x2D)
     #hm = heatmap!(ax, lat, depth, x2D; kwargs...)
-    hm = contourf!(ax, lat, depth, x2D; kwargs...)
-    #contour!(ax, lat, depth, x2D, color=:black)
+    kwargsf = if haskey(kwargs, :filllevels)
+        (;kwargs..., levels=kwargs[:filllevels])
+    else
+        kwargs
+    end
+    hm = contourf!(ax, lat, depth, x2D; kwargsf...)
+    heatmap!(ax, lat, depth, x2D; kwargs...)
+    ylims!(ax, get(kwargs, :ylims, (6000,0)))
+    contour!(ax, lat, depth, x2D; kwargs..., color=:black)
     return u, hm
 end
 function generic_ZA!(ax, v::Vector{T}, grd; mask=1, kwargs...) where T
@@ -166,6 +173,8 @@ function generic_ZA!(ax, v::Vector{T}, grd; mask=1, kwargs...) where T
     lat = ustrip.(grd.lat)
     return generic_ZA!(ax, v2D, lat, depth; kwargs...)
 end
+
+
 
 #=============================#
 #      Tools for nice maps    #
@@ -282,6 +291,10 @@ function latlabelfun(lat)
     lat = round(Int, lat)
     if lat == 0
         "EQ"
+    elseif lat == 90
+        "NP"
+    elseif lat == -90
+        "SP"
     elseif lat > 0
         "$(lat)°N"
     else
@@ -294,6 +307,10 @@ function mylatlons!(ax, lats, lons)
     ax.yticks = lats
     ax.xtickformat = lonlabelfun
     ax.ytickformat = latlabelfun
+end
+function myxlats!(ax, lats)
+    ax.xticks = lats
+    ax.xtickformat = latlabelfun
 end
 
 
@@ -322,6 +339,7 @@ outer_padding = 30
 maskscmap = ColorSchemes.okabe_ito[[8,6,1,5,2,4,7,3]]
 masks2cmap = [ColorSchemes.okabe_ito[[6,5]]; :white]
 Ωcmap = ColorSchemes.okabe_ito[[6,5,3]]
+Ωcmap2 = ColorSchemes.tableau_10[[1, 3, 6, 7, 5]]
 
 
 Ndpartitionlvls = 0:10:80

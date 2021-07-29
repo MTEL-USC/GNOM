@@ -26,7 +26,7 @@ function sed_source_profiles!(fig)
     upref = upreferred(u)
 
     z = 0:1:6000
-    v = ustrip.(u, s_sed_per_area_fun(p).(z) .* upref)
+    v = ustrip.(u, ϕ(p).(z) .* upref)
 
     # Rearrange as a step function to match model source
     lines!(ax, v, z)

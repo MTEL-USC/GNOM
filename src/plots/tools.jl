@@ -1,7 +1,7 @@
 # Only keep obs part of the cost function
 # and interpolate model onto their location
 # Function to extract indices of those model boxes (or obs.) that go in comparison
-function _locations(xmodel, obs, ux)
+function _locations(xmodel, obs, ux, grd=grd)
     M = interpolationmatrix(grd, obs)
     xmodelatobs = M * xmodel
     xdepthatobs = M * depthvec(grd)
@@ -340,6 +340,7 @@ maskscmap = ColorSchemes.okabe_ito[[8,6,1,5,2,4,7,3]]
 masks2cmap = [ColorSchemes.okabe_ito[[6,5]]; :white]
 Ωcmap = ColorSchemes.okabe_ito[[6,5,3]]
 Ωcmap2 = ColorSchemes.tableau_10[[1, 3, 6, 7, 5]]
+Ωcmap3 = [ColorSchemes.tableau_10[[6, 3, 1, 7, 2, 4]]; :lightgray]
 
 
 Ndpartitionlvls = 0:10:80

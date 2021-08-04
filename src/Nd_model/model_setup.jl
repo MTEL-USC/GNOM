@@ -19,22 +19,22 @@ const Ndunit = pM
     α_c::Tp            | -10.0  | εunit        | true  | (-20,0)  | "Center of Nd release enhancement parabola"
     α_GIC::Tp          |  2.0   | NoUnits      | true  |   (0,∞)  | "Geenland Nd release enhancement"
     σ_ε::Tp            |  3.0   | εunit        | true  |   (0,∞)  | "Per-pixel variance (std) of εNd"
-    σ_river::Tp        |  6.0   | Mmol/yr      | true  |   (0,∞)  | "Magnitude of riverine source"
-    σ_gw::Tp           |  2.0   | Mmol/yr      | true  |   (0,∞)  | "Magnitude of groundwater source"
-    σ_hydro::Tp        |  1.0   | Mmol/yr      | true  |   (0,∞)  | "Magnitude of hydrothermal source"
+    sol_river::Tp      | 100.0  | pM           | true  |   (0,∞)  | "River effective [Nd]"
+    sol_gw::Tp         | 100.0  | pM           | true  |   (0,∞)  | "Surface groundwater effective [Nd]"
+    σ_hydro::Tp        |  1.0   | Mmol/yr      | true  |   (0,∞)  | "Hydrothermal source magnitude"
+    ε_hydro::Tp        |  10.0  | εunit        | true  | (-10,15) | "Hydrothermal source εNd"
     ϕ_0::Tp            |  20.0  | pmol/cm^2/yr | true  |   (0,∞)  | "Sedimentary flux at surface"
     ϕ_∞::Tp            |  10.0  | pmol/cm^2/yr | true  |   (0,∞)  | "Sedimentary flux at infinite depth"
-    z_0::Tp            | 200.0  | m            | true  |   (0,∞)  | "Sedimentary-flux depth attenuation"
-    ε_EAsia_dust::Tp   |  -8.0  | εunit        | true  | (-12,-2) | "εNd of East Asian mineral dust"
-    ε_NEAf_dust::Tp    | -12.0  | εunit        | true  | (-15,-9) | "εNd of North East African mineral dust"
-    ε_NWAf_dust::Tp    | -12.0  | εunit        | true  | (-15,-9) | "εNd of North West African mineral dust"
-    ε_NAm_dust::Tp     |  -8.0  | εunit        | true  | (-12,-4) | "εNd of North American mineral dust"
-    ε_SAf_dust::Tp     | -10.0  | εunit        | true  | (-25,-6) | "εNd of South African mineral dust"
-    ε_SAm_dust::Tp     |  -3.0  | εunit        | true  | ( -7, 0) | "εNd of South American mineral dust"
-    ε_MECA_dust::Tp    |  -2.0  | εunit        | true  | ( -5, 3) | "εNd of Arabian mineral dust"
-    ε_Aus_dust::Tp     |  -4.0  | εunit        | true  | ( -7,-1) | "εNd of Australian mineral dust"
-    ε_Sahel_dust::Tp   | -12.0  | εunit        | true  | (-15,-9) | "εNd of Sahel mineral dust"
-    sol_volc::Tp       |   90.0 | u"percent"   | true  | (0, 100) | "Volcanic Nd solubility"
+    z_0::Tp            | 200.0  | m            | true  |   (0,∞)  | "Sedimentary flux depth attenuation"
+    ε_EAsia_dust::Tp   |  -8.0  | εunit        | true  | (-12,-2) | "EAsia dust εNd"
+    ε_NEAf_dust::Tp    | -12.0  | εunit        | true  | (-15,-9) | "NEAf dust εNd"
+    ε_NWAf_dust::Tp    | -12.0  | εunit        | true  | (-15,-9) | "NWAf dust εNd"
+    ε_NAm_dust::Tp     |  -8.0  | εunit        | true  | (-12,-4) | "NAm dust εNd"
+    ε_SAf_dust::Tp     | -10.0  | εunit        | true  | (-25,-6) | "SAf dust εNd"
+    ε_SAm_dust::Tp     |  -3.0  | εunit        | true  | ( -7, 0) | "SAm dust εNd"
+    ε_MECA_dust::Tp    |  -2.0  | εunit        | true  | ( -5, 3) | "MECA dust εNd" 
+    ε_Aus_dust::Tp     |  -4.0  | εunit        | true  | ( -7,-1) | "Aus dust εNd"
+    ε_Sahel_dust::Tp   | -12.0  | εunit        | true  | (-15,-9) | "Sahel dust εNd"
     sol_EAsia_dust::Tp |   10.0 | u"percent"   | true  | (0, 100) | "EAsia dust Nd solubility"
     sol_NEAf_dust::Tp  |   10.0 | u"percent"   | true  | (0, 100) | "NEAf dust Nd solubility"
     sol_NWAf_dust::Tp  |   10.0 | u"percent"   | true  | (0, 100) | "NWAf dust Nd solubility"
@@ -44,8 +44,8 @@ const Ndunit = pM
     sol_MECA_dust::Tp  |   10.0 | u"percent"   | true  | (0, 100) | "MECA dust Nd solubility"
     sol_Aus_dust::Tp   |   10.0 | u"percent"   | true  | (0, 100) | "Aus dust Nd solubility"
     sol_Sahel_dust::Tp |   10.0 | u"percent"   | true  | (0, 100) | "Sahel dust Nd solubility"
-    ε_volc::Tp         |  10.0  | εunit        | true  | (  0,15) | "εNd of volcanic ash"
-    ε_hydro::Tp        |  10.0  | εunit        | true  | (-10,15) | "εNd of hydrothermal vents"
+    sol_volc::Tp       |   90.0 | u"percent"   | true  | (0, 100) | "Volcanic ash Nd solubility"
+    ε_volc::Tp         |  10.0  | εunit        | true  | (  0,15) | "Volcanic ash εNd"
     K_prec::Tp         | 0.01   | NoUnits      | true  |   (0,∞)  | "Precipitation reaction constant"
     f_prec::Tp         | 0.4    | NoUnits      | true  |   (0,1)  | "Fraction of non-buried precipitated Nd"
     w₀_prec::Tp        | 0.7    | km/yr        | false |   (0,∞)  | "Settling velocity of precipitated Nd"
@@ -344,31 +344,33 @@ end
 
 # 5. Riverine source
 # normalized river source
-const s_river0 = let
+const river_injection_invsec = let
     RIVERS = Rivers.load()
     rivers = regrid(RIVERS, grd)
-    S = smooth_operator(grd, T)
-    vnormalize(S * rivers) # S smoothes the singular river source points
+    rivers_pervolume = rivers ./ (volvec * u"m^3")
+    smooth_operator(grd, T) * ustrip.(upreferred.(rivers_pervolume)) # S smoothes the singular river source points
 end
 # Riverine source scaled by global magnitude σ
 function s_river(p)
-    @unpack σ_river = p
-    return σ_river .* α_quad(p) .* s_river0
+    @unpack sol_river = p
+    return sol_river .* river_injection_invsec
 end
 # Isotope river source
 s_river_iso(p) = R_sed(p) .* s_river(p)
 
 # 5. Groundwater source
 # Groundwater source scaled by global magnitude σ
-const s_gw0 = let
-    gw_raw = GroundWaters.load()
-    gw = ustrip.(u"m^3/s", regrid(gw_raw, grd))
-    vnormalize(gw)
+const groundwater_injection_invsec = let
+    GROUNDWATERS = GroundWaters.load()
+    groundwaters = regrid(GROUNDWATERS, grd)
+    groundwaters_pervolume = groundwaters ./ (volvec * u"m^3")
+    smooth_operator(grd, T) * ustrip.(upreferred.(groundwaters_pervolume)) # S smoothes the singular river source points
 end
 function s_gw(p)
-    @unpack σ_gw = p
-    return σ_gw * s_gw0
+    @unpack sol_gw = p
+    return sol_gw * groundwater_injection_invsec
 end
+# TODO Go back to using Jeandel dataset? (Needs DIVAnd-interpolation!)
 # Isotope groundwater source
 #const R_gw = let
 #    Z2D = matread(joinpath(data_path, "Jeandel_DIVAnd_interpolated_topcore_1200km.mat"))["interpolated_Jeandel_eNd"]

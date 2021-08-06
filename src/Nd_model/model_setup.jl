@@ -19,8 +19,8 @@ const Ndunit = pM
     α_c::Tp            | -10.0  | εunit        | true  | (-20,0)  | "Center of Nd release enhancement parabola"
     α_GIC::Tp          |  2.0   | NoUnits      | true  |   (0,∞)  | "Geenland Nd release enhancement"
     σ_ε::Tp            |  3.0   | εunit        | true  |   (0,∞)  | "Per-pixel variance (std) of εNd"
-    sol_river::Tp      | 100.0  | pM           | true  |   (0,∞)  | "River effective [Nd]"
-    sol_gw::Tp         | 100.0  | pM           | true  |   (0,∞)  | "Surface groundwater effective [Nd]"
+    Nd_river::Tp       | 100.0  | pM           | true  |   (0,∞)  | "River effective [Nd]"
+    Nd_gw::Tp          | 100.0  | pM           | true  |   (0,∞)  | "Surface groundwater effective [Nd]"
     σ_hydro::Tp        |  1.0   | Mmol/yr      | true  |   (0,∞)  | "Hydrothermal source magnitude"
     ε_hydro::Tp        |  10.0  | εunit        | true  | (-10,15) | "Hydrothermal source εNd"
     ϕ_0::Tp            |  20.0  | pmol/cm^2/yr | true  |   (0,∞)  | "Sedimentary flux at surface"
@@ -35,17 +35,17 @@ const Ndunit = pM
     ε_MECA_dust::Tp    |  -2.0  | εunit        | true  | ( -5, 3) | "MECA dust εNd" 
     ε_Aus_dust::Tp     |  -4.0  | εunit        | true  | ( -7,-1) | "Aus dust εNd"
     ε_Sahel_dust::Tp   | -12.0  | εunit        | true  | (-15,-9) | "Sahel dust εNd"
-    sol_EAsia_dust::Tp |   10.0 | u"percent"   | true  | (0, 100) | "EAsia dust Nd solubility"
-    sol_NEAf_dust::Tp  |   10.0 | u"percent"   | true  | (0, 100) | "NEAf dust Nd solubility"
-    sol_NWAf_dust::Tp  |   10.0 | u"percent"   | true  | (0, 100) | "NWAf dust Nd solubility"
-    sol_NAm_dust::Tp   |   10.0 | u"percent"   | true  | (0, 100) | "NAm dust Nd solubility"
-    sol_SAf_dust::Tp   |   10.0 | u"percent"   | true  | (0, 100) | "SAf dust Nd solubility"
-    sol_SAm_dust::Tp   |   10.0 | u"percent"   | true  | (0, 100) | "SAm dust Nd solubility"
-    sol_MECA_dust::Tp  |   10.0 | u"percent"   | true  | (0, 100) | "MECA dust Nd solubility"
-    sol_Aus_dust::Tp   |   10.0 | u"percent"   | true  | (0, 100) | "Aus dust Nd solubility"
-    sol_Sahel_dust::Tp |   10.0 | u"percent"   | true  | (0, 100) | "Sahel dust Nd solubility"
-    sol_volc::Tp       |   90.0 | u"percent"   | true  | (0, 100) | "Volcanic ash Nd solubility"
-    ε_volc::Tp         |  10.0  | εunit        | true  | (  0,15) | "Volcanic ash εNd"
+    sol_EAsia_dust::Tp |    2.0 | u"percent"   | true  | (0, 100) | "EAsia dust Nd solubility"
+    sol_NEAf_dust::Tp  |    2.0 | u"percent"   | true  | (0, 100) | "NEAf dust Nd solubility"
+    sol_NWAf_dust::Tp  |    2.0 | u"percent"   | true  | (0, 100) | "NWAf dust Nd solubility"
+    sol_NAm_dust::Tp   |    2.0 | u"percent"   | true  | (0, 100) | "NAm dust Nd solubility"
+    sol_SAf_dust::Tp   |    2.0 | u"percent"   | true  | (0, 100) | "SAf dust Nd solubility"
+    sol_SAm_dust::Tp   |    2.0 | u"percent"   | true  | (0, 100) | "SAm dust Nd solubility"
+    sol_MECA_dust::Tp  |    2.0 | u"percent"   | true  | (0, 100) | "MECA dust Nd solubility"
+    sol_Aus_dust::Tp   |    2.0 | u"percent"   | true  | (0, 100) | "Aus dust Nd solubility"
+    sol_Sahel_dust::Tp |    2.0 | u"percent"   | true  | (0, 100) | "Sahel dust Nd solubility"
+    sol_volc::Tp       |   10.0 | u"percent"   | true  | (0, 100) | "Volcanic ash Nd solubility"
+    ε_volc::Tp         |  10.0  | εunit        | true  |  (0,15)  | "Volcanic ash εNd"
     K_prec::Tp         | 0.01   | NoUnits      | true  |   (0,∞)  | "Precipitation reaction constant"
     f_prec::Tp         | 0.4    | NoUnits      | true  |   (0,1)  | "Fraction of non-buried precipitated Nd"
     w₀_prec::Tp        | 0.7    | km/yr        | false |   (0,∞)  | "Settling velocity of precipitated Nd"
@@ -352,8 +352,8 @@ const river_injection_invsec = let
 end
 # Riverine source scaled by global magnitude σ
 function s_river(p)
-    @unpack sol_river = p
-    return sol_river .* river_injection_invsec
+    @unpack Nd_river = p
+    return Nd_river .* river_injection_invsec
 end
 # Isotope river source
 s_river_iso(p) = R_sed(p) .* s_river(p)
@@ -367,8 +367,8 @@ const groundwater_injection_invsec = let
     smooth_operator(grd, T) * ustrip.(upreferred.(groundwaters_pervolume)) # S smoothes the singular river source points
 end
 function s_gw(p)
-    @unpack sol_gw = p
-    return sol_gw * groundwater_injection_invsec
+    @unpack Nd_gw = p
+    return Nd_gw * groundwater_injection_invsec
 end
 # TODO Go back to using Jeandel dataset? (Needs DIVAnd-interpolation!)
 # Isotope groundwater source

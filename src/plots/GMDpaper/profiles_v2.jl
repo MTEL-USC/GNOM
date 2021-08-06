@@ -45,7 +45,7 @@ end
 function plot_profiles_v2!(fig)
     axs = Array{Any}(undef, (2, 4))
     for (itracer, (xmodel, xobs, ux)) in enumerate(zip((DNdmodel, εNdmodel), (DNdobs, εNdobs), (uDNd, uεNd)))
-        xmodelatobs, xdepthatobs, iobswet, xwetobs = _locations(xmodel, xobs, ux, Gu.grd)
+        xmodelatobs, xdepthatobs, iobswet, xwetobs = _locations(xmodel, xobs, ux)
         for (ibasin, isbasin) in enumerate(isbasins)
             ax = axs[itracer, ibasin] = fig[itracer, ibasin] = Axis(fig, xaxisposition = :top, xticklabelalign = (:center, :bottom))#, title = titles[itracer])
             xmodelmean, xmodelerror, xobsmean, xobserror, depths = basin_profile_mean_and_std(isbasin, xmodel, xmodelatobs, xdepthatobs, xobs, xwetobs, iobswet)

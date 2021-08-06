@@ -29,6 +29,7 @@ using Unitful
 using NCDatasets
 using XLSX
 using Formatting
+using NearestNeighbors
 # Chose the plotting backend (CairoMakie for PDFs, GLMakie for "live" windows)
 if use_GLMakie
     using GLMakie; GLMakie.activate!()

@@ -89,3 +89,5 @@ Nd_transects = uconvert(uDNd, GEOTRACES.transects("Nd") * ρSW)
 #landlon, landlat, landdata = GeoDatasets.landseamask(;resolution='l', grid=5)
 #segments = GeoDatasets.gshhg('c', [1,6])
 
+reload = false
+

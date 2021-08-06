@@ -314,6 +314,24 @@ function myxlats!(ax, lats)
 end
 
 
+# parameters
+function plot_params!(ax, p, s)
+   param_unit = units(p, s)
+   param_value = getproperty(p, s)
+   param_dist = prior(p, s) #/ (ustrip(param_unit, 1.0upreferred(param_unit)))
+   plot!(ax, param_dist)
+   vlines!(ax, param_value)
+   u_str = param_unit == NoUnits ? "unitless" : string(param_unit)
+   ax.xlabel = "$s ($u_str)"
+   hideydecorations!(ax)
+   (u_str == "‱") && xlims!(ax, s == :σ_ε ? (0,20) : (-35,15))
+   (u_str == "pM") && xlims!(ax, (0,300))
+end
+
+
+
+
+
 # ribbon / profiles
 αribbon = 0.3
 

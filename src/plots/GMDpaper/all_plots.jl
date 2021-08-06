@@ -16,6 +16,14 @@ include("sedimentary_source_profiles.jl")
 include("alpha_map.jl")
 include("sink_maps.jl")
 
+include("parameters.jl")
+
+# Diagnostics
+include("GMD_diagnostics_masks_map.jl")
+include("GMD_diagnostics_conservative_eNd.jl")
+include("GMD_diagnostics_wtag_Nd.jl")
+include("GMD_diagnostics_tables.jl")
+
 # model-output-independent plots
 include("obs_maps.jl")
 #include("modelindependent/sedimentary_source_diagnostics.jl")

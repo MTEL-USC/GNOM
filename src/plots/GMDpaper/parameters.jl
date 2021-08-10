@@ -1,6 +1,6 @@
-#================================================
-Profiles
-================================================#
+#===============================================#
+#              Parameters plots                 #
+#===============================================#
 use_GLMakie = false
 include("../plots_setup_Nd.jl")
 
@@ -14,7 +14,7 @@ for (i,s) in enumerate((:α_a, :α_c, :σ_ε, :α_GIC))
     plot_params!(ax, p, s)
 end
 # river, gw, hydro params
-for (i,s) in enumerate((:sol_river, :sol_gw, :σ_hydro, :ε_hydro))
+for (i,s) in enumerate((:Nd_river, :Nd_gw, :σ_hydro, :ε_hydro))
     local ax = fig[2,i] = Axis(fig)
     plot_params!(ax, p, s)
 end
@@ -46,4 +46,26 @@ ax = fig[10,1] = Axis(fig)
 plot_params!(ax, p, :τ_ns)
 
 save(joinpath(archive_path, "parameters_$(lastcommit)_run$(run_num).pdf"), fig)
+
+
+#======================================#
+#          Print param tables          #
+#======================================#
+# Don't reload eveything everytime
+tp2 = select(tp_opt,
+             :Symbol=>ByRow(symbol2latex)=>:Symbol,
+             :Value,
+             Symbol("Initial value"),
+             :Prior=>ByRow(latexify)=>:Range,
+             :Unit=>ByRow(latexify)=>:Unit,
+             :Description=>ByRow(latexeNd)=>:Description)
+             #:Optimizable=>ByRow(latexbool)=>:Optimized)
+formatters = (v,i,j) -> j ∈ [2,3] ? string("\$", numformat(sprintf1("%.3g", v)), "\$") : (j == 4) ? string("\$", v, "\$") : v
+
+println("Latex param table")
+
+println(pretty_table(tp2, tf=tf_latex_simple, formatters=formatters, nosubheader=true))
+#open(joinpath(archive_path, "optimized_parameters.tex"), "w") do f
+#    pretty_table(f, tp2, tf=tf_latex_simple, formatters=formatters, nosubheader=true)
+#end
 

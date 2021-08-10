@@ -12,6 +12,7 @@ for i in run_nums
     println("Loading run $run_num...")
     include("../plots_setup_Nd.jl")
     include("../load.jl") # force a reload of the specific run $num_run
+    include("GMD_diagnostics_setup.jl") # force re computations of diagnostics
     println("Run $run_num Params:")
     @show p
     include("all_plots.jl")

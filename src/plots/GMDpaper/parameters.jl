@@ -14,7 +14,7 @@ for (i,s) in enumerate((:α_a, :α_c, :σ_ε, :α_GIC))
     plot_params!(ax, p, s)
 end
 # river, gw, hydro params
-for (i,s) in enumerate((:Nd_river, :Nd_gw, :σ_hydro, :ε_hydro))
+for (i,s) in enumerate((:c_river, :c_gw, :σ_hydro, :ε_hydro))
     local ax = fig[2,i] = Axis(fig)
     plot_params!(ax, p, s)
 end
@@ -24,14 +24,14 @@ for (i,s) in enumerate((:ϕ_0, :ϕ_∞, :z_0))
     plot_params!(ax, p, s)
 end
 # dust params 2×9 to 3×6
-dust_params = (:ε_EAsia_dust, :ε_NEAf_dust, :ε_NWAf_dust, :ε_NAm_dust, :ε_SAf_dust, :ε_SAm_dust, :ε_MECA_dust, :ε_Aus_dust, :ε_Sahel_dust, :sol_EAsia_dust, :sol_NEAf_dust, :sol_NWAf_dust, :sol_NAm_dust, :sol_SAf_dust, :sol_SAm_dust, :sol_MECA_dust, :sol_Aus_dust, :sol_Sahel_dust)
+dust_params = (:ε_EAsia_dust, :ε_NEAf_dust, :ε_NWAf_dust, :ε_NAm_dust, :ε_SAf_dust, :ε_SAm_dust, :ε_MECA_dust, :ε_Aus_dust, :ε_Sahel_dust, :β_EAsia_dust, :β_NEAf_dust, :β_NWAf_dust, :β_NAm_dust, :β_SAf_dust, :β_SAm_dust, :β_MECA_dust, :β_Aus_dust, :β_Sahel_dust)
 for (i,s) in enumerate(dust_params)
     I, J = Tuple(CartesianIndices((3,6))[i])
     local ax = fig[3+I,J] = Axis(fig)
     plot_params!(ax, p, s)
 end
 # volc params
-for (i,s) in enumerate((:sol_volc, :ε_volc))
+for (i,s) in enumerate((:β_volc, :ε_volc))
     local ax = fig[7,i] = Axis(fig)
     plot_params!(ax, p, s)
 end

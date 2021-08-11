@@ -35,17 +35,17 @@ const Ndunit = pM
     ε_MECA_dust::Tp    |  -2.0  | εunit        | true  | ( -5, 3) | "MECA dust εNd" 
     ε_Aus_dust::Tp     |  -4.0  | εunit        | true  | ( -7,-1) | "Aus dust εNd"
     ε_Sahel_dust::Tp   | -12.0  | εunit        | true  | (-15,-9) | "Sahel dust εNd"
-    sol_EAsia_dust::Tp |    2.0 | u"percent"   | true  |  (0, 10) | "EAsia dust Nd solubility"
-    sol_NEAf_dust::Tp  |    2.0 | u"percent"   | true  |  (0, 10) | "NEAf dust Nd solubility"
-    sol_NWAf_dust::Tp  |    2.0 | u"percent"   | true  |  (0, 10) | "NWAf dust Nd solubility"
-    sol_NAm_dust::Tp   |    2.0 | u"percent"   | true  |  (0, 10) | "NAm dust Nd solubility"
-    sol_SAf_dust::Tp   |    2.0 | u"percent"   | true  |  (0, 10) | "SAf dust Nd solubility"
-    sol_SAm_dust::Tp   |    2.0 | u"percent"   | true  |  (0, 10) | "SAm dust Nd solubility"
-    sol_MECA_dust::Tp  |    2.0 | u"percent"   | true  |  (0, 10) | "MECA dust Nd solubility"
-    sol_Aus_dust::Tp   |    2.0 | u"percent"   | true  |  (0, 10) | "Aus dust Nd solubility"
-    sol_Sahel_dust::Tp |    2.0 | u"percent"   | true  |  (0, 10) | "Sahel dust Nd solubility"
-    sol_volc::Tp       |   10.0 | u"percent"   | true  |  (0,100) | "Volcanic ash Nd solubility"
+    β_EAsia_dust::Tp   |    2.0 | u"percent"   | true  |  (0, 10) | "EAsia dust Nd solubility"
+    β_NEAf_dust::Tp    |    2.0 | u"percent"   | true  |  (0, 10) | "NEAf dust Nd solubility"
+    β_NWAf_dust::Tp    |    2.0 | u"percent"   | true  |  (0, 10) | "NWAf dust Nd solubility"
+    β_NAm_dust::Tp     |    2.0 | u"percent"   | true  |  (0, 10) | "NAm dust Nd solubility"
+    β_SAf_dust::Tp     |    2.0 | u"percent"   | true  |  (0, 10) | "SAf dust Nd solubility"
+    β_SAm_dust::Tp     |    2.0 | u"percent"   | true  |  (0, 10) | "SAm dust Nd solubility"
+    β_MECA_dust::Tp    |    2.0 | u"percent"   | true  |  (0, 10) | "MECA dust Nd solubility"
+    β_Aus_dust::Tp     |    2.0 | u"percent"   | true  |  (0, 10) | "Aus dust Nd solubility"
+    β_Sahel_dust::Tp   |    2.0 | u"percent"   | true  |  (0, 10) | "Sahel dust Nd solubility"
     ε_volc::Tp         |  10.0  | εunit        | true  |  (0,15)  | "Volcanic ash εNd"
+    β_volc::Tp         |   10.0 | u"percent"   | true  |  (0,100) | "Volcanic ash Nd solubility"
     K_prec::Tp         | 0.01   | NoUnits      | true  |   (0,∞)  | "Precipitation reaction constant"
     f_prec::Tp         | 0.4    | NoUnits      | true  |   (0,1)  | "Fraction of non-buried precipitated Nd"
     w₀_prec::Tp        | 0.7    | km/yr        | false |   (0,∞)  | "Settling velocity of precipitated Nd"
@@ -221,25 +221,25 @@ const DUST_REGIONS = AeolianSources.Kok_REGIONS_NAMES
 # functions to unpack ε values and solubilities
 ε_dust(r, p) = AIBECS.UnPack.unpack(p, Val(Symbol(:ε_, r, :_dust)))
 ε_dust(p) = [ε_dust(r, p) for r in DUST_REGIONS]
-sol_dust(r, p) = AIBECS.UnPack.unpack(p, Val(Symbol(:sol_, r, :_dust)))
-sol_dust(p) = [sol_dust(r, p) for r in DUST_REGIONS]
+β_dust(r, p) = AIBECS.UnPack.unpack(p, Val(Symbol(:β_, r, :_dust)))
+β_dust(p) = [β_dust(r, p) for r in DUST_REGIONS]
 # constant Matrix of dust-deposited Nd (before dissolution) per region
 const s_dust_arr = reduce(hcat, v for (r,v) in AEOL_Koketal)
 # Dust source is then the sum of soluble Nd from each region
-s_dust(p) = s_dust_arr * sol_dust(p)
-s_dust_iso(p) = s_dust_arr * (R.(ε_dust(p)) .* sol_dust(p))
+s_dust(p) = s_dust_arr * β_dust(p)
+s_dust_iso(p) = s_dust_arr * (R.(ε_dust(p)) .* β_dust(p))
 # not used in optimization (slower) but useful for inspection
-s_dust(r, p) = AEOL_Koketal[r] * sol_dust(r, p)
-s_dust_iso(r, p) = AEOL_Koketal[r] * R(ε_dust(r, p)) * sol_dust(r, p)
+s_dust(r, p) = AEOL_Koketal[r] * β_dust(r, p)
+s_dust_iso(r, p) = AEOL_Koketal[r] * R(ε_dust(r, p)) * β_dust(r, p)
 
 # 2. Volc source
 # Only use the volcanic ash here source from Chien et al.
 # The assumption being that volcanic ash is more soluble therefore
 # it's the only aerosol type other than dust that we consider.
-sol_volc(p) = AIBECS.UnPack.unpack(p, Val(:sol_volc))
-s_volc(p) = sol_volc(p) * AEOL_Chienetal[:volc]
+β_volc(p) = AIBECS.UnPack.unpack(p, Val(:β_volc))
+s_volc(p) = β_volc(p) * AEOL_Chienetal[:volc]
 ε_volc(p) = AIBECS.UnPack.unpack(p, Val(:ε_volc))
-s_volc_iso(p) =  (R(ε_volc(p)) * sol_volc(p)) * AEOL_Chienetal[:volc]
+s_volc_iso(p) =  (R(ε_volc(p)) * β_volc(p)) * AEOL_Chienetal[:volc]
 
 
 # 3. Sedimentary source

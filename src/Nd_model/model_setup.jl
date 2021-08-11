@@ -19,8 +19,8 @@ const Ndunit = pM
     α_c::Tp            | -10.0  | εunit        | true  | (-20,0)  | "Center of Nd release enhancement parabola"
     α_GIC::Tp          |  2.0   | NoUnits      | true  |   (0,∞)  | "Geenland Nd release enhancement"
     σ_ε::Tp            |  3.0   | εunit        | true  |   (0,∞)  | "Per-pixel variance (std) of εNd"
-    Nd_river::Tp       | 100.0  | pM           | true  |   (0,∞)  | "River effective [Nd]"
-    Nd_gw::Tp          | 100.0  | pM           | true  |   (0,∞)  | "Surface groundwater effective [Nd]"
+    c_river::Tp        | 100.0  | pM           | true  |   (0,∞)  | "River effective [Nd]"
+    c_gw::Tp           | 100.0  | pM           | true  |   (0,∞)  | "Surface groundwater effective [Nd]"
     σ_hydro::Tp        |  1.0   | Mmol/yr      | true  |   (0,∞)  | "Hydrothermal source magnitude"
     ε_hydro::Tp        |  10.0  | εunit        | true  | (-10,15) | "Hydrothermal source εNd"
     ϕ_0::Tp            |  20.0  | pmol/cm^2/yr | true  |   (0,∞)  | "Sedimentary flux at surface"
@@ -104,7 +104,7 @@ const POC = let
     vnormalize(POC) # TODO: remove normalization?
 end
 # Dust from Chien et al available from AIBECS
-const DustNd = 40.0u"g"/u"Mg"
+const DustNd = 40.0u"g"/u"Mg" # 
 const AEOL_Chienetal = let
     s_A_2D = AeolianSources.load("Chien")
     tmp = Any[]
@@ -352,8 +352,8 @@ const river_injection_invsec = let
 end
 # Riverine source scaled by global magnitude σ
 function s_river(p)
-    @unpack Nd_river = p
-    return Nd_river .* river_injection_invsec
+    @unpack c_river = p
+    return c_river .* river_injection_invsec
 end
 # Isotope river source
 s_river_iso(p) = R_sed(p) .* s_river(p)
@@ -367,8 +367,8 @@ const groundwater_injection_invsec = let
     smooth_operator(grd, T) * ustrip.(upreferred.(groundwaters_pervolume)) # S smoothes the singular river source points
 end
 function s_gw(p)
-    @unpack Nd_gw = p
-    return Nd_gw * groundwater_injection_invsec
+    @unpack c_gw = p
+    return c_gw * groundwater_injection_invsec
 end
 # TODO Go back to using Jeandel dataset? (Needs DIVAnd-interpolation!)
 # Isotope groundwater source

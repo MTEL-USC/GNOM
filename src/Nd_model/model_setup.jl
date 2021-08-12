@@ -17,7 +17,7 @@ const Ndunit = pM
 @initial_value @units @flattenable @limits @description struct Params{Tp} <: AbstractParameters{Tp}
     α_a::Tp            |  1.0   | NoUnits      | true  |  (0,20)  | "Curvature of Nd release enhancement parabola"
     α_c::Tp            | -10.0  | εunit        | true  | (-20,0)  | "Center of Nd release enhancement parabola"
-    α_GIC::Tp          |  2.0   | NoUnits      | true  |   (0,∞)  | "Geenland Nd release enhancement"
+    α_GRL::Tp          |  2.0   | NoUnits      | true  |   (0,∞)  | "Geenland Nd release enhancement"
     σ_ε::Tp            |  3.0   | εunit        | true  |   (0,∞)  | "Per-pixel variance (std) of εNd"
     c_river::Tp        | 100.0  | pM           | true  |   (0,∞)  | "River effective [Nd]"
     c_gw::Tp           | 100.0  | pM           | true  |   (0,∞)  | "Surface groundwater effective [Nd]"
@@ -32,7 +32,7 @@ const Ndunit = pM
     ε_NAm_dust::Tp     |  -8.0  | εunit        | true  | (-12,-4) | "NAm dust εNd"
     ε_SAf_dust::Tp     | -10.0  | εunit        | true  | (-25,-6) | "SAf dust εNd"
     ε_SAm_dust::Tp     |  -3.0  | εunit        | true  | ( -7, 0) | "SAm dust εNd"
-    ε_MECA_dust::Tp    |  -2.0  | εunit        | true  | ( -5, 3) | "MECA dust εNd" 
+    ε_MECA_dust::Tp    |  -2.0  | εunit        | true  | ( -5, 3) | "MECA dust εNd"
     ε_Aus_dust::Tp     |  -4.0  | εunit        | true  | ( -7,-1) | "Aus dust εNd"
     ε_Sahel_dust::Tp   | -12.0  | εunit        | true  | (-15,-9) | "Sahel dust εNd"
     β_EAsia_dust::Tp   |    1.0 | u"percent"   | true  |  (0,  3) | "EAsia dust Nd solubility"
@@ -104,7 +104,7 @@ const POC = let
     vnormalize(POC) # TODO: remove normalization?
 end
 # Dust from Chien et al available from AIBECS
-const DustNd = 40.0u"g"/u"Mg" # 
+const DustNd = 40.0mg/kg
 const AEOL_Chienetal = let
     s_A_2D = AeolianSources.load("Chien")
     tmp = Any[]
@@ -299,13 +299,25 @@ function α_quad(ε, p)
 end
 α_quad(p) = α_quad(ε_sed, p)
 # Enhanced Greenland Nd release
-const GIC_mask = let
-    GREENLAND = GeoRegion("AR6_GIC")
-    BitVector([isinGeoRegion(Point2(lon,lat), GREENLAND, throw=false) for (lon,lat) in zip(lonvec(grd),latvec(grd))])
+const GRL_mask = let # GIS = Greenland Ice Sheet
+    wet_surf = iswet(grd)[:,:,1]
+    land_surf = .!wet_surf
+    borders = wet_surf .& (land_surf[   [2:end; 1]   ,        :       ] .|
+                           land_surf[ [end; 1:end-1] ,        :       ] .|
+                           land_surf[       :        ,   [2:end; 1]   ] .|
+                           land_surf[       :        , [end; 1:end-1] ])
+
+    AR6_GIC = GeoRegion("AR6_GIC")
+    mask_2D = borders .&
+        [isinGeoRegion(Point2(lon,lat), AR6_GIC, throw=false) for lat in ustrip.(grd.lat), lon in ustrip.(grd.lon)] .&
+        .![(62.5 ≤ lat ≤ 67.5) & (360-25 ≤ lon ≤ 360-10) for lat in ustrip.(grd.lat), lon in ustrip.(grd.lon)]
+    # The last line removes Iceland (This might not work for other circulations/grids!)
+    vectorize(repeat(mask_2D, outer=(1,1,size(grd)[3])), grd)
 end
-function α_GIC(p)
-    @unpack α_GIC = p
-    @. α_GIC * GIC_mask + 1.0 * !GIC_mask
+
+function α_GRL(p)
+    @unpack α_GRL = p
+    @. α_GRL * GRL_mask + 1.0 * !GRL_mask
 end
 # Shifting of effective ε released as per notebook in extras/
 shifted_ε(μ, σ, a, c, α_scaling) = (a * (μ - 2 * (c-μ)) * σ^2 + (a * (c-μ)^2 + α_scaling^2) * μ)/(a * σ^2 + a * (c - μ)^2 + α_scaling^2)
@@ -321,8 +333,8 @@ function ϕ(p)
 end
 ϕ_bot(p) = ϕ(p).(z_bot)
 
-s_sed(p) = α_quad(p) .* α_GIC(p) .* v_sed_multiplier .* ϕ_bot(p)
-s_sed_iso(p) = R_sed(p) .* α_quad(p) .* α_GIC(p) .* v_sed_multiplier .* ϕ_bot(p)
+s_sed(p) = α_quad(p) .* α_GRL(p) .* v_sed_multiplier .* ϕ_bot(p)
+s_sed_iso(p) = R_sed(p) .* α_quad(p) .* α_GRL(p) .* v_sed_multiplier .* ϕ_bot(p)
 
 # 4. Hydrothermal source
 # In case the circulation is not OCIM2,

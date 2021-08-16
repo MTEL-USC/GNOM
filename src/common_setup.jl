@@ -106,8 +106,10 @@ function prior(::Type{T}, s::Symbol) where {T<:AbstractParameters}
             μ = initial_value(T, s)
             σ = 10.0 # Assumes that a sensible unit is chosen (i.e., that within 10.0 * U)
             Distributions.Normal(μ, σ)
-        else
-            LocationScale(lb, ub - lb, LogitNormal())
+        else # LogitNormal with median as initial value and bounds
+            m = initial_value(T, s)
+            f = (m - lb) / (ub - lb)
+            LocationScale(lb, ub - lb, LogitNormal(log(f/(1-f)), 1.0))
         end
     else
         nothing

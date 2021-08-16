@@ -9,7 +9,7 @@ fig = Figure(resolution=(1200, 1500))
 use_GLMakie && display(fig)
 
 # α parameters
-for (i,s) in enumerate((:α_a, :α_c, :σ_ε, :α_GIC))
+for (i,s) in enumerate((:α_a, :α_c, :σ_ε, :α_GRL))
     local ax = fig[1,i] = Axis(fig)
     plot_params!(ax, p, s)
 end

@@ -2,36 +2,56 @@ use_GLMakie = false
 include("../plots_setup_Nd.jl")
 
 
-# Create the figure
-fig = Figure()
-use_GLMakie && display(fig)
 
 # levels and limits for colorbar
 #αlevs = 0.99:0.002:1.01
 #αlims = extrema(αlevs)
+
+# α curve is defined by α_quad
+α_curve(ε) = α_quad(ε * εunit |> upreferred, p)
+εs = range(εclims..., length=200)
+αs = α_curve.(εs)
+
+# α curve vs ε values
+function αcurve(fig)
+    ax = fig[1,1] = Axis(fig)
+    lines!(ax, εs, αs, ylims=(0,NaN))
+    ax.xlabel = "εNd (‱)"
+    ax.ylabel = "Reactivity scaling factor α"
+    ax.xticks = range(εclims..., step=5)
+    ax.yticks = 0:1:maximum(αs)
+    topscene = Scene(fig.scene)
+    Label(topscene, bbox = ax.scene.px_area, panellabels[1], textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:black)
+end
 
 # α colormap
 αcmap = cgrad(:solar)
 
 surfacemask = horizontalslice(ones(count(iswet(grd))), grd, depth=0)
 function plot_alpha_map!(fig)
+    αcurve(fig)
+    # α map
     α2D = permutedims(rearrange_into_3Darray(α_quad(p), grd)[:,:,1])
     innan = findall(.!isnan.(α2D))
     colorrange = extrema(log10.(α2D[innan]))
-    ax = fig[1,1] = Axis(fig, backgroundcolor=:gray20)
+    ax = fig[2,1] = Axis(fig, backgroundcolor=:gray20)
     mapit!(ax, clon, mypolys(clon), color=:gray50)
     hm = heatmap!(ax, sclons, lats, view(log10.(α2D), ilon, :), colormap=αcmap; nan_color, colorrange)#, colorrange=αlims)
     mapit!(ax, clon, mypolys(clon), color=:transparent, strokecolor=:black, strokewidth=1)
     # Better lat/lon ticks
     mylatlons!(ax, latticks30, lonticks60)
     # colorbar
-    cbar = fig[end+1, 1] = Colorbar(fig, hm, label="Reactivity scaling factor log₁₀(α)", vertical=false, flipaxis=false, ticklabelalign = (:center, :top))#, ticks=αlevs)
+    cbar = fig[end+1, 1] = Colorbar(fig, hm, label="Log reactivity scaling factor log₁₀(α)", vertical=false, flipaxis=false, ticklabelalign = (:center, :top))#, ticks=αlevs)
     cbar.width = Relative(3/4)
     cbar.height = 30
     cbar.tellheight = true
+
+    # label
+    topscene = Scene(fig.scene)
+    Label(topscene, bbox = ax.scene.px_area, panellabels[2], textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:black)
     nothing
 end
-fig = Figure(resolution = (700, 500), backgroundcolor=:white)
+fig = Figure(resolution = (700, 1000), backgroundcolor=:white)
 plot_alpha_map!(fig)
 trim!(fig.layout)
 if use_GLMakie
@@ -43,18 +63,17 @@ end
 
 
 
-# Create the figure
-fig = Figure()
-use_GLMakie && display(fig)
 # α colormap
 αcmap = cgrad(:lajolla, rev=true)
 
 surfacemask = horizontalslice(ones(count(iswet(grd))), grd, depth=0)
 function plot_alpha_map!(fig)
+    αcurve(fig)
+
     α2D = permutedims(rearrange_into_3Darray(α_quad(p), grd)[:,:,1])
     innan = findall(.!isnan.(α2D))
     colorrange = extrema(α2D[innan]) .* (0,1)
-    ax = fig[1,1] = Axis(fig, backgroundcolor=:gray20)
+    ax = fig[2,1] = Axis(fig, backgroundcolor=:gray20)
     mapit!(ax, clon, mypolys(clon), color=:gray50)
     hm = heatmap!(ax, sclons, lats, view(α2D, ilon, :), colormap=αcmap; nan_color, colorrange)#, colorrange=αlims)
     mapit!(ax, clon, mypolys(clon), color=:transparent, strokecolor=:black, strokewidth=1)
@@ -65,9 +84,13 @@ function plot_alpha_map!(fig)
     cbar.width = Relative(3/4)
     cbar.height = 30
     cbar.tellheight = true
+
+    # label
+    topscene = Scene(fig.scene)
+    Label(topscene, bbox = ax.scene.px_area, panellabels[2], textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:black)
     nothing
 end
-fig = Figure(resolution = (700, 500), backgroundcolor=:white)
+fig = Figure(resolution = (700, 1000), backgroundcolor=:white)
 plot_alpha_map!(fig)
 trim!(fig.layout)
 if use_GLMakie

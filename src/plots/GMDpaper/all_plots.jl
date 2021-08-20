@@ -27,3 +27,9 @@ include("GMD_diagnostics_tables.jl")
 # model-output-independent plots
 include("obs_maps.jl")
 #include("modelindependent/sedimentary_source_diagnostics.jl")
+
+# parameters
+include("parameters.jl")
+
+# Si model
+include("jointPDF_Si.jl")

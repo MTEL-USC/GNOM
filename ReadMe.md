@@ -26,8 +26,8 @@ Thanks to Julia's excellent built-in package manager and the DataDeps.jl package
 
 ## Single model run
 
-We refer to GNOM v1 as the Nd-cycling (and isotope) model with "optimized" parameters as described in [*Pasquier, Hines, et al.* (2021)](), which you can simply modify and run in just a few seconds on your laptop. 
-For a single model run, all you need is to set the model up and solve the resulting equations. 
+We refer to GNOM v1 as the Nd-cycling (and isotope) model with "optimized" parameters as described in [*Pasquier, Hines, et al.* (2021)](), which you can simply modify and run in just a few seconds on your laptop.
+For a single model run, all you need is to set the model up and solve the resulting equations.
 (For instructions on how to run the optimization of the model parameters, head over to the next section.)
 This is easily done in 3 steps:
 
@@ -60,7 +60,7 @@ This is easily done in 3 steps:
     DNd, εNd = modify(DNd1, DNd2)
     ```
 
-    where `modify` is a function defined in the model setup to do exactly that conversion.
+    where `modify` is a function defined in `model_setup.jl` to do exactly that conversion.
 
 
 The optimized bSi field required for opal scavenging is automatically downloaded from XXX.
@@ -79,7 +79,7 @@ You can reproduce the same plots as in the paper by using the code in the `src/p
 To run one optimization, you just need to call
 
 ```julia
-include("src/Nd_model/run.jl")
+include("src/Nd_model/setup_and_optimization.jl")
 ```
 
 ## Running on a SLURM cluster

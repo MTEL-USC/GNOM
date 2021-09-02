@@ -26,8 +26,8 @@ Thanks to Julia's excellent built-in package manager and the DataDeps.jl package
 
 ## Single model run
 
-We refer to GNOM v1 as the Nd-cycling (and isotope) model with "optimized" parameters as described in [*Pasquier, Hines, et al.* (2021)](), which you can simply modify and run in just a few seconds on your laptop.
-For a single model run, all you need is to set the model up and solve the resulting equations.
+We refer to GNOM v1 as the Nd-cycling (and isotope) model with "optimized" parameters as described in [*Pasquier, Hines, et al.* (2021)](), which you can modify and run in just a few seconds on your laptop.
+For a single model run, all you need is to set the model up and solve the linear system.
 (For instructions on how to run the optimization of the model parameters, head over to the next section.)
 This is easily done in 3 steps:
 
@@ -76,19 +76,29 @@ You can reproduce the same plots as in the paper by using the code in the `src/p
 
 ## Optimization
 
-To run one optimization, you just need to call
+To run the optimization, you can type
 
 ```julia
 include("src/Nd_model/setup_and_optimization.jl")
 ```
+
+This optimization script will randomize the initial value for the parameter values by taking a random sample from the prior distributions determined by the initial guess and the range defined in the parameter type (the `Params` struct in the `model_setup.jl` file).
 
 ## Running on a SLURM cluster
 
 Clone your repository on your cluster, have Julia installed, and run
 
 ```bash
+sbatch src/slurm/optimize_Si.sh
+```
+
+to optimize the Si model and run
+
+```bash
 sbatch src/slurm/optimize_Nd.sh
 ```
+
+to optimize the Nd model. These are SLURM batch files that will request 1 node with 64GB for 20 hours to run each process.
 
 ## Si model
 
@@ -100,7 +110,8 @@ include("src/Si_model/run.jl")
 
 ## Citation
 
-
+To cite the GNOM v1 model, please cite [*Pasquier, Hines, et al.* (2021)](link_to_GMD_paper).
+To cite the more general GNOM model and future versions, please cite [*Pasquier et al. (2021)*](zenodo_link?).
 
 ## Changelog
 

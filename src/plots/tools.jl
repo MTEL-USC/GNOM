@@ -228,7 +228,7 @@ isleft(p, lon) = all(pt[1] ≤ lon for pt in p) # check ≤ or <
 # Shared clims and colormaps
 εcmap = make_colorscheme([colorant"cyan", colorant"darkblue", colorant"white", colorant"darkred", colorant"yellow"], 2^8)
 εclims = (-30, 10)
-εlevels = range(extrema(εclims)..., step=1)
+εlevels = range(extrema(εclims)..., step=0.5)
 
 Ndcmap = cgrad(:viridis)
 Ndclims = (0, 40)
@@ -245,6 +245,9 @@ Ndcmap2 = :grayC
 δNdclims = (-10, 10)
 δNdlevels = range(extrema(δNdclims)..., step=1)
 
+# α colormap
+αcmap = cgrad(:solar)
+
 # σ cmap ? (TODO comment what σ is)
 logσcmap = cgrad(:magma)
 logσclims = (-10, -6)
@@ -260,6 +263,13 @@ centerlon(lon, wlon=wlon) = mod(lon - wlon, 360) + wlon
 clons = @. centerlon.(lons)
 ilon = sortperm(clons)       # sorting permutation for longitudes
 sclons = view(clons, ilon) # sorted centered grd longitudes
+
+
+# Transect plots stuff
+# sort transects by distance so that longests are at bottom
+Nd_t_sort = [7, 1, 10, 9, 2, 11, 8, 6, 4, 5, 3]
+ε_t_sort = [1, 6, 4, 8, 10, 7, 5, 2, 9]
+t_ext = 1 # transect extension in km (so it goes from -t_ext to total distance + t_ext)
 
 cl0 = 0 # centered central longitude for dust-region map
 
@@ -315,18 +325,30 @@ end
 
 
 # parameters
-function plot_params!(ax, p, s)
+function plot_param!(ax, p, s; color=:black)
    param_unit = units(p, s)
    param_value = getproperty(p, s)
    param_dist = prior(p, s) #/ (ustrip(param_unit, 1.0upreferred(param_unit)))
-   plot!(ax, param_dist)
-   vlines!(ax, param_value)
+   xlims = Makie.default_range(param_dist, 0.005)
+   xleft = min(xlims.left, param_value)
+   xright = max(xlims.right, param_value)
+   xs = range(xleft, xright, length=1001)
+   ys = pdf.(param_dist, xs)
+   band!(ax, xs, zeros(length(xs)), ys, color=:lightgray)
+   vlines!(ax, param_value; color)
+   ylims!(ax; low=0.0)
    u_str = param_unit == NoUnits ? "unitless" : string(param_unit)
    ax.xlabel = "$s ($u_str)"
    hideydecorations!(ax)
    (u_str == "‱") && xlims!(ax, s == :σ_ε ? (0,20) : (-35,15))
-   (u_str == "pM") && xlims!(ax, (0,300))
+   #(u_str == "pM") && xlims!(ax, (0,300))
 end
+function plot_params!(ax, p, symbols)
+    for s in symbols
+        plot_param!(ax, p, s)
+    end
+ end
+
 
 
 

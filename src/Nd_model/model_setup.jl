@@ -109,14 +109,14 @@ const AEOL_Chienetal = let
     s_A_2D = AeolianSources.load("Chien")
     tmp = Any[]
     for k in AeolianSources.Chien_AEROSOLTYPE_NAMES
-        v_2D = s_A_2D[k]
+        ϕ_2D = s_A_2D[k]
         # Take annual mean and permute dims
-        v_2D_annual = permutedims(dropdims(mean(v_2D, dims=3), dims=3), (2,1))
+        ϕ_2D_annual = permutedims(dropdims(mean(ϕ_2D, dims=3), dims=3), (2,1))
         # Regrid to OCIM2 grid
-        v_2D_annual_regridded = regrid(v_2D_annual, s_A_2D[:lat], s_A_2D[:lon], grd)
+        ϕ_2D_annual_regridded = regrid(ϕ_2D_annual, s_A_2D[:lat], s_A_2D[:lon], grd)
         # Paint the top layer only, with units
         OneHot3rdDim = reshape(grd.depth .== grd.depth[1], (1,1,size(grd)[3]))
-        v_3D = (v_2D_annual_regridded * u"kg/m^2/s" * DustNd / grd.δdepth[1]) .* OneHot3rdDim
+        v_3D = (ϕ_2D_annual_regridded * u"kg/m^2/s" * DustNd / grd.δdepth[1]) .* OneHot3rdDim
         # Convert to moles of Nd and vectorize
         v = vectorize(ustrip.(u"molNd/m^3/s", v_3D), grd)
         push!(tmp, (k, v))
@@ -292,10 +292,10 @@ end
 const v_sed_multiplier = f_topo ./ ustrip.(vectorize(grd.δz_3D, grd))
 
 # Reactivity α as a quadratic function of ε
-const α_scaling = upreferred(10εunit)
+const ε10 = upreferred(10εunit)
 function α_quad(ε, p)
     @unpack α_a, α_c = p
-    @. α_a * ((ε - α_c) / α_scaling)^2 + 1
+    @. α_a * ((ε - α_c) / ε10)^2 + 1
 end
 α_quad(p) = α_quad(ε_sed, p)
 # Enhanced Greenland Nd release
@@ -320,10 +320,10 @@ function α_GRL(p)
     @. α_GRL * GRL_mask + 1.0 * !GRL_mask
 end
 # Shifting of effective ε released as per notebook in extras/
-shifted_ε(μ, σ, a, c, α_scaling) = (a * (μ - 2 * (c-μ)) * σ^2 + (a * (c-μ)^2 + α_scaling^2) * μ)/(a * σ^2 + a * (c - μ)^2 + α_scaling^2)
+shifted_ε(μ, σ, a, c, ε10) = (a * (μ - 2 * (c-μ)) * σ^2 + (a * (c-μ)^2 + ε10^2) * μ)/(a * σ^2 + a * (c - μ)^2 + ε10^2)
 function shifted_ε_sed(p)
     @unpack α_a, α_c, σ_ε = p
-    shifted_ε.(ε_sed, σ_ε, α_a, α_c, α_scaling)
+    shifted_ε.(ε_sed, σ_ε, α_a, α_c, ε10)
 end
 R_sed(p) = R.(shifted_ε_sed(p))
 
@@ -344,7 +344,7 @@ const ϕ_He = let
     grd_OCIM2, _, ϕ_He, _ = OCIM2.load()
     (debug || Circulation ≠ OCIM2) ? ϕ_He = regrid(ϕ_He, latvec(grd_OCIM2), lonvec(grd_OCIM2), depthvec(grd_OCIM2), grd) : ϕ_He
 end
-const v_hydro = vnormalize(@. ϕ_He * (z_top > 0))
+const v_hydro = vnormalize(@. ϕ_He * (z_top > 0)) # Remove the air–sea gas exchange (from the OCIM2 product)
 function s_hydro(p)
     @unpack σ_hydro = p
     return σ_hydro * v_hydro

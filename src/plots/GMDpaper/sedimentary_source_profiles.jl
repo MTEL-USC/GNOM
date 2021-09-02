@@ -5,13 +5,11 @@ use_GLMakie = false
 include("../plots_setup_Nd.jl")
 
 
-# Create the figure
-fig = Figure()
-use_GLMakie && display(fig)
 
 isbasins = [isatlantic2, ispacific2, isantarctic]
 basins = ["ATL", "PAC", "SO"]
 colors = ColorSchemes.colorschemes[:tableau_colorblind][[5,6,4]]
+
 
 
 function sed_source_profiles!(fig)
@@ -19,12 +17,12 @@ function sed_source_profiles!(fig)
     ztop = sort(unique(topdepthvec(grd)))
     yticks = vcat(0, zbot)
     y = reduce(vcat, [zt, zb] for (zt, zb) in zip(ztop, zbot))
-    label_opts = (textsize=20, halign=:right, valign=:bottom, padding=(10,10,5,5), font=labelfont, color=:black)
-    # left panel is just plain source
-    ax = fig[1,1] = Axis(fig)
+    label_opts = (textsize=20, halign=:left, valign=:bottom, padding=(10,10,5,5), font=labelfont, color=:black)
+
+    # left panel is just ϕ(z)
+    ax = fig[1,2] = Axis(fig)
     u = u"pmol/cm^2/yr"
     upref = upreferred(u)
-
     z = 0:1:6000
     v = ustrip.(u, ϕ(p).(z) .* upref)
 
@@ -34,12 +32,13 @@ function sed_source_profiles!(fig)
     #xlims!(ax, (0, 1.05maximum(v)))
     xlims!(ax, (0, maximum(ax.finallimits[])[1]))
     ax.yticks = 0:1000:6000
-    ax.xlabel = "local (per unit area)\nsedimentary source ($(u))"
+    ax.xlabel = "Base sed. flux, ϕ(z) ($(u))"
     ax.ylabel = "depth (m)"
-    Label(fig, bbox = ax.scene.px_area, panellabels[1]; label_opts...)
+    Label(fig, bbox = ax.scene.px_area, panellabels[3]; label_opts...)
+
     # panel for integrated source
-    ax = fig[1,2] = Axis(fig)
-    u∫dxdy = u"kmol/m/yr" 
+    ax = fig[2,2] = Axis(fig)
+    u∫dxdy = u"kmol/m/yr"
     ∫dxdy_s_sed = ∫dxdy(s_sed(p) * upreferred(uDNd) / u"s", grd) .|> u∫dxdy
     x = vcat(0, repeat(ustrip.(∫dxdy_s_sed), inner=2), 0)
     #lines!(ax, x, vcat(0, y, maximum(zbot)))
@@ -47,14 +46,61 @@ function sed_source_profiles!(fig)
     ylims!(ax, (6000, -50))
     xlims!(ax, (0, maximum(ax.finallimits[])[1]))
     ax.yticks = 0:1000:6000
-    ax.xlabel = "horizontally integrated\nsedimentary source ($(u∫dxdy))"
-    hideydecorations!(ax, grid=false)
+    ax.ylabel = "Depth (m)"
+    ax.xlabel = "∫dxdy sed. source ($(u∫dxdy))"
+    #hideydecorations!(ax, grid=false)
+    Label(fig, bbox = ax.scene.px_area, panellabels[4], ; label_opts...)
+
+    # panel for alpha curve
+    ax1 = fig[1,1] = Axis(fig)
+    εs = upreferred.(range(εclims..., length=1001) * εunit)
+    αs = α_quad(εs, p)
+    lines!(ax1, ustrip.(εunit, εs), αs)
+    ax1.xlabel = "εNd (‱)"
+    ax1.ylabel = "Scaling factor α(εNd)"
+    ylims!(ax1, low=0.0)
+    xlims!(ax1, εclims)
+    Label(fig, bbox = ax1.scene.px_area, panellabels[1], ; label_opts...)
+
+
+    # panel for shifted epsilon
+    ax = fig[2,1] = Axis(fig)
+    @unpack α_a, α_c, σ_ε = p
+    ε_eff = shifted_ε.(εs, σ_ε, α_a, α_c, ε10)
+    lines!(ax, ustrip.(εunit, εs), ustrip.(εunit, ε_eff - εs))
+    ax.xlabel = "In situ εNd (‱)"
+    ax.ylabel = "Released εNd − εNd (‱)"
+    xlims!(ax, εclims)
     Label(fig, bbox = ax.scene.px_area, panellabels[2], ; label_opts...)
+
+
+    # α map
+    α2D = permutedims(rearrange_into_3Darray(α_quad(p), grd)[:,:,1])
+    innan = findall(.!isnan.(α2D))
+    colorrange = extrema(α2D[innan]) .* (0,1)
+    ax = fig[3:4,:] = Axis(fig, backgroundcolor=:gray20, aspectratio=DataAspect())
+    mapit!(ax, clon, mypolys(clon), color=:gray50)
+    hm = heatmap!(ax, sclons, lats, view(α2D, ilon, :), colormap=αcmap; nan_color, colorrange)#, colorrange=αlims)
+    mapit!(ax, clon, mypolys(clon), color=:transparent, strokecolor=:black, strokewidth=1)
+    # Better lat/lon ticks
+    mylatlons!(ax, latticks30, lonticks60)
+    # colorbar
+    cbar = fig[end+1,:] = Colorbar(fig, hm, label="Scaling factor α(εNd)", vertical=false, flipaxis=false, ticklabelalign = (:center, :top))#, ticks=αlevs)
+    cbar.width = Relative(3/4)
+    cbar.height = 30
+    cbar.tellheight = true
+
+    # label
+    topscene = Scene(fig.scene)
+    Label(topscene, bbox = ax.scene.px_area, panellabels[5]; label_opts...)
+    #textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:black)
 
     nothing
 end
 
-# Create the plot
+# Create the figure
+fig = Figure(resolution=(800,1000))
+use_GLMakie && display(fig)
 sed_source_profiles!(fig)
 
 # Label axes
@@ -63,6 +109,6 @@ sed_source_profiles!(fig)
 
 #save(joinpath(output_path, "Nd_Makie_profiles.png"), scene)
 #save(joinpath(archive_path, "Nd_profiles_$(lastcommit)_run$(run_num).png"), scene, px_per_unit=4)
-save(joinpath(archive_path, "sedimentary_source_profiles_$(lastcommit)_run$(run_num).pdf"), fig)
+save(joinpath(archive_path, "sedimentary_source_details_$(lastcommit)_run$(run_num).pdf"), fig)
 
 nothing

@@ -15,8 +15,8 @@
 export PATH=~/Applications/julia-1.6.2/bin:$PATH
 export LD_LIBRARY_PATH=~/Applications/julia-1.6.2/lib
 
-# Cd to the root folder 
+# Cd to the root folder
 cd /home/geovault-06/pasquier/Projects/GNOM
 
 # Optimize it!
-julia src/Si_model/run.jl
+julia src/Si_model/setup_and_optimize.jl

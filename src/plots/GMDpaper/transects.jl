@@ -12,7 +12,7 @@ include("../plots_setup_Nd.jl")
 
 
 # Full figure with every transect
-ts = Nd_transects.transects
+ts = Nd_transects.transects[Nd_t_sort]
 nt = length(ts)
 fig = Figure(resolution=(1600, 1600))
 #display(s)
@@ -47,26 +47,36 @@ for it in 1:nt
     i, j = Tuple(CartesianIndices((nt÷2+1, 2))[it+1])
     t = sort(OceanographyCruises.shiftlon(ts[it], baselon=wlon))
     ct = CruiseTrack(t)
-    local ax = Axis(fig[i,j], xgridvisible=false, ygridvisible=false, backgroundcolor=land_color)
+    local ax = Axis(fig[i,j], xgridvisible=false, ygridvisible=false, backgroundcolor=land_color, halign=:left)
     push!(axs, ax)
     hm = makietransect!(ax, DNdmodel, ct, colormap=Ndcmap, nan_color=nan_color, levels=Ndlevels, colorrange=Ndclims, extendhigh = :auto) # note: added levels with contourf
     sc = makiescattertransect!(ax, t, colormap=Ndcmap, markersize=markersize)
     push!(scs, hm)
     sc.plots[end].colorrange = Ndclims # color of last overlaid scatter
     ylims!(ax, (6000,0))
-    Label(fig, bbox = axs[it].scene.px_area, t.cruise, textsize=20, halign=:right, valign=:bottom, padding=(0,35,5,0), font=labelfont, color=labelcol)
-    Label(fig, bbox = axs[it].scene.px_area, panellabels[it+1], textsize=20, halign=:left, valign=:bottom, padding=(10,10,5,10), font=labelfont, color=labelcol)
-    Label(fig, bbox = axs[it].scene.px_area, "■", textsize=20, halign=:right, valign=:bottom, padding=(0,10,5,0), font=labelfont, color=tcol[it])
+    dis = ustrip(km, maximum(scattertransect(t)[1]))
+    if dis > 1500
+        Label(fig, bbox = axs[it].scene.px_area, t.cruise, textsize=20, halign=:right, valign=:bottom, padding=(0,35,5,0), font=labelfont, color=labelcol)
+        Label(fig, bbox = axs[it].scene.px_area, panellabels[it+1], textsize=20, halign=:left, valign=:bottom, padding=(10,10,5,10), font=labelfont, color=labelcol)
+        Label(fig, bbox = axs[it].scene.px_area, "■", textsize=20, halign=:right, valign=:bottom, padding=(0,10,5,0), font=labelfont, color=tcol[it])
+    else # special treatment for tiny transects (labels don't fit)
+        Label(fig, bbox = axs[it].scene.px_area, string(panellabels[it+1], " ", t.cruise), textsize=20, halign=:right, valign=:bottom, padding=(0,-115,5,0), font=labelfont, color=labelcol)
+        Label(fig, bbox = axs[it].scene.px_area, "■", textsize=20, halign=:right, valign=:bottom, padding=(0,-140,5,0), font=labelfont, color=tcol[it])
+    end
     ax.xlabel="Distance (km)"
     ax.ylabel="Depth (m)"
     !((i==nt÷2+1) || (it==nt)) && hidexdecorations!(ax, ticks=false)
     j==2 && hideydecorations!(ax, ticks=false)
     tightlimits!(ax, Bottom())
+    ax.xticks = 0:1000:maximum(dis)
+    ax.width = 700 * (dis+2t_ext) / 8000
+    xlims!(ax, (-t_ext, dis+t_ext))
+    ylims!(ax, (6001, -1))
     hidespines!(ax, :t, :r)
 end
-linkaxes!(axs...)
+#linkaxes!(axs...)
 # colorbar (need to use scs[1].plots[end] because doubly-overlaid-scatter plot)
-cbar = fig[end+1,:] = Colorbar(fig, scs[1].plots[1], vertical=false, width=400, height=30,
+cbar = fig[end+1,:] = Colorbar(fig, scs[1].plots[1], vertical=false, width=600, height=30,
                                flipaxis=false, ticklabelalign=(:center, :top), label="[Nd] (pM)",
                                labelsize=25, ticks=Ndlevels[1:5:end])
 cbar.alignmode = Outside()
@@ -89,14 +99,14 @@ use_GLMakie || save(joinpath(archive_path, "Nd_transects_$(lastcommit)_run$(run_
 # Now isotope values
 
 # Full figure with every transect
-ts = εNd_transects.transects[1:10 .≠ 3] # skips GA04 because it has no water values? (why is it in Med??)
+ts = εNd_transects.transects[ε_t_sort] # skips GA04 because it has no water values? (why is it in Med??)
 nt = length(ts)
 fig = Figure(resolution=(1600, 1600))
 #display(s)
 axs = Axis[]
 scs = Any[]
 # colors for cruises
-tcol = tcol[[1,2,4,6,7,8,9,10,11]] # keep same colors for transects (but εNd transects is a subset of [Nd] transects) 
+tcol = tcol[[1,2,4,6,7,8,9,10,11]] # keep same colors for transects (but εNd transects is a subset of [Nd] transects)
 # Minimap in top left
 subl = GridLayout(1,2)
 ax = subl[1,1] = Axis(fig, backgroundcolor=water_color)
@@ -122,7 +132,7 @@ for it in eachindex(ts)
     i, j = Tuple(CartesianIndices((nt÷2+1, 2))[it+1])
     t = sort(OceanographyCruises.shiftlon(ts[it], baselon=wlon))
     ct = CruiseTrack(t)
-    local ax = fig[i,j] = Axis(fig, xgridvisible=false, ygridvisible=false, backgroundcolor=land_color)
+    local ax = fig[i,j] = Axis(fig, xgridvisible=false, ygridvisible=false, backgroundcolor=land_color, halign=:left)
     push!(axs, ax)
     hm = makietransect!(ax, εNdmodel, ct, colormap=εcmap, nan_color=nan_color, levels=εlevels, colorrange=εclims,
                        extendhigh = :auto, extendlow = :auto) # note: added εlevels with contourf
@@ -130,21 +140,30 @@ for it in eachindex(ts)
     push!(scs, hm)
     sc.plots[end].colorrange = εclims # color of last overlaid scatter
     ylims!(ax, (6000,0))
-    Label(fig, bbox = axs[it].scene.px_area, t.cruise, textsize=20, halign=:right, valign=:bottom, padding=(0,35,5,0), font=labelfont, color=labelcol)
-    Label(fig, bbox = axs[it].scene.px_area, panellabels[it+1], textsize=20, halign=:left, valign=:bottom, padding=(10,10,5,10), font=labelfont, color=labelcol)
-    Label(fig, bbox = axs[it].scene.px_area, "■", textsize=20, halign=:right, valign=:bottom, padding=(0,10,5,0), font=labelfont, color=tcol[it])
+    dis = ustrip(km, maximum(scattertransect(t)[1]))
+    if dis > 1500
+        Label(fig, bbox = axs[it].scene.px_area, t.cruise, textsize=20, halign=:right, valign=:bottom, padding=(0,35,5,0), font=labelfont, color=labelcol)
+        Label(fig, bbox = axs[it].scene.px_area, panellabels[it+1], textsize=20, halign=:left, valign=:bottom, padding=(10,10,5,10), font=labelfont, color=labelcol)
+        Label(fig, bbox = axs[it].scene.px_area, "■", textsize=20, halign=:right, valign=:bottom, padding=(0,10,5,0), font=labelfont, color=tcol[it])
+    else # special treatment for tiny transects (labels don't fit)
+        Label(fig, bbox = axs[it].scene.px_area, string(panellabels[it+1], " ", t.cruise), textsize=20, halign=:right, valign=:bottom, padding=(0,-115,5,0), font=labelfont, color=labelcol)
+        Label(fig, bbox = axs[it].scene.px_area, "■", textsize=20, halign=:right, valign=:bottom, padding=(0,-140,5,0), font=labelfont, color=tcol[it])
+    end
     ax.xlabel="Distance (km)"
     ax.ylabel="Depth (m)"
     !((i==nt÷2+1) || (it==nt)) && hidexdecorations!(ax, ticks=false)
     j==2 && hideydecorations!(ax, ticks=false)
     tightlimits!(ax, Bottom())
+    ax.xticks = 0:1000:maximum(dis)
+    ax.width = 700 * (dis+2t_ext) / 8000
+    xlims!(ax, (-t_ext, dis+t_ext))
+    ylims!(ax, (6001, -1))
     hidespines!(ax, :t, :r)
 end
-linkaxes!(axs...)
 # colorbar (need to use scs[1].plots[end] because doubly-overlaid-scatter plot)
-cbar = fig[end+1,:] = Colorbar(fig, scs[1].plots[1], vertical=false, width=400, height=30,
-                               flipaxis=false, ticklabelalign=(:center, :top), label="εNd (‱)", 
-                               labelsize=25, ticks=εlevels[1:5:end])
+cbar = fig[end+1,:] = Colorbar(fig, scs[1].plots[1], vertical=false, width=600, height=30,
+                               flipaxis=false, ticklabelalign=(:center, :top), label="εNd (‱)",
+                               labelsize=25, ticks=εlevels[1:10:end])
 cbar.alignmode = Outside()
 cbar.tellheight = true
 # final touches

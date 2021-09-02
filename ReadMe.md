@@ -44,10 +44,24 @@ This is easily done in 3 steps:
 4. Chose the parameters you want. For the optimal parameters, you can load them via XXX. Otherwise, choose parameter values, via
 
     ```julia
-    p = Params()
+    p = Params(...)
     ```
 
-5. Solve for the system
+5. Solve for the system by typing
+
+    ```julia
+    sol = solve(prob, CTKAlg(), preprint="Nd & εNd solve ", τstop=ustrip(u"s", 1e3u"Myr"))
+    ```
+
+    which will return `sol`, a large vector containing the vectors for the two isotopes nominally tracking <sup>143</sup>Nd and <sup>144</sup>Nd. To get the total Nd concentration and the ε<sub>Nd</sub> values, type
+
+    ```julia
+    DNd1, DNd2 = unpack_tracers(s_optimized, grd)
+    DNd, εNd = modify(DNd1, DNd2)
+    ```
+
+    where `modify` is a function defined in the model setup to do exactly that conversion.
+
 
 The optimized bSi field required for opal scavenging is automatically downloaded from XXX.
 

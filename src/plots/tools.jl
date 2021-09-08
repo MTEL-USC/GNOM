@@ -267,8 +267,8 @@ sclons = view(clons, ilon) # sorted centered grd longitudes
 
 # Transect plots stuff
 # sort transects by distance so that longests are at bottom
-Nd_t_sort = [7, 1, 10, 9, 2, 11, 8, 6, 4, 5, 3]
-ε_t_sort = [1, 6, 4, 8, 10, 7, 5, 2, 9]
+Nd_t_sort = [11, 10, 8, 9, 7, 1, 2, 4, 5, 3, 6]
+ε_t_sort = [10, 9, 7, 8, 1, 2, 4, 5, 6]
 t_ext = 1 # transect extension in km (so it goes from -t_ext to total distance + t_ext)
 
 cl0 = 0 # centered central longitude for dust-region map

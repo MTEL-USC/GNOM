@@ -41,7 +41,8 @@ function plot_obs_maps!(fig)
     nothing
 
     # Legend
-    leg = Legend(fig, scts, sources)
+    markers = [MarkerElement(; marker, color, markersize=15, strokewidth=1) for (marker,color) in zip(mshp, mcol)]
+    leg = Legend(fig, markers, sources)
     leg.orientation = :horizontal
     leg.tellheight = true
     fig[3,1] = leg

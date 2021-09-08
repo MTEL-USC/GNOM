@@ -55,6 +55,7 @@ function sed_source_profiles!(fig)
     ax1 = fig[1,1] = Axis(fig)
     εs = upreferred.(range(εclims..., length=1001) * εunit)
     αs = α_quad(εs, p)
+    vlines!(ax1, [ustrip.(p.α_c)], linestyle=:dash, color=:gray)
     lines!(ax1, ustrip.(εunit, εs), αs)
     ax1.xlabel = "εNd (‱)"
     ax1.ylabel = "Scaling factor α(εNd)"
@@ -67,6 +68,8 @@ function sed_source_profiles!(fig)
     ax = fig[2,1] = Axis(fig)
     @unpack α_a, α_c, σ_ε = p
     ε_eff = shifted_ε.(εs, σ_ε, α_a, α_c, ε10)
+    vlines!(ax, [ustrip.(p.α_c)], linestyle=:dash, color=:gray)
+    hlines!(ax, [0.0], color=:gray)
     lines!(ax, ustrip.(εunit, εs), ustrip.(εunit, ε_eff - εs))
     ax.xlabel = "In situ εNd (‱)"
     ax.ylabel = "Released εNd − εNd (‱)"

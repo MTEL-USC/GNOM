@@ -58,7 +58,6 @@ const Ndunit = pM
     K_dust::Tp         | 2e15   | NoUnits      | true  |   (0,∞)  | "Dust-scavenging reaction constant"
     f_dust::Tp         | 0.073  | NoUnits      | true  |   (0,1)  | "Fraction of non-buried dust-scavenged Nd"
     w₀_dust::Tp        | 1.0    | km/yr        | false |   (0,∞)  | "Settling velocity of dust-scavenged Nd"
-    τ_ns::Tp           | 100.0  | yr           | true  |   (0,∞)  | "Benthic sink"
 end
 
 
@@ -394,26 +393,12 @@ end
 s_gw_iso(p) = R_sed(p) .* s_gw(p)
 
 
-#================================================
-Bottom sink
-================================================#
-function ϕ_normalized(p)
-    @unpack ϕ_∞ = p
-    z -> ϕ(p)(z) / ϕ_∞
-end
-ϕ_bot_normalized(p) = ϕ_normalized(p).(z_bot)
-function neph_sink(x, p)
-    @unpack τ_ns = p
-    @. f_topo * $ϕ_bot_normalized(p) * x / τ_ns
-end
-
-
 
 #====================================#
 # Right-hand side of tracer equation #
 #====================================#
-G_Nd(DNd, ⁱDNd, p) = s_tot(p) - neph_sink(DNd, p)
-G_Nd_iso(DNd, ⁱDNd, p) = s_tot_iso(p) - neph_sink(ⁱDNd, p)
+G_Nd(DNd, ⁱDNd, p) = s_tot(p)
+G_Nd_iso(DNd, ⁱDNd, p) = s_tot_iso(p)
 #G_Nd(dx, DNd, ⁱDNd, p) = dx .= s_tot(p)
 #G_Nd_iso(dx, DNd, ⁱDNd, p) = dx .= s_tot_iso(p)
 

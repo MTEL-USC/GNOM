@@ -7,7 +7,7 @@ Optimization setup
 
 include("obs.jl")
 
-# isotope function
+# isotope function returns [Nd] and εNd from χNd and χRNd
 modify(DNd, ⁱDNd) = (DNd, ⁱDNd ./ DNd ./ R_CHUR .- 1)
 
 # Weights for objective function

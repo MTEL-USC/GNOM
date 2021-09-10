@@ -41,6 +41,7 @@ This is easily done in 3 steps:
 
     to run a single simulation of the GNOM model with optimized parameters, as reported in [*Pasquier, Hines, et al.* (2021)]().
 
+If you want to edit the parameter values, you can edit the [src/Nd_model/single_run.jl](src/Nd_model/single_run.jl), which contains a list of all the optimal parameters values and follow the same steps above.
 
 (Note that the optimized bSi field required for opal scavenging is automatically downloaded from FigShare, but you can also edit the Si-cycle code and re-optimize it if you wish to.)
 

@@ -61,7 +61,7 @@ sol = solve(prob, CTKAlg(), preprint="Nd & εNd solve ", τstop=ustrip(u"s", 1e3
 DNd, DRNd = unpack_tracers(sol, grd)
 
 # compute εNd
-εNd = ε(DRNd ./ DNd)
+εNd = ε.(DRNd ./ DNd)
 
 # For plotting, you can either
 # follow the plotting scripts from the GNOM repository and use Makie

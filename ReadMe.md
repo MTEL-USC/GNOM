@@ -36,34 +36,13 @@ This is easily done in 3 steps:
 3. In Julia, type
 
     ```julia
-    include("src/Nd_model/model_setup.jl")
+    include("src/Nd_model/single_run.jl")
     ```
 
-    to run the Julia code that will set the GNOM model up. At this stage, your model is ready to be run with the parameters in `p`.
-
-4. Chose the parameters you want. For the optimal parameters, you can load them via XXX. Otherwise, choose parameter values, via
-
-    ```julia
-    p = Params(...)
-    ```
-
-5. Solve for the system by typing
-
-    ```julia
-    sol = solve(prob, CTKAlg(), preprint="Nd & εNd solve ", τstop=ustrip(u"s", 1e3u"Myr"))
-    ```
-
-    which will return `sol`, a large vector containing the vectors for the two isotopes nominally tracking <sup>143</sup>Nd and <sup>144</sup>Nd. To get the total Nd concentration and the ε<sub>Nd</sub> values, type
-
-    ```julia
-    DNd1, DNd2 = unpack_tracers(s_optimized, grd)
-    DNd, εNd = modify(DNd1, DNd2)
-    ```
-
-    where `modify` is a function defined in `model_setup.jl` to do exactly that conversion.
+    to run a single simulation of the GNOM model with optimized parameters, as reported in [*Pasquier, Hines, et al.* (2021)]().
 
 
-The optimized bSi field required for opal scavenging is automatically downloaded from XXX.
+(Note that the optimized bSi field required for opal scavenging is automatically downloaded from FigShare, but you can also edit the Si-cycle code and re-optimize it if you wish to.)
 
 ## Plotting
 
@@ -71,8 +50,6 @@ The vectors, matrices, and 3D arrays that you can extract from the GNOM model th
 Although AIBECS.jl provides recipes for [Plots.jl](https://github.com/JuliaPlots/Plots.jl), each figure in the GNOM v1.0 paper was created with [Makie.jl](https://github.com/JuliaPlots/Makie.jl) because it provides finer control on the layout.
 
 You can reproduce the same plots as in the paper by using the code in the `src/plots/GMDpaper/`.
-
-
 
 ## Optimization
 

@@ -148,9 +148,23 @@ const dustparticles = let # Repeat the dust field throughout the water column
     vnormalize(vectorize(dust3D, grd))
 end
 # Opal (bSi) from side Si-cycle model
-# Note: The Si model optimization must have been run before for this data to be used!
-const bSi = jldopen(joinpath(output_path, "optimized_Simodel_$circname.jld2")) do file
-    vnormalize(file["PSi"])
+const bSi = let
+    Si_model_file = if false # use local output file if you want to update the Si-cycle model
+        # Note: The Si model optimization must have been run before for this data to be used!
+        joinpath(output_path, "optimized_Simodel_$circname.jld2")
+    else # otherwise, download Si-model GNOM v1 output
+        register(DataDep(
+            "GNOM_Si_model",
+            "Si-cycle model output. See Pasquier, Hines, et al. (2021)",
+            "https://ndownloader.figshare.com/files/30725783",
+            "eef6a0c288422ffeefd78f870d8812519acda7dc6b719f3d08ca0dc0ae4a92bc"
+        ))
+        joinpath(datadep"GNOM_Si_model", "optimized_Simodel_$circname.jld2")
+    end
+    # Then open JLD2 file and load the particulate Si variable, PSi
+    jldopen(Si_model_file) do file
+        vnormalize(file["PSi"])
+    end
 end
 # Instead of simply building the matrices with tranposrtoperator, to speed things up, these are constant
 # vectors of the values that go into the matrices. This is much more complicated now, but it is much faster, too
@@ -173,7 +187,7 @@ const v_scav_noremin_dict, v_scav_justremin_dict = let
     )
     v_scav_noremin = Dict((t, collect((T_w_noremin * diagonals[t])[ijscav])) for t in instances(ScavenginParticle))
     v_scav_justremin = Dict((t, collect((T_w_justremin * diagonals[t])[ijscav])) for t in instances(ScavenginParticle))
-    # Check that the transport operators are going to be correct
+    # Check that the transport operators are correct
     for t in instances(ScavenginParticle)
         (K, w₀, f) = rand(3)
         (K * w₀ * (v_scav_noremin[t] + f * v_scav_justremin[t]) ≈ collect((transportoperator(grd, z -> w₀ ; z_top=z_top, z_bot=z_bot, frac_seafloor=f_topo, fsedremin=f) * K * diagonals[t])[ijscav])) || error("Nah not good for $t")

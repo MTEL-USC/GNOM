@@ -1,4 +1,6 @@
-include("model_setup.jl")
+# This lines sets up the model (and `F`) only once,
+# so that you rerunning this file will not repeat the entire model setup
+!isdefined(Main, :F) && include("model_setup.jl")
 
 # Chose your parameter values here
 # Optimized parameters as published in Pasquier, Hines, et al. (2021)

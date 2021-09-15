@@ -2,12 +2,10 @@
 
 ***A Global Neodymium Ocean Model.***
 
-This repository holds the code and data for our global steady-state model of the marine Nd cycle as described in the following paper
+This repository holds the code and data for the global steady-state model of the marine neodymium (Nd) cycle as described in *Pasquier, Hines, et al.* (in prep.)[^Pasquier_Hines_etal_GMD_2021].
 
-Pasquier, B., Hines, S., Liang, H., Wu, Y., John, S., and Goldstein, S.: *GNOM v1.0: An optimized steady-state model of the modern marine neodymium cycle*, in preparation for submission to Geosci. Model Dev.
-
-This ReadMe serves as documentation for running the GNOM model in Julia.
-Thanks to Julia's excellent built-in package manager and the DataDeps.jl package, no setup should be required apart from installing Julia, downloading the GEOTRACES dataset, and activating the GNOM environment.
+This ReadMe serves as documentation for running the GNOM model in [Julia](https://julialang.org/).
+Thanks to Julia's excellent built-in package manager and the [DataDeps.jl](https://github.com/oxinabox/DataDeps.jl) package, no setup should be required apart from installing Julia, downloading the GEOTRACES dataset, and activating the GNOM environment.
 
 ## Installation
 
@@ -41,16 +39,84 @@ This is easily done in 3 steps:
 
     to run a single simulation of the GNOM model with optimized parameters, as reported in [*Pasquier, Hines, et al.* (2021)]().
 
-If you want to edit the parameter values, you can edit the [src/Nd_model/single_run.jl](src/Nd_model/single_run.jl), which contains a list of all the optimal parameters values and follow the same steps above.
+Once run, the [`src/Nd_model/single_run.jl`](src/Nd_model/single_run.jl) file should have created two variables, `DNd` and `εNd` which contain the vectors for the Nd concentration (in mol/m<sup>−3</sup>) and ε<sub>Nd</sub> (unitless). Because the `εNd` vector is the last computed variable, the output should end with something like
 
-(Note that the optimized bSi field required for opal scavenging is automatically downloaded from FigShare, but you can also edit the Si-cycle code and re-optimize it if you wish to.)
+```julia
+200160-element Vector{Float64}:
+ -0.0006020528949600701
+ -0.000595097968841718
+  ⋮
+ -0.0013770493809266426
+ -0.001364787766450326
+```
+
+although the actual numerical values might be different.
+
+These are the ε<sub>Nd</sub> values that you can convert to parts per ten thousand (‱) by typing, e.g.,
+
+```julia
+julia> εNd .|> εunit
+200160-element Vector{Quantity{Float64, NoDims, Unitful.FreeUnits{(‱,), NoDims, nothing}}}:
+  -6.020528949600701 ‱
+ -5.9509796884171795 ‱
+                     ⋮
+ -13.770493809266426 ‱
+  -13.64787766450326 ‱
+```
+
+where `εunit` is the ‱ unit.
+
+Similarly, you can convert `DNd` to pM by doing:
+
+```julia
+julia> DNd * mol/m^3 .|> pM
+200160-element Vector{Quantity{Float64, 𝐍 𝐋⁻³, Unitful.FreeUnits{(pM,), 𝐍 𝐋⁻³, nothing}}}:
+  1.450921127576513 pM
+ 1.4497239997396394 pM
+                     ⋮
+ 38.646836627631856 pM
+ 34.017114010235964 pM
+```
+
+where here we additionally had to apply the default unit (mol m<sup>−3</sup>) before converting.
+
+You can edit the parameter values in [`src/Nd_model/single_run.jl`](src/Nd_model/single_run.jl) and run it again to simulate the [Nd] and ε<sub>Nd</sub> fields for different parameter values.
+
+If you encounter any errors, please share what you did and the stacktrace in a GitHub issue and we will try to troubleshoot the issue with you as fast as possible.
 
 ## Plotting
 
-The vectors, matrices, and 3D arrays that you can extract from the GNOM model through the [AIBECS.jl](https://github.com/JuliaOcean/AIBECS.jl) interface can be visualized with your plotting package of choice.
-Although AIBECS.jl provides recipes for [Plots.jl](https://github.com/JuliaPlots/Plots.jl), each figure in the GNOM v1.0 paper was created with [Makie.jl](https://github.com/JuliaPlots/Makie.jl) because it provides finer control on the layout.
+There many packages for plotting in Julia.
 
-You can reproduce the same plots as in the paper by using the code in the `src/plots/GMDpaper/`.
+### with Plots.jl
+
+The most popular plotting package is [Plots.jl](https://github.com/JuliaPlots/Plots.jl) and AIBECS.jl provides recipes for it.
+To use the Plots.jl package, simply type
+
+```julia
+julia> using Plots
+```
+
+The vectors of tracers, such as `DNd` and `εNd`, can be easily plotted with the AIBECS recipes.
+For example, after running the single run above, you can use
+
+```julia
+julia> plotverticalmean(εNd .|> εunit, grd, c=:balance)
+```
+
+which will output something like
+
+![XXXXXXXXXXXXXXXXX](plots_image_link)
+
+For more plot types, see the [AIBECS documentation](https://juliaocean.github.io/AIBECS.jl/stable/), which contains [example tutorials](https://juliaocean.github.io/AIBECS.jl/stable/#.-Tutorials) and [how-to guides](https://juliaocean.github.io/AIBECS.jl/stable/#.-How-to-guides) with simple plots.
+
+### With Makie.jl
+
+The figures in  were created with [Makie.jl](https://github.com/JuliaPlots/Makie.jl) because it provides finer control to create detailed publication-quality PDFs.
+
+AIBECS.jl does *not* provide recipes for Makie.jl, but there are a number of underlying functions to rearrange the 1D column vectors into 3D and take slices/averages over given regions/depths.
+These functions are used by the plotting scripts in [`src/plots/GMDpaper/`](src/plots/GMDpaper/), which you can directly use to reproduce the plots in [*Pasquier, Hines, et al.* (2021)[^Pasquier_Hines_etal_GMD_2021]]().
+
 
 ## Optimization
 
@@ -80,11 +146,16 @@ to optimize the Nd model. These are SLURM batch files that will request 1 node w
 
 ## Si model
 
+When running the Nd-cycling single run, the optimized Si-cycling fields required for opal scavenging are automatically downloaded from FigShare.
+However, is you want, you can also edit the Si-cycle code and re-optimize it.
+
 To run the Si-model optimization, call
 
 ```julia
-include("src/Si_model/run.jl")
+include("src/Si_model/setup_and_optimization.jl")
 ```
+
+Just like for the Nd-cycle model, you can modify the Si-cycle model in [`src/Si_model/model_setup.jl`](src/Si_model/model_setup.jl)
 
 ## Citation
 
@@ -94,3 +165,7 @@ To cite the more general GNOM model and future versions, please cite [*Pasquier 
 ## Changelog
 
 Currently a WIP, planned release v1.0 soon.
+
+
+
+[^Pasquier_Hines_etal_GMD_2021]: Pasquier, B., Hines, S., Liang, H., Wu, Y., John, S., and Goldstein, S.: *GNOM v1.0: An optimized steady-state model of the modern marine neodymium cycle*, in preparation for submission to Geosci. Model Dev.

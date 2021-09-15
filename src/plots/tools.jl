@@ -325,29 +325,27 @@ end
 
 
 # parameters
-function plot_param!(ax, p, s; color=:black)
-   param_unit = units(p, s)
-   param_value = getproperty(p, s)
-   param_dist = prior(p, s) #/ (ustrip(param_unit, 1.0upreferred(param_unit)))
-   xlims = Makie.default_range(param_dist, 0.005)
-   xleft = min(xlims.left, param_value)
-   xright = max(xlims.right, param_value)
-   xs = range(xleft, xright, length=1001)
-   ys = pdf.(param_dist, xs)
-   band!(ax, xs, zeros(length(xs)), ys, color=:lightgray)
-   vlines!(ax, param_value; color)
-   ylims!(ax; low=0.0)
-   u_str = param_unit == NoUnits ? "unitless" : string(param_unit)
-   ax.xlabel = "$s ($u_str)"
-   hideydecorations!(ax)
-   (u_str == "‱") && xlims!(ax, s == :σ_ε ? (0,20) : (-35,15))
-   #(u_str == "pM") && xlims!(ax, (0,300))
+function plot_param!(ax, p, s, powers_of_ten=0; color=:black, density_color=:lightgray)
+    param_unit = units(p, s)
+    param_value = getproperty(p, s)
+    param_dist = prior(p, s) #/ (ustrip(param_unit, 1.0upreferred(param_unit)))
+    xlims = Makie.default_range(param_dist, 0.005)
+    xleft = min(xlims.left, param_value)
+    xright = max(xlims.right, param_value)
+    xs = range(xleft, xright, length=1001)
+    ys = pdf.(param_dist, xs)
+    band!(ax, xs ./ exp10(powers_of_ten), zeros(length(xs)), ys, color=density_color)
+    vlines!(ax, param_value / exp10(powers_of_ten); color)
+    ylims!(ax; low=0.0)
+    pow_str = (powers_of_ten==0) ? "" : "×10" * Unitful.superscript(powers_of_ten)
+    u_str = (param_unit==NoUnits) ? "" : param_unit
+    paren_str = (u_str=="" && pow_str=="") ? "" : "($pow_str$u_str)"
+    ax.xlabel = "$s $paren_str"
+    #hideydecorations!(ax)
+    (u_str == "‱") && xlims!(ax, s == :σ_ε ? (0,20) : (-35,15))
+    #(u_str == "pM") && xlims!(ax, (0,300))
 end
-function plot_params!(ax, p, symbols)
-    for s in symbols
-        plot_param!(ax, p, s)
-    end
- end
+
 
 
 
@@ -373,7 +371,8 @@ markersize_maps = 4
 
 outer_padding = 30
 
-
+# density colors
+density_colors = ColorSchemes.Pastel1_8[[1,2,3,4,5,7,8]]
 
 # diagnosis plots
 maskscmap = ColorSchemes.okabe_ito[[8,6,1,5,2,4,7,3]]

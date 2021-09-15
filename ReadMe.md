@@ -112,11 +112,40 @@ For more plot types, see the [AIBECS documentation](https://juliaocean.github.io
 
 ### With Makie.jl
 
-The figures in  were created with [Makie.jl](https://github.com/JuliaPlots/Makie.jl) because it provides finer control to create detailed publication-quality PDFs.
+The figures in [*Pasquier, Hines, et al.* (in prep.)]() were created with [Makie.jl](https://github.com/JuliaPlots/Makie.jl) because it provides finer control to create detailed publication-quality PDFs.
+Although AIBECS.jl does *not* provide recipes for Makie.jl, there are a number of AIBECS functions to rearrange the 1D column vectors into 3D and take slices/averages over given regions/depths.
+For example, in line with the Plots.jl recipe used above, you can get the 2D array of the vertical mean with
 
-AIBECS.jl does *not* provide recipes for Makie.jl, but there are a number of underlying functions to rearrange the 1D column vectors into 3D and take slices/averages over given regions/depths.
-These functions are used by the plotting scripts in [`src/plots/GMDpaper/`](src/plots/GMDpaper/), which you can directly use to reproduce the plots in [*Pasquier, Hines, et al.* (in prep.)]().
+```julia
+julia> verticalmean(εNd .|> εunit, grd)
+91×180 Matrix{Quantity{Float64, NoDims, Unitful.FreeUnits{(‱,), NoDims, nothing}}}:
+      NaN ‱      NaN ‱  …       NaN ‱       NaN ‱
+      NaN ‱      NaN ‱          NaN ‱       NaN ‱
+          ⋮             ⋱
+ -11.7113 ‱  -11.709 ‱     -11.7166 ‱  -11.7138 ‱
+      NaN ‱      NaN ‱  …       NaN ‱       NaN ‱
+```
 
+(where `NaN`s represent land/dry model grid cells.)
+
+Such functions are extensively used by the plotting scripts in [`src/plots/GMDpaper/`](src/plots/GMDpaper/), which you can directly use to reproduce the plots in [*Pasquier, Hines, et al.* (in prep.)]().
+
+Note that Makie.jl comes with multiple backends, of which GNOM includes GLMakie and CairoMakie.
+The default backend is CairoMakie because it is suited to PDF export.
+If you want to use GLMakie (for a window of the plot to appear without requiring you to open a PDF), you must set
+```julia
+use_GLMakie = true
+```
+
+#### Plots requiring observations
+
+To reproduce those figures in [*Pasquier, Hines, et al.* (in prep.)]() that require observations, you must load the [Nd] and ε<sub>Nd</sub> data by typing
+
+```julia
+include("src/Nd_model/obs.jl)
+```
+
+which will create a table `DNdobs` for [Nd] data and a table `εNdobs` for ε<sub>Nd</sub> data.
 
 ## Optimization
 
@@ -164,11 +193,9 @@ You can use the journal's citation tools, directly grab the contents of our [CIT
 
 > Pasquier, B., Hines, S., Liang, H., Wu, Y., John, S., and Goldstein, S.: *GNOM v1.0: An optimized steady-state model of the modern marine neodymium cycle*, in preparation for submission to Geosci. Model Dev.
 
-To cite the more general GNOM model and future versions, please cite [*Pasquier et al. (2021)*](zenodo_link?).
-
 ## Changelog
 
-Currently a WIP, planned release v1.0 soon.
+Currently a WIP, v1.0.0 release coming soon.
 
 
 

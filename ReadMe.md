@@ -2,7 +2,7 @@
 
 ***A Global Neodymium Ocean Model.***
 
-This repository holds the code and data for the global steady-state model of the marine neodymium (Nd) cycle as described in *Pasquier, Hines, et al.* (in prep.)[^Pasquier_Hines_etal_GMD_2021].
+This repository holds the code and data for the global steady-state model of the marine neodymium (Nd) cycle as described in [*Pasquier, Hines, et al.* (in prep.)]().
 
 This ReadMe serves as documentation for running the GNOM model in [Julia](https://julialang.org/).
 Thanks to Julia's excellent built-in package manager and the [DataDeps.jl](https://github.com/oxinabox/DataDeps.jl) package, no setup should be required apart from installing Julia, downloading the GEOTRACES dataset, and activating the GNOM environment.
@@ -24,7 +24,7 @@ Thanks to Julia's excellent built-in package manager and the [DataDeps.jl](https
 
 ## Single model run
 
-We refer to GNOM v1 as the Nd-cycling (and isotope) model with "optimized" parameters as described in [*Pasquier, Hines, et al.* (2021)](), which you can modify and run in just a few seconds on your laptop.
+We refer to GNOM v1 as the Nd-cycling (and isotope) model with "optimized" parameters as described in [*Pasquier, Hines, et al.* (in prep.)](), which you can modify and run in just a few seconds on your laptop.
 For a single model run, all you need is to set the model up and solve the linear system.
 (For instructions on how to run the optimization of the model parameters, head over to the next section.)
 This is easily done in 3 steps:
@@ -37,7 +37,7 @@ This is easily done in 3 steps:
     include("src/Nd_model/single_run.jl")
     ```
 
-    to run a single simulation of the GNOM model with optimized parameters, as reported in [*Pasquier, Hines, et al.* (2021)]().
+    to run a single simulation of the GNOM model with optimized parameters, as reported in [*Pasquier, Hines, et al.* (in prep.)]().
 
 Once run, the [`src/Nd_model/single_run.jl`](src/Nd_model/single_run.jl) file should have created two variables, `DNd` and `εNd` which contain the vectors for the Nd concentration (in mol/m<sup>−3</sup>) and ε<sub>Nd</sub> (unitless). Because the `εNd` vector is the last computed variable, the output should end with something like
 
@@ -115,7 +115,7 @@ For more plot types, see the [AIBECS documentation](https://juliaocean.github.io
 The figures in  were created with [Makie.jl](https://github.com/JuliaPlots/Makie.jl) because it provides finer control to create detailed publication-quality PDFs.
 
 AIBECS.jl does *not* provide recipes for Makie.jl, but there are a number of underlying functions to rearrange the 1D column vectors into 3D and take slices/averages over given regions/depths.
-These functions are used by the plotting scripts in [`src/plots/GMDpaper/`](src/plots/GMDpaper/), which you can directly use to reproduce the plots in [*Pasquier, Hines, et al.* (2021)[^Pasquier_Hines_etal_GMD_2021]]().
+These functions are used by the plotting scripts in [`src/plots/GMDpaper/`](src/plots/GMDpaper/), which you can directly use to reproduce the plots in [*Pasquier, Hines, et al.* (in prep.)]().
 
 
 ## Optimization
@@ -159,7 +159,11 @@ Just like for the Nd-cycle model, you can modify the Si-cycle model in [`src/Si_
 
 ## Citation
 
-To cite the GNOM v1 model, please cite [*Pasquier, Hines, et al.* (2021)](link_to_GMD_paper).
+To cite the GNOM v1 model, please cite [*Pasquier, Hines, et al.* (in prep.)]().
+You can use the journal's citation tools, directly grab the contents of our [CITATION.bib](CITATION.bib) file or simply use:
+
+> Pasquier, B., Hines, S., Liang, H., Wu, Y., John, S., and Goldstein, S.: *GNOM v1.0: An optimized steady-state model of the modern marine neodymium cycle*, in preparation for submission to Geosci. Model Dev.
+
 To cite the more general GNOM model and future versions, please cite [*Pasquier et al. (2021)*](zenodo_link?).
 
 ## Changelog
@@ -168,4 +172,3 @@ Currently a WIP, planned release v1.0 soon.
 
 
 
-[^Pasquier_Hines_etal_GMD_2021]: Pasquier, B., Hines, S., Liang, H., Wu, Y., John, S., and Goldstein, S.: *GNOM v1.0: An optimized steady-state model of the modern marine neodymium cycle*, in preparation for submission to Geosci. Model Dev.

@@ -106,7 +106,7 @@ julia> plotverticalmean(εNd .|> εunit, grd, c=:balance)
 
 which will output something like
 
-![XXXXXXXXXXXXXXXXX](plots_image_link)
+![plot_GNOM_demo](https://user-images.githubusercontent.com/4486578/133375278-623b1e7d-4b52-4806-beec-db5be82bac32.png)
 
 For more plot types, see the [AIBECS documentation](https://juliaocean.github.io/AIBECS.jl/stable/), which contains [example tutorials](https://juliaocean.github.io/AIBECS.jl/stable/#.-Tutorials) and [how-to guides](https://juliaocean.github.io/AIBECS.jl/stable/#.-How-to-guides) with simple plots.
 

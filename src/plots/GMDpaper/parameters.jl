@@ -15,11 +15,13 @@ for (i,s) in enumerate((:α_a, :α_c, :σ_ε, :α_GRL))
 end
 
 # river, gw params
-ax = fig[2,1] = Axis(fig)
-plot_params!(ax, p, (:c_river, :c_gw))
+for (i,s) in enumerate((:c_river, :c_gw))
+    local ax = fig[2,i] = Axis(fig)
+    plot_param!(ax, p, s)
+end
 # hydro params
 for (i,s) in enumerate((:σ_hydro, :ε_hydro))
-    local ax = fig[2,i+1] = Axis(fig)
+    local ax = fig[2,i+2] = Axis(fig)
     plot_param!(ax, p, s)
 end
 # sed flux params
@@ -40,14 +42,17 @@ for (i,s) in enumerate((:β_volc, :ε_volc))
     plot_param!(ax, p, s)
 end
 # scavenging params 4×2 so 2×4
-scav_params = (:K_prec, :f_prec, :K_POC, :f_POC, :K_bSi, :f_bSi, :K_dust, :f_dust)
-for (i,s) in enumerate(scav_params)
-    I, J = Tuple(CartesianIndices((2,4))[i])
-    local ax = fig[7+I,J] = Axis(fig)
+K_scavs = (:K_prec, :K_POC, :K_bSi, :K_dust)
+for (i,s) in enumerate(K_scavs)
+    local ax = fig[8,i] = Axis(fig)
+    powers_of_ten = round(Int, log10(initial_value(p, s)))
+    plot_param!(ax, p, s, powers_of_ten)
+end
+f_scavs = (:f_prec, :f_POC, :f_bSi, :f_dust)
+for (i,s) in enumerate(f_scavs)
+    local ax = fig[9,i] = Axis(fig)
     plot_param!(ax, p, s)
 end
-ax = fig[10,1] = Axis(fig)
-plot_param!(ax, p, :τ_ns)
 
 save(joinpath(archive_path, "parameters_$(lastcommit)_run$(run_num).pdf"), fig)
 

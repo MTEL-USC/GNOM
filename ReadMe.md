@@ -2,8 +2,10 @@
 
 ***A Global Neodymium Ocean Model.***
 
-<img width=100% src="https://user-images.githubusercontent.com/4486578/133535732-d0360a48-5dc7-4653-8472-8c09ac0ff2e9.jpg">
-
+<p align="center">
+<img width=66.6% src="https://user-images.githubusercontent.com/4486578/133535732-d0360a48-5dc7-4653-8472-8c09ac0ff2e9.jpg">
+</p>
+    
 This repository holds the code and data for the global steady-state model of the marine neodymium (Nd) cycle as described in [*Pasquier, Hines, et al.* (in prep.)]().
 
 This ReadMe serves as documentation for running the GNOM model in [Julia](https://julialang.org/).

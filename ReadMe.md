@@ -41,7 +41,7 @@ You can reproduce the same output in just a few seconds on your laptop by follow
 3. In Julia, type
 
     ```julia
-    include("src/Nd_model/single_run.jl")
+    julia> include("src/Nd_model/single_run.jl")
     ```
 
 This sets the model up with the optimized parameters and runs a single simulation of the GNOM, which should take a few seconds to a few minutes, depending if it's the first time that you are running the file. (Unless there is an `ERROR` thrown out, you can safely ignore the warnings and information printed out.)

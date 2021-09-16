@@ -426,3 +426,5 @@ function numformat(s)
     s = replace(s, r"e\+0([0-9])" => s"\\times 10^{\1}")
     s = replace(s, r"e\+([0-9]+)" => s"\\times 10^{\1}")
 end
+
+retools = false # flag to avoid reloading tools

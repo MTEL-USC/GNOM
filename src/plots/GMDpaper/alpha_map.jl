@@ -1,7 +1,5 @@
 include("../plots_setup_Nd.jl")
 
-
-
 # levels and limits for colorbar
 #αlevs = 0.99:0.002:1.01
 #αlims = extrema(αlevs)
@@ -22,6 +20,12 @@ function αcurve(fig)
     topscene = Scene(fig.scene)
     Label(topscene, bbox = ax.scene.px_area, panellabels[1], textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:black)
 end
+
+
+
+#=====================================#
+#          α map in logscale          #
+#=====================================#
 
 # α colormap
 αcmap = cgrad(:solar)
@@ -61,6 +65,10 @@ else
 end
 
 
+
+#=====================================#
+#          α map in linear scale      #
+#=====================================#
 
 # α colormap
 αcmap = cgrad(:lajolla, rev=true)

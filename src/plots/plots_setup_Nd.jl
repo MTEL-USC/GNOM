@@ -1,9 +1,8 @@
 
 # Load the model functions
-(!isdefined(Main, :prob) || reload) && include("../Nd_model/model_setup.jl")
+(!isdefined(Main, :prob) || resetup) && include("../Nd_model/model_setup.jl")
 
 # Load the plots setup
 (!isdefined(Main, :εNd_transects) || reload) && include("load.jl")
-(!isdefined(Main, :numformat) || reload) && include("tools.jl")
+(!isdefined(Main, :numformat) || retools) && include("tools.jl")
 
-reload = false

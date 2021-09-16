@@ -5,7 +5,7 @@
 <p align="center">
 <img width=66.6% src="https://user-images.githubusercontent.com/4486578/133535732-d0360a48-5dc7-4653-8472-8c09ac0ff2e9.jpg">
 </p>
-    
+
 This repository holds the code and data for the global steady-state model of the marine neodymium (Nd) cycle as described in [*Pasquier, Hines, et al.* (in prep.)]().
 
 This ReadMe serves as documentation for running the GNOM model in [Julia](https://julialang.org/).
@@ -44,7 +44,7 @@ You can reproduce the same output in just a few seconds on your laptop by follow
     include("src/Nd_model/single_run.jl")
     ```
 
-This sets the model up with the optimized parameters and runs a single simulation of the GNOM, which should take a few seconds to a few minutes, depending if it's the first time that you are running the file. (Unless there is an `ERROR` thrown out, you can safely ignore the warnings and information printed out.) 
+This sets the model up with the optimized parameters and runs a single simulation of the GNOM, which should take a few seconds to a few minutes, depending if it's the first time that you are running the file. (Unless there is an `ERROR` thrown out, you can safely ignore the warnings and information printed out.)
 
 ### The single run output
 
@@ -128,9 +128,30 @@ For more plot types, see the [AIBECS documentation](https://juliaocean.github.io
 
 ### with Makie.jl
 
+#### Reproducing figures from the GNOM paper
+
+After your single run, you can reproduce the figures of the GNOM paper by running the scripts located in [`src/plots/GMDpaper/`](src/plots/GMDpaper/).
+For example, to reproduce the ε<sub>Nd</sub> transects (Fig. 10 in [*Pasquier, Hines, et al.* (in prep.)]()), you can type
+
+```julia
+julia> include("src/plots/GMDpaper/transects_eNd.jl")
+```
+
+and it will produce a figure similar to
+
+![eNd_transects_single_run10](https://user-images.githubusercontent.com/4486578/133563204-47901894-fbd2-4bae-8018-26d1da9900d0.jpg)
+
+Note that Makie.jl comes with multiple backends, of which GNOM includes GLMakie (that I would use for interactive plot windows) and CairoMakie (that I would use for PDFs).
+The Makie backend is set to GLMakie in [`src/Nd_model/single_run.jl`](src/Nd_model/single_run.jl) by setting the variable `use_GLMakie = true`.
+If you want to generate PDFs, use CairoMakie by editing the line to `use_GLMakie = false`.
+(If you switch between GLMakie and CairoMakie, you must rerun the `load.jl` file, which you can do by simply setting `reload = true` before running any of the figure scripts.)
+
+
+#### Why Makie and how to plot without the Plots.jl recipes?
+
 The figures in [*Pasquier, Hines, et al.* (in prep.)]() were created with [Makie.jl](https://github.com/JuliaPlots/Makie.jl) because it provides finer control to create detailed publication-quality PDFs.
 Although AIBECS.jl does *not* provide recipes for Makie.jl, there are a number of AIBECS functions to rearrange the 1D column vectors into 3D and take slices/averages over given regions/depths.
-For example, in line with the Plots.jl recipe used above, you can get the 2D array of the vertical mean with
+For example, in line with the Plots.jl recipe used above for the vertical mean of ε<sub>Nd</sub>, you can get the 2D array of the vertical mean with
 
 ```julia
 julia> verticalmean(εNd .|> εunit, grd)
@@ -146,9 +167,6 @@ julia> verticalmean(εNd .|> εunit, grd)
 
 Such functions are extensively used by the plotting scripts in [`src/plots/GMDpaper/`](src/plots/GMDpaper/), which you can directly use to reproduce the plots in [*Pasquier, Hines, et al.* (in prep.)]().
 
-Note that Makie.jl comes with multiple backends, of which GNOM includes GLMakie (that I would use for interactive plot windows) and CairoMakie (that I would use for PDFs).
-The Makie backend is set to GLMakie in [`src/Nd_model/single_run.jl`](src/Nd_model/single_run.jl) by setting the variable `use_GLMakie = true`.
-If you want to generate PDFs, use CairoMakie by editing the line to `use_GLMakie = false`.
 
 
 

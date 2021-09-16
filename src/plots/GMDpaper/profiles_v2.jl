@@ -5,7 +5,6 @@ include("../plots_setup_Nd.jl")
 
 # Create the figure
 fig = Figure(resolution=(1200, 900))
-use_GLMakie && display(fig)
 
 
 isbasins = [isatlantic2, ispacific2, isindian2, isantarctic]
@@ -108,8 +107,11 @@ linkxaxes!(axs[2,:]...)
 
 
 
-#save(joinpath(output_path, "Nd_Makie_profiles.png"), scene)
-#save(joinpath(archive_path, "Nd_profiles_$(lastcommit)_run$(run_num).png"), scene, px_per_unit=4)
-save(joinpath(archive_path, "Nd_profiles_exploded_$(lastcommit)_run$(run_num).pdf"), fig)
+if use_GLMakie
+    fig # show the output wiht GLMakie
+else
+    save(joinpath(archive_path, "Nd_profiles_exploded_$(lastcommit)_run$(run_num).pdf"), fig)
+    nothing # just so that no output is spat out
+end
 
 nothing

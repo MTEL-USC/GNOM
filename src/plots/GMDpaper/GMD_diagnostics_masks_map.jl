@@ -25,8 +25,6 @@ trim!(fig.layout)
 if use_GLMakie
     fig # show the output wiht GLMakie
 else
-    #save(joinpath(output_path, "εNd_sources_v2.$EXT"), scene)
-    #save(joinpath(archive_path, "εNd_sources_$(lastcommit)_v2.$EXT"), scene, px_per_unit=4)
     save(joinpath(archive_path, "Omega_maps_$(lastcommit).pdf"), fig)
     nothing # just so that no output is spat out
 end

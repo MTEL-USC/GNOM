@@ -5,7 +5,6 @@ include("../plots_setup_Nd.jl")
 
 # Create the figure
 fig = Figure(resolution=(1200, 1500))
-use_GLMakie && display(fig)
 
 # α parameters
 for (i,s) in enumerate((:α_a, :α_c, :σ_ε, :α_GRL))
@@ -53,8 +52,13 @@ for (i,s) in enumerate(f_scavs)
     plot_param!(ax, p, s)
 end
 
-save(joinpath(archive_path, "parameters_$(lastcommit)_run$(run_num).pdf"), fig)
 
+if use_GLMakie
+    fig # show the output wiht GLMakie
+else
+    save(joinpath(archive_path, "parameters_$(lastcommit)_run$(run_num).pdf"), fig)
+    nothing # just so that no output is spat out
+end
 
 #======================================#
 #          Print param tables          #

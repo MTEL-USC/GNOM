@@ -432,5 +432,6 @@ F, ∇ₓF = F_and_∇ₓF(fun)
 # problem
 prob = SteadyStateProblem(fun, x, p)
 
+resetup = false # flag for plotting to avoid resetting everything up
 
 

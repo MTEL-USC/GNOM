@@ -72,8 +72,12 @@ end
 # Create the plot
 myjointpdf!(fig)
 
-#save(joinpath(archive_path, "jointPDF_$(lastcommit)_run$(run_num).png"), fig, px_per_unit=4)
-save(joinpath(archive_path, "jointPDF_$(lastcommit)_run$(run_num).pdf"), fig)
+if use_GLMakie
+    fig # show the output wiht GLMakie
+else
+    save(joinpath(archive_path, "jointPDF_$(lastcommit)_run$(run_num).pdf"), fig)
+    nothing # just so that no output is spat out
+end
 
 
 
@@ -135,5 +139,9 @@ fig = Figure(resolution=(450, 1000))
 use_GLMakie && display(fig)
 myjointpdf2!(fig)
 
-#save(joinpath(archive_path, "jointPDF_$(lastcommit)_run$(run_num).png"), fig, px_per_unit=4)
-save(joinpath(archive_path, "jointPDF_vertical_$(lastcommit)_run$(run_num).pdf"), fig)
+if use_GLMakie
+    fig # show the output wiht GLMakie
+else
+    save(joinpaoth(archive_path, "jointPDF_vertical_$(lastcommit)_run$(run_num).pdf"), fig)
+    nothing # just so that no output is spat out
+end

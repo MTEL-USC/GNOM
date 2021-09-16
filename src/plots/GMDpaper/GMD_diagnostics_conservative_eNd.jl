@@ -2,10 +2,6 @@
 # Compute the diagnostics only once, unless rediagnose=true
 (!isdefined(Main, :fDNd_wtags) || rediagnose) && include("GMD_diagnostics_setup.jl")
 
-# Create the figure
-fig = Figure(resolution=(600, 900))
-use_GLMakie && display(fig)
-
 
 
 function plot_conservative_ε!(fig)
@@ -17,7 +13,7 @@ function plot_conservative_ε!(fig)
     opts = (mask=ATL, nan_color=nan_color, extendhigh=:auto, extendlow=:auto, linewidth=0.5)
     εopts = (colormap=εcmap, levels=εlevels, colorrange=εclims)
     δεopts = (colormap=δεcmap, levels=δεlevels2, colorrange=δεclims)
-    
+
     labels = ("Modelled εNd", "Conservative εNd", "Difference")
 
     function commons!(ax)
@@ -64,54 +60,19 @@ function plot_conservative_ε!(fig)
         Label(topscene, bbox = axs[i].scene.px_area, string(panellabels[i], "   ", labels[i]), textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:white)
     end
 
-    #zbot = sort(unique(bottomdepthvec(grd)))
-    #ztop = sort(unique(topdepthvec(grd)))
-    #yticks = vcat(0, zbot)
-    #y = reduce(vcat, [zt, zb] for (zt, zb) in zip(ztop, zbot))
-    #label_opts = (textsize=20, halign=:right, valign=:bottom, padding=(10,10,5,5), font=labelfont, color=:black)
-    ## left panel is just plain source
-    #ax = fig[1,1] = Axis(fig)
-    #u = u"pmol/cm^2/yr"
-    #upref = upreferred(u)
-
-    #z = 0:1:6000
-    #v = ustrip.(u, ϕ(p).(z) .* upref)
-
-    ## Rearrange as a step function to match model source
-    #lines!(ax, v, z)
-    #ylims!(ax, (6000, -50))
-    ##xlims!(ax, (0, 1.05maximum(v)))
-    #xlims!(ax, (0, maximum(ax.finallimits[])[1]))
-    #ax.yticks = 0:1000:6000
-    #ax.xlabel = "local (per unit area)\nsedimentary source ($(u))"
-    #ax.ylabel = "depth (m)"
-    #Label(fig, bbox = ax.scene.px_area, panellabels[1]; label_opts...)
-    ## panel for integrated source
-    #ax = fig[1,2] = Axis(fig)
-    #u∫dxdy = u"kmol/m/yr" 
-    #∫dxdy_s_sed = ∫dxdy(s_sed(p) * upreferred(uDNd) / u"s", grd) .|> u∫dxdy
-    #x = vcat(0, repeat(ustrip.(∫dxdy_s_sed), inner=2), 0)
-    ##lines!(ax, x, vcat(0, y, maximum(zbot)))
-    #poly!(ax, Point2f0.(zip(x, vcat(0, y, maximum(zbot)))), color=ColorSchemes.colorschemes[:tableau_colorblind][1])
-    #ylims!(ax, (6000, -50))
-    #xlims!(ax, (0, maximum(ax.finallimits[])[1]))
-    #ax.yticks = 0:1000:6000
-    #ax.xlabel = "horizontally integrated\nsedimentary source ($(u∫dxdy))"
-    #hideydecorations!(ax, grid=false)
-    #Label(fig, bbox = ax.scene.px_area, panellabels[2], ; label_opts...)
-
     nothing
 end
+
+
+# Create the figure
+fig = Figure(resolution=(600, 900))
 
 # Create the plot
 plot_conservative_ε!(fig)
 
-# Label axes
-
-# Add labels
-
-#save(joinpath(output_path, "Nd_Makie_profiles.png"), scene)
-#save(joinpath(archive_path, "Nd_profiles_$(lastcommit)_run$(run_num).png"), scene, px_per_unit=4)
-save(joinpath(archive_path, "conservative_eNd_$(lastcommit)_run$(run_num).pdf"), fig)
-
-nothing
+if use_GLMakie
+    fig # show the output wiht GLMakie
+else
+    save(joinpath(archive_path, "conservative_eNd_$(lastcommit)_run$(run_num).pdf"), fig)
+    nothing # just so that no output is spat out
+end

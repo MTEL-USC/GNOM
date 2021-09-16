@@ -5,7 +5,6 @@ include("../plots_setup_Nd.jl")
 
 # Create the figure
 fig = Figure(resolution=(1200, 1500))
-use_GLMakie && display(fig)
 
 
 # layout of params:
@@ -138,7 +137,12 @@ for (label, layout, nlab) in zip(panellabels, [ga, gb, gc, gd, ge, gf, gg], name
         halign = :right)
 end
 
-save(joinpath(archive_path, "parameters_grouped_$(lastcommit)_run$(run_num).pdf"), fig)
+if use_GLMakie
+    fig # show the output wiht GLMakie
+else
+    save(joinpath(archive_path, "parameters_grouped_$(lastcommit)_run$(run_num).pdf"), fig)
+    nothing # just so that no output is spat out
+end
 
 
 #======================================#

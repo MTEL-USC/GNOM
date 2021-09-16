@@ -87,7 +87,7 @@ jldsave(joinpath(archive_path, "model$(headcommit)_single_run$(run_num)_$(circna
 prob = SteadyStateProblem(fun, x, p)
 
 # solve the system
-sol = solve(prob, CTKAlg(), preprint="Nd & εNd solve ", τstop=ustrip(u"s", 1e3u"Myr"))
+sol = solve(prob, CTKAlg(), preprint="Nd & εNd solve ", τstop=ustrip(u"s", 1e3u"Myr")).u
 
 # unpack nominal isotopes
 DNd, DRNd = unpack_tracers(sol, grd)

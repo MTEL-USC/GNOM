@@ -16,7 +16,8 @@ function plot_εNd_sinks!(fig, fun)
     yticks = vcat(0, zbot)
     ypro = reduce(vcat, [zt, zb] for (zt, zb) in zip(ztop, zbot))
     for (i, t) in enumerate(instances(ScavenginParticle))
-        Tx = T_D(t, p) * DNd * u"mol/m^3/s"# each sink is the vertical integral of Tx
+        Tx = T_D(t, p) * DNd * u"mol/m^3/s" # each sink is the vertical integral of Tx
+        # Might freeze if DNd is a view of a SciLM solution because it dispatches to dense matmul
         ∫dzsink = ∫dz(Tx, grd)
         ∫dxdysink = ∫dxdy(Tx, grd)
         # replace negative values from numerical noise when doing T * x

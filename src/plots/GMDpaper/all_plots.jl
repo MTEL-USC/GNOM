@@ -1,9 +1,12 @@
 
-
-reload = false # setting this to true will reload model, data, plot functions and so on...
+# Set flags for re-setting up, reloading data, and reloading tools to false
+reload = false
+retools = false
+resetup = false
 
 include("jointPDF_Nd.jl")
-include("transects.jl")
+include("transects_Nd.jl")
+include("transects_eNd.jl")
 #include("transects_extended.jl")
 #include("transects_mismatch.jl")
 include("profiles_v2.jl")
@@ -16,8 +19,6 @@ include("sedimentary_source_profiles.jl")
 include("alpha_map.jl")
 include("sink_maps.jl")
 
-include("parameters.jl")
-
 # Diagnostics
 include("GMD_diagnostics_masks_map.jl")
 include("GMD_diagnostics_conservative_eNd.jl")
@@ -29,7 +30,7 @@ include("obs_maps.jl")
 #include("modelindependent/sedimentary_source_diagnostics.jl")
 
 # parameters
-include("parameters.jl")
+include("parameters_grouped.jl")
 
 # Si model
 include("jointPDF_Si.jl")

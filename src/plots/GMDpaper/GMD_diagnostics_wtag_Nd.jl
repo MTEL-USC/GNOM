@@ -2,9 +2,6 @@
 # Compute the diagnostics only once, unless rediagnose=true
 (!isdefined(Main, :fDNd_wtags) || rediagnose) && include("GMD_diagnostics_setup.jl")
 
-
-
-
 function plot_wtag_fNd!(fig)
 
     u = u"percent"
@@ -16,15 +13,8 @@ function plot_wtag_fNd!(fig)
     depth = ustrip.(grd.depth)
     lat = ustrip.(grd.lat)
 
-
-
-
-
     axisopts = (xgridvisible=false, ygridvisible=false, backgroundcolor=land_color, ylabel="Depth (m)")
     opts = (mask=ATL, nan_color=nan_color, linewidth=0.5, levels=10:10:100, filllevels=0:10:100, colorrange=(0,100))
-
-    function commons!(ax)
-    end
 
     axs = Vector{Any}(undef, 4)
     hms = Vector{Any}(undef, 3)
@@ -33,21 +23,18 @@ function plot_wtag_fNd!(fig)
     ax = axs[1] = fig[1,1] = Axis(fig; axisopts...)
     _, hms2[1] = generic_ZA!(ax, ATL_ZA_fDNd_wtags.N, lat, depth; opts..., colormap=cgrad([:white, Ωcmap[2]]))
     myxlats!(ax, latticks30)
-    commons!(ax)
     vlines!(ax, [latS, latN], linestyle=:dash, color=:black)
     hidexdecorations!(ax)
 
     ax = axs[2] = fig[2,1] = Axis(fig; axisopts...)
     _, hms2[2] = generic_ZA!(ax, ATL_ZA_fDNd_wtags.S, lat, depth; opts..., colormap=cgrad([:white, Ωcmap[1]]))
     myxlats!(ax, latticks30)
-    commons!(ax)
     vlines!(ax, [latS, latN], linestyle=:dash, color=:black)
     hidexdecorations!(ax)
 
     ax = axs[3] = fig[3,1] = Axis(fig; axisopts...)
     _, hms2[3] = generic_ZA!(ax, ATL_ZA_fDNd_wtags.U, lat, depth; opts..., colormap=cgrad([:white, Ωcmap[3]]))
     myxlats!(ax, latticks30)
-    commons!(ax)
     vlines!(ax, [latS, latN], linestyle=:dash, color=:black)
     hidexdecorations!(ax)
 
@@ -60,7 +47,6 @@ function plot_wtag_fNd!(fig)
         _, hms[i] = generic_ZA!(ax, x, lat, depth; opts..., colormap=cgrad([:white, c]))
     end
     myxlats!(ax, latticks30)
-    commons!(ax)
     vlines!(ax, [latS, latN], linestyle=:dash, color=:black)
 
 
@@ -94,15 +80,13 @@ end
 
 # Create the plot
 fig = Figure(resolution=(600, 1200))
-use_GLMakie && display(fig)
 plot_wtag_fNd!(fig)
 
-# Label axes
-
-# Add labels
-
-#save(joinpath(output_path, "Nd_Makie_profiles.png"), scene)
-#save(joinpath(archive_path, "Nd_profiles_$(lastcommit)_run$(run_num).png"), scene, px_per_unit=4)
-save(joinpath(archive_path, "water-tagged_Nd_$(lastcommit)_run$(run_num).pdf"), fig)
+if use_GLMakie
+    fig # show the output wiht GLMakie
+else
+    save(joinpath(archive_path, "water-tagged_Nd_$(lastcommit)_run$(run_num).pdf"), fig)
+    nothing # just so that no output is spat out
+end
 
 nothing

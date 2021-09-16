@@ -1,7 +1,6 @@
 #================================================
 Transects
 ================================================#
-use_GLMakie = false
 include("../plots_setup_Nd.jl")
 # Basin profiles where obs only
 # Only keep obs part of the cost function

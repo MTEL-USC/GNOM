@@ -1,7 +1,6 @@
 #===============================================#
 #              Parameters plots                 #
 #===============================================#
-use_GLMakie = false
 include("../plots_setup_Nd.jl")
 
 # Create the figure

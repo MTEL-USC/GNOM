@@ -1,7 +1,6 @@
 #================================================
 dust regions εNd values
 ================================================#
-use_GLMakie = false
 include("../plots_setup_Nd.jl")
 
 
@@ -13,7 +12,7 @@ ax = fig[1,1] = Axis(fig, backgroundcolor=:gray20)
 myrectangle(lon_tuple, lat_tuple) = [Point(lon_tuple[i], lat_tuple[j]) for (i,j) in zip([1,1,2,2,1], [1,2,2,1,1])]
 POLYGON_DUST_REGIONS = Dict(
     # From email by Jasper Kok:
-    #The coordinates of the nine source regions are: 
+    #The coordinates of the nine source regions are:
     #(1) western North Africa: 20⁰ W – 7.5⁰ E; 18⁰ N – 37.5⁰ N
     :NWAf => myrectangle((-20, 7.5), (18, 37.5)),
     #(2) eastern North Africa: 7.5E – 35E; 18N – 37.5N

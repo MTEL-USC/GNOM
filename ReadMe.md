@@ -130,22 +130,11 @@ julia> verticalmean(εNd .|> εunit, grd)
 
 Such functions are extensively used by the plotting scripts in [`src/plots/GMDpaper/`](src/plots/GMDpaper/), which you can directly use to reproduce the plots in [*Pasquier, Hines, et al.* (in prep.)]().
 
-Note that Makie.jl comes with multiple backends, of which GNOM includes GLMakie and CairoMakie.
-The default backend is CairoMakie because it is suited to PDF export.
-If you want to use GLMakie (for a window of the plot to appear without requiring you to open a PDF), you must set
-```julia
-use_GLMakie = true
-```
+Note that Makie.jl comes with multiple backends, of which GNOM includes GLMakie (that I would use for interactive plot windows) and CairoMakie (that I would use for PDFs).
+The Makie backend is set to GLMakie in [`src/Nd_model/single_run.jl`](src/Nd_model/single_run.jl) by setting the variable `use_GLMakie = true`.
+If you want to generate PDFs, use CairoMakie by editing the line to `use_GLMakie = false`.
 
-#### Plots requiring observations
 
-To reproduce those figures in [*Pasquier, Hines, et al.* (in prep.)]() that require observations, you must load the [Nd] and ε<sub>Nd</sub> data by typing
-
-```julia
-include("src/Nd_model/obs.jl)
-```
-
-which will create a table `DNdobs` for [Nd] data and a table `εNdobs` for ε<sub>Nd</sub> data.
 
 ## Optimization
 
@@ -155,36 +144,44 @@ To run the optimization, you can type
 include("src/Nd_model/setup_and_optimization.jl")
 ```
 
+Beware that this will take a few hours on a modern laptop!
+
 This optimization script will randomize the initial value for the parameter values by taking a random sample from the prior distributions determined by the initial guess and the range defined in the parameter type (the `Params` struct in the `model_setup.jl` file).
 
-## Running on a SLURM cluster
-
-Clone your repository on your cluster, have Julia installed, and run
-
-```bash
-sbatch src/slurm/optimize_Si.sh
-```
-
-to optimize the Si model and run
-
-```bash
-sbatch src/slurm/optimize_Nd.sh
-```
-
-to optimize the Nd model. These are SLURM batch files that will request 1 node with 64GB for 20 hours to run each process.
 
 ## Si model
 
 When running the Nd-cycling single run, the optimized Si-cycling fields required for opal scavenging are automatically downloaded from FigShare.
-However, is you want, you can also edit the Si-cycle code and re-optimize it.
+However, if you want, you can also edit the Si-cycle code and re-optimize it.
 
-To run the Si-model optimization, call
+To run the Si-model optimization on your laptop, call
 
 ```julia
 include("src/Si_model/setup_and_optimization.jl")
 ```
 
 Just like for the Nd-cycle model, you can modify the Si-cycle model in [`src/Si_model/model_setup.jl`](src/Si_model/model_setup.jl)
+
+
+
+## Running on a SLURM cluster
+
+The GNOM v1.0 outputs for [*Pasquier, Hines, et al.* (in prep.)]() were generated using a [SLURM](https://slurm.schedmd.com/overview.html) cluster, for which batch scripts were written in this repository.
+
+If you have access to a cluster with the SLURM workload manager, you should be able to run the optimizations by
+1. Cloning this repository on your cluster,
+2. Have Julia installed,
+3. And after `cd`ing to the GNOM directory, typing
+
+    ```bash
+    sbatch src/slurm/optimize_Nd.sh
+    ```
+
+This SLURM batch file will request 1 node with 64GB for 20 hours.
+
+Similarly, there is also a batch script for optimizing the Si-cycle model, [`src/slurm/optimize_Nd.sh`](src/slurm/optimize_Nd.sh).
+
+
 
 ## Citation
 

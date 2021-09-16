@@ -1,8 +1,7 @@
-use_GLMakie = false
 include("../plots_setup_Nd.jl")
 
 
-u∫dxdy_s = u"kmol/m/yr" 
+u∫dxdy_s = u"kmol/m/yr"
 # plot the εNd of sources
 
 surfacemask = horizontalslice(ones(count(iswet(grd))), grd, depth=0)
@@ -25,7 +24,7 @@ function plot_εNd_sinks!(fig, fun)
         fun∫dzsink = fun.(ustrip.(u, permutedims(∫dzsink, (2,1))))
         ax = axs[i,1] = fig[i,1] = Axis(fig, backgroundcolor=seafloor_color)
         mapit!(ax, clon, mypolys(clon), color=continent_color)
-        hms[1] = heatmap!(ax, sclons, lats, view(fun∫dzsink, ilon, :), 
+        hms[1] = heatmap!(ax, sclons, lats, view(fun∫dzsink, ilon, :),
                           colormap = islog ? logσcmap : σcmap,
                           colorrange = islog ? logσclims : σclims,
                           nan_color=nan_color)

@@ -1,6 +1,5 @@
 #include("load.jl") # this is the model-independent load.jl script
 #include("../../modelling/obs.jl")
-use_GLMakie = false
 include("../plots_setup_Nd.jl")
 
 

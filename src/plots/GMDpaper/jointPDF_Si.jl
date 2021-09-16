@@ -1,7 +1,6 @@
 #================================================
 Joint PDF
 ================================================#
-use_GLMakie = false
 include("../plots_setup_Nd.jl")
 
 DSi, tp_opt_Si = jldopen(joinpath(output_path, "optimized_Simodel_$circname.jld2")) do f
@@ -40,7 +39,7 @@ function myjointpdf_Si!(fig)
     Q_sorted = Q[idx]
     Dcum = similar(D.density)
     Dcum[idx] .= 100cumsum(Q_sorted)
-    
+
     ax = fig[1, 1] = Axis(fig, aspect = AxisAspect(1))
     co = contourf!(ax, D.x, D.y, Dcum, levels=10:10:100, colormap=cmap2)
     lines!(ax, collect(boundary), collect(boundary), linestyle=:dash, color=:black)

@@ -25,6 +25,7 @@ lastcommit = "single" # misnomer to call this lastcommit but simpler
 archive_path = joinpath(allsingleruns_path, "run$run_num")
 mkpath(archive_path)
 reload = false # prevents loading other runs
+use_GLMakie = true # Set to true for interactive mode if plotting with Makie later
 
 
 # Chose your parameter values here. Optimized parameters
@@ -78,6 +79,9 @@ p = Params(
 
 tp_opt = AIBECS.table(p)# table of parameters
 # "opt" is a misnomer but it is simpler for plotting scripts
+
+# Save model parameters table and headcommit for safekeeping
+jldsave(joinpath(archive_path, "model$(headcommit)_single_run$(run_num)_$(circname).jld2"); headcommit, tp_opt)
 
 # Set the problem with the parameters above
 prob = SteadyStateProblem(fun, x, p)

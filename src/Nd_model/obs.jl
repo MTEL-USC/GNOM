@@ -31,7 +31,8 @@ const DNdobs, εNdobs = let
             Please cite this dataset: van de Flierdt, Tina; Griffiths, Alexander M.; Lambelet, Myriam; Little, Susan H.; Stichel, Torben; J. Wilson, David (2016): Global Database from Neodymium in the oceans: a global database, a regional comparison and implications for palaeoceanographic research. The Royal Society. Dataset. https://doi.org/10.6084/m9.figshare.3980064.v1
             """,
             "https://ndownloader.figshare.com/files/6294558",
-            "ba250b1b64b8c43d1130a7aee39674e9ee5936ebb49050c4c224c740bff588b0"
+            "ba250b1b64b8c43d1130a7aee39674e9ee5936ebb49050c4c224c740bff588b0",
+            post_fetch_method = x -> mv(x, "rsta20150293_si_001.xlsx")
         ))
         # Then you can access the file via
         df = XLSX.openxlsx(joinpath(datadep"Flierdt_etal_2016_Nd", "rsta20150293_si_001.xlsx")) do f
@@ -100,16 +101,14 @@ const DNdobs, εNdobs = let
             DataDep(
                 "posd-IDP17_Nd_data",
                 """
-                TODO: This description is a draft and will be updated soon.
-
                 Marine neodymium and epsilon data taken from the literature after GEOTRACES IDP-17.
 
                 Compilation of data from the Indian Ocean (Amakawaet al., 2019), the Barents Sea (Laukert et al., 2018; Lauk-ert et al., 2019), the northern Iceland Basin (Morrison et al.,2019), the Northwestern Pacific (Che and Zhang, 2018), the Kerguelen Plateau (Grenier et al., 2018), the southeastern At-lantic Ocean (GA08, Rahlf et al., 2020; Rahlf et al., 2019;Rahlf et al., 2021; Rahlf et al., 2020), the Bay of Biscay (Dausmann et al., 2020; Dausmann et al., 2019), the Western North Atlantic (Stichel et al., 2020; Stichel et al., 2020), the arctic (Laukert et al., 2017; Laukert et al., 2017a, d), and theBermuda Atlantic Time-series Study (BATS; Laukert et al.,2017; Laukert et al., 2017b, c)
 
-                See Pasquier et al. (in prep) for more details
+                See Pasquier, Hines, et al. (2021) for more details
                 """,
                 "https://ndownloader.figshare.com/files/28958076",
-                sha2_256,
+                "aba03e69706f5fc88727d4a5762ed970bd4531f9cb3dbc5974acdd6608d56bb3",
                 fetch_method = fallback_download,
                 post_fetch_method = unpack
             )

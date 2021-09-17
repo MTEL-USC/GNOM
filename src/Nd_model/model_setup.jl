@@ -18,7 +18,7 @@ const Ndunit = pM
     α_a::Tp            |  1.0   | NoUnits      | true  |  (0,20)  | "Curvature of Nd release enhancement parabola"
     α_c::Tp            | -10.0  | εunit        | true  | (-20,0)  | "Center of Nd release enhancement parabola"
     α_GRL::Tp          |  2.0   | NoUnits      | true  |   (0,∞)  | "Geenland Nd release enhancement"
-    σ_ε::Tp            |  3.0   | εunit        | true  |   (0,∞)  | "Per-pixel variance (std) of εNd"
+    σ_ε::Tp            |  0.5   | εunit        | true  |   (0,5)  | "Per-pixel variance (std) of εNd"
     c_river::Tp        | 100.0  | pM           | true  |   (0,∞)  | "River effective [Nd]"
     c_gw::Tp           | 100.0  | pM           | true  |   (0,∞)  | "Surface groundwater effective [Nd]"
     σ_hydro::Tp        |  1.0   | Mmol/yr      | true  |   (0,∞)  | "Hydrothermal source magnitude"

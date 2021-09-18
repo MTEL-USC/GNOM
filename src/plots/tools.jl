@@ -182,7 +182,9 @@ end
 
 # Download using RemoteFiles (from Shapefile's tests)
 url_physical = "https://github.com/nvkelso/natural-earth-vector/raw/v4.1.0/110m_physical"
-natural_earth_dir = joinpath("/Users/benoitpasquier/Data", "natural_earth")
+natural_earth_dir = joinpath(DataDeps.determine_save_path(""), "natural_earth")
+# Note that this is not a DataDep although I use DataDeps to get a good save path
+# that should work as long as DataDeps has been used before, which it should have been.
 
 @RemoteFileSet natural_earth "Natural Earth 110m physical" begin
     # polygon

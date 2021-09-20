@@ -71,7 +71,7 @@ fig = Figure(resolution=(600, 900))
 plot_conservative_ε!(fig)
 
 if use_GLMakie
-    fig # show the output wiht GLMakie
+    display(fig) # show the output wiht GLMakie
 else
     save(joinpath(archive_path, "conservative_eNd_$(lastcommit)_run$(run_num).pdf"), fig)
     nothing # just so that no output is spat out

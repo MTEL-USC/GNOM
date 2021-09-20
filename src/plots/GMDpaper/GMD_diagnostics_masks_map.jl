@@ -23,7 +23,7 @@ fig = Figure(resolution = (400, 440), backgroundcolor=:white)
 plot_diagnosis_Omega_map!(fig)
 trim!(fig.layout)
 if use_GLMakie
-    fig # show the output wiht GLMakie
+    display(fig) # show the output wiht GLMakie
 else
     save(joinpath(archive_path, "Omega_maps_$(lastcommit).pdf"), fig)
     nothing # just so that no output is spat out

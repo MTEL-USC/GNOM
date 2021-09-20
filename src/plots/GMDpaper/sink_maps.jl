@@ -66,7 +66,7 @@ for fun in (log10, identity)
     plot_εNd_sinks!(fig, fun)
     trim!(fig.layout)
     if use_GLMakie
-        fig # show the output wiht GLMakie
+        display(fig) # show the output wiht GLMakie
     else
         str = (fun == log10) ? "log_" : ""
         save(joinpath(archive_path, "sinks_$(str)maps_$(lastcommit)_run$(run_num).pdf"), fig)

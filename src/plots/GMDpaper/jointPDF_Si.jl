@@ -71,7 +71,7 @@ myjointpdf_Si!(fig)
 
 #save(joinpath(archive_path, "jointPDF_$(lastcommit)_run$(run_num).png"), fig, px_per_unit=4)
 if use_GLMakie
-    fig # show the output wiht GLMakie
+    display(fig) # show the output wiht GLMakie
 else
     save(joinpath(archive_path, "jointPDF_Si_$(lastcommit)_run$(run_num).pdf"), fig)
     nothing # just so that no output is spat out

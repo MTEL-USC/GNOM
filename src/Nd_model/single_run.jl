@@ -32,48 +32,48 @@ use_GLMakie = true # Set to true for interactive mode if plotting with Makie lat
 # — as published in Pasquier, Hines, et al. (2021) —
 # are shown in comment
 p = Params(
-    α_a = 2.52,                   # α_a = 2.52
-    α_c = -11.6εunit,             # α_c = -11.6εunit
-    α_GRL = 1.03,                 # α_GRL = 1.03
-    σ_ε = 12.6εunit,               # σ_ε = 3.0εunit
-    c_river = 162.0pM,            # c_river = 100.0pM
-    c_gw = 136.0pM,               # c_gw = 100.0pM
-    σ_hydro = 0.446Mmol/yr,         # σ_hydro = 1.0Mmol/yr
-    ε_hydro = 9.86εunit,          # ε_hydro = 10.0εunit
-    ϕ_0 = 42.6pmol/cm^2/yr,       # ϕ_0 = 20.0pmol/cm^2/yr
-    ϕ_∞ = 0.687pmol/cm^2/yr,       # ϕ_∞ = 10.0pmol/cm^2/yr
-    z_0 = 400.0m,                 # z_0 = 200.0m
-    ε_EAsia_dust = -7.44εunit,     # ε_EAsia_dust = -8.0εunit
-    ε_NEAf_dust = -13.8εunit,     # ε_NEAf_dust = -12.0εunit
-    ε_NWAf_dust = -13.7εunit,     # ε_NWAf_dust = -12.0εunit
-    ε_NAm_dust = -4.33εunit,       # ε_NAm_dust = -8.0εunit
-    ε_SAf_dust = -19.9εunit,      # ε_SAf_dust = -10.0εunit
-    ε_SAm_dust = -3.13εunit,       # ε_SAm_dust = -3.0εunit
-    ε_MECA_dust = -1.48εunit,      # ε_MECA_dust = -2.0εunit
-    ε_Aus_dust = -5.13εunit,       # ε_Aus_dust = -4.0εunit
-    ε_Sahel_dust = -11.9εunit,    # ε_Sahel_dust = -12.0εunit
-    β_EAsia_dust = 11.5u"percent", # β_EAsia_dust = 5.0u"percent"
-    β_NEAf_dust = 37.8u"percent",  # β_NEAf_dust = 5.0u"percent"
-    β_NWAf_dust = 45.7u"percent",  # β_NWAf_dust = 5.0u"percent"
-    β_NAm_dust = 81.7u"percent",   # β_NAm_dust = 5.0u"percent"
-    β_SAf_dust = 53.4u"percent",   # β_SAf_dust = 5.0u"percent"
-    β_SAm_dust = 2.51u"percent",   # β_SAm_dust = 5.0u"percent"
-    β_MECA_dust = 5.0u"percent",  # β_MECA_dust = 5.0u"percent"
-    β_Aus_dust = 41.4u"percent",   # β_Aus_dust = 5.0u"percent"
-    β_Sahel_dust = 2.81u"percent", # β_Sahel_dust = 5.0u"percent"
-    ε_volc = 12.4εunit,           # ε_volc = 10.0εunit
-    β_volc = 61.2u"percent",      # β_volc = 10.0u"percent"
-    K_prec = 0.00374,         # K_prec = 0.01
-    f_prec = 0.433,          # f_prec = 0.4
+    α_a = 4.25896,                   # α_a = 2.52
+    α_c = -13.4003εunit,             # α_c = -11.6εunit
+    α_GRL = 2.45502,                 # α_GRL = 1.03
+    σ_ε = 0.255468εunit,               # σ_ε = 3.0εunit
+    c_river = 1022.22pM,            # c_river = 100.0pM
+    c_gw = 60.7159pM,               # c_gw = 100.0pM
+    σ_hydro = 0.452881Mmol/yr,         # σ_hydro = 1.0Mmol/yr
+    ε_hydro = 5.3727εunit,          # ε_hydro = 10.0εunit
+    ϕ_0 = 100.613pmol/cm^2/yr,       # ϕ_0 = 20.0pmol/cm^2/yr
+    ϕ_∞ = 3.34434pmol/cm^2/yr,       # ϕ_∞ = 10.0pmol/cm^2/yr
+    z_0 = 159.749m,                 # z_0 = 200.0m
+    ε_EAsia_dust = -7.29218εunit,     # ε_EAsia_dust = -8.0εunit
+    ε_NEAf_dust = -12.1979εunit,     # ε_NEAf_dust = -12.0εunit
+    ε_NWAf_dust = -12.2858εunit,     # ε_NWAf_dust = -12.0εunit
+    ε_NAm_dust = -9.17992εunit,       # ε_NAm_dust = -8.0εunit
+    ε_SAf_dust = -9.36719εunit,      # ε_SAf_dust = -10.0εunit
+    ε_SAm_dust = -3.42779εunit,       # ε_SAm_dust = -3.0εunit
+    ε_MECA_dust = -1.74237εunit,      # ε_MECA_dust = -2.0εunit
+    ε_Aus_dust = -3.73625εunit,       # ε_Aus_dust = -4.0εunit
+    ε_Sahel_dust = -12.1482εunit,    # ε_Sahel_dust = -12.0εunit
+    β_EAsia_dust = 2*0.590052u"percent", # β_EAsia_dust = 5.0u"percent"
+    β_NEAf_dust = 2*1.04977u"percent",  # β_NEAf_dust = 5.0u"percent"
+    β_NWAf_dust = 2*2.8137u"percent",  # β_NWAf_dust = 5.0u"percent"
+    β_NAm_dust = 2*1.11589u"percent",   # β_NAm_dust = 5.0u"percent"
+    β_SAf_dust = 2*0.566935u"percent",   # β_SAf_dust = 5.0u"percent"
+    β_SAm_dust = 2*1.42008u"percent",   # β_SAm_dust = 5.0u"percent"
+    β_MECA_dust = 2*1.80498u"percent",  # β_MECA_dust = 5.0u"percent"
+    β_Aus_dust = 2*1.11362u"percent",   # β_Aus_dust = 5.0u"percent"
+    β_Sahel_dust = 2*4.22232u"percent", # β_Sahel_dust = 5.0u"percent"
+    ε_volc = 10.1533εunit,           # ε_volc = 10.0εunit
+    β_volc = 2*4.03051u"percent",      # β_volc = 10.0u"percent"
+    K_prec = 0.00848695,         # K_prec = 0.01
+    f_prec = 0.0695125,          # f_prec = 0.4
     w₀_prec = 0.7km/yr,           # w₀_prec = 0.7km/yr
-    K_POC = 1.84e13,          # K_POC = 3e13
-    f_POC = 0.727,          # f_POC = 0.78
+    K_POC = 1.07351e14,          # K_POC = 3e13
+    f_POC = 0.205732,          # f_POC = 0.78
     w₀_POC = 40.0m/d,             # w₀_POC = 40.0m/d
-    K_bSi = 5.9e12,          # K_bSi = 3e13
-    f_bSi = 0.866,           # f_bSi = 0.5
+    K_bSi = 1.17098e12,          # K_bSi = 3e13
+    f_bSi = 0.711062,           # f_bSi = 0.5
     w₀_bSi = 714.069m/d,          # w₀_bSi = 714.069m/d
-    K_dust = 3.93e15,         # K_dust = 2e15
-    f_dust = 0.176,        # f_dust = 0.073
+    K_dust = 9.49175e14,         # K_dust = 2e15
+    f_dust = 0.0607855,        # f_dust = 0.073
     w₀_dust = 1.0km/yr            # w₀_dust = 1.0km/yr
 )
 

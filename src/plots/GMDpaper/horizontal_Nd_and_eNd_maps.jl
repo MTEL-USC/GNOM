@@ -62,7 +62,7 @@ fig = Figure(resolution = (1200, 1800), backgroundcolor=:white)
 plot_horizontal_maps!(fig)
 trim!(fig.layout)
 if use_GLMakie
-    fig # show the output wiht GLMakie
+    display(fig) # show the output wiht GLMakie
 else
     #save(joinpath(output_path, "εNd_sources_v2.$EXT"), scene)
     #save(joinpath(archive_path, "εNd_sources_$(lastcommit)_run$(run_num)_v2.$EXT"), scene, px_per_unit=4)

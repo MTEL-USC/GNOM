@@ -50,7 +50,7 @@ fig = Figure(resolution = (650, 700), backgroundcolor=:white)
 plot_obs_maps!(fig)
 trim!(fig.layout)
 if use_GLMakie
-    fig # show the output wiht GLMakie
+    display(fig) # show the output wiht GLMakie
 else
     save(joinpath(archive_path, "obs_maps.pdf"), fig)
     nothing # just so that no output is spat out

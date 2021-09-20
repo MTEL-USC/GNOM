@@ -60,7 +60,7 @@ cbar.tellheight = true
 
 #save(joinpath(output_path, "εNd_dust_regions.$EXT"), scene)
 if use_GLMakie
-    fig # show the output wiht GLMakie
+    display(fig) # show the output wiht GLMakie
 else
     save(joinpath(archive_path, "εNd_dust_region_$(lastcommit)_run$(run_num).pdf"), fig)
     nothing # just so that no output is spat out

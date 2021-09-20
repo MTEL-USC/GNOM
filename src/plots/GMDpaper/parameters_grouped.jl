@@ -127,7 +127,7 @@ for (i,s) in enumerate(scav_params)
 end
 
 # subplot labels
-named_labels = ["Dust", "Volcanic ash", "Enhanced Nd release (α curve)", "Riverine source", "Hyrdothermal source", "ϕ(z)", "Scavenging"]
+named_labels = ["Dust", "Volcanic ash", "Enhanced Nd release", "Riverine source", "Hyrdothermal source", "ϕ(z)", "Scavenging"]
 for (label, layout, nlab) in zip(panellabels, [ga, gb, gc, gd, ge, gf, gg], named_labels)
     Label(layout[1, :, Top()], nlab * " parameters", valign = :bottom, padding = (0, 0, 5, 0))
     Label(layout[1, 1, TopLeft()], label,
@@ -138,7 +138,7 @@ for (label, layout, nlab) in zip(panellabels, [ga, gb, gc, gd, ge, gf, gg], name
 end
 
 if use_GLMakie
-    fig # show the output wiht GLMakie
+    display(fig) # show the output wiht GLMakie
 else
     save(joinpath(archive_path, "parameters_grouped_$(lastcommit)_run$(run_num).pdf"), fig)
     nothing # just so that no output is spat out

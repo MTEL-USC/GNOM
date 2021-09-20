@@ -140,8 +140,8 @@ use_GLMakie && display(fig)
 myjointpdf2!(fig)
 
 if use_GLMakie
-    fig # show the output wiht GLMakie
+    display(fig) # show the output wiht GLMakie
 else
-    save(joinpaoth(archive_path, "jointPDF_vertical_$(lastcommit)_run$(run_num).pdf"), fig)
+    save(joinpath(archive_path, "jointPDF_vertical_$(lastcommit)_run$(run_num).pdf"), fig)
     nothing # just so that no output is spat out
 end

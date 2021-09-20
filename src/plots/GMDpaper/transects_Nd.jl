@@ -84,7 +84,7 @@ cbar.tellheight = true
 trim!(fig.layout)
 
 if use_GLMakie
-    fig # show the output wiht GLMakie
+    display(fig) # show the output wiht GLMakie
 else
     save(joinpath(archive_path, "Nd_transects_$(lastcommit)_run$(run_num).pdf"), fig)
     nothing # just so that no output is spat out

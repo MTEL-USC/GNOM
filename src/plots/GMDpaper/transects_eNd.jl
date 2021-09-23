@@ -16,6 +16,8 @@ fig = Figure(resolution=(1600, 1600))
 axs = Axis[]
 scs = Any[]
 # colors for cruises
+tcol = ColorSchemes.tableau_10.colors
+tcol = [:black; tcol]
 tcol = tcol[[1,2,4,6,7,8,9,10,11]] # keep same colors for transects (but εNd transects is a subset of [Nd] transects)
 # Minimap in top left
 subl = GridLayout(1,2)

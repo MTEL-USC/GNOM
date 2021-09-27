@@ -51,7 +51,18 @@ output_path = joinpath(root_path, "output")
 data_path = joinpath(root_path, "data")
 # We use the head commit's 8 first characters to keep a record of which commit gave which output
 using LibGit2
-headcommit = string(LibGit2.GitHash(LibGit2.peel(LibGit2.GitCommit, LibGit2.head(GitRepo(root_path)))))[1:8]
+headcommit = if isdir(".git")
+    string(LibGit2.GitHash(LibGit2.peel(LibGit2.GitCommit, LibGit2.head(GitRepo(root_path)))))[1:8]
+else
+    @warn """
+        You probably just downloaded the GNOM without using git.
+        This is OK, but be aware that the version you are using is not tracked!
+        The GNOM is preferably used with git to track versions by naming runs after commit ids.
+        Use `git clone https://github.com/MTEL-USC/GNOM.git` for version-controlled runs.
+        Output from this run will be in folder named "nocommit".
+    """
+    "nocommit"
+end
 archive_path = joinpath(output_path, "archive", headcommit)
 
 #===============================================#

@@ -2,6 +2,8 @@
 
 ***A Global Neodymium Ocean Model.***
 
+[![DOI](https://zenodo.org/badge/386138595.svg)](https://zenodo.org/badge/latestdoi/386138595)
+
 <p align="center">
 <img width=66.5% src="https://user-images.githubusercontent.com/4486578/133535732-d0360a48-5dc7-4653-8472-8c09ac0ff2e9.jpg">
 </p>

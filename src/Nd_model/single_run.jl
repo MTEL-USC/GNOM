@@ -30,51 +30,52 @@ use_GLMakie = true # Set to true for interactive mode if plotting with Makie lat
 
 # Chose your parameter values here. Optimized parameters
 # — as published in Pasquier, Hines, et al. (2021) —
-# are shown in comment
+# are shown in comment (leave them there
+# if you want to refer back to them)
 p = Params(
-    α_a = 4.25896,                   # α_a = 2.52
-    α_c = -13.4003εunit,             # α_c = -11.6εunit
-    α_GRL = 2.45502,                 # α_GRL = 1.03
-    σ_ε = 0.255468εunit,               # σ_ε = 3.0εunit
-    c_river = 1022.22pM,            # c_river = 100.0pM
-    c_gw = 60.7159pM,               # c_gw = 100.0pM
-    σ_hydro = 0.452881Mmol/yr,         # σ_hydro = 1.0Mmol/yr
-    ε_hydro = 5.3727εunit,          # ε_hydro = 10.0εunit
-    ϕ_0 = 100.613pmol/cm^2/yr,       # ϕ_0 = 20.0pmol/cm^2/yr
-    ϕ_∞ = 3.34434pmol/cm^2/yr,       # ϕ_∞ = 10.0pmol/cm^2/yr
-    z_0 = 159.749m,                 # z_0 = 200.0m
-    ε_EAsia_dust = -7.29218εunit,     # ε_EAsia_dust = -8.0εunit
-    ε_NEAf_dust = -12.1979εunit,     # ε_NEAf_dust = -12.0εunit
-    ε_NWAf_dust = -12.2858εunit,     # ε_NWAf_dust = -12.0εunit
-    ε_NAm_dust = -9.17992εunit,       # ε_NAm_dust = -8.0εunit
-    ε_SAf_dust = -9.36719εunit,      # ε_SAf_dust = -10.0εunit
-    ε_SAm_dust = -3.42779εunit,       # ε_SAm_dust = -3.0εunit
-    ε_MECA_dust = -1.74237εunit,      # ε_MECA_dust = -2.0εunit
-    ε_Aus_dust = -3.73625εunit,       # ε_Aus_dust = -4.0εunit
-    ε_Sahel_dust = -12.1482εunit,    # ε_Sahel_dust = -12.0εunit
-    β_EAsia_dust = 2*0.590052u"percent", # β_EAsia_dust = 5.0u"percent"
-    β_NEAf_dust = 2*1.04977u"percent",  # β_NEAf_dust = 5.0u"percent"
-    β_NWAf_dust = 2*2.8137u"percent",  # β_NWAf_dust = 5.0u"percent"
-    β_NAm_dust = 2*1.11589u"percent",   # β_NAm_dust = 5.0u"percent"
-    β_SAf_dust = 2*0.566935u"percent",   # β_SAf_dust = 5.0u"percent"
-    β_SAm_dust = 2*1.42008u"percent",   # β_SAm_dust = 5.0u"percent"
-    β_MECA_dust = 2*1.80498u"percent",  # β_MECA_dust = 5.0u"percent"
-    β_Aus_dust = 2*1.11362u"percent",   # β_Aus_dust = 5.0u"percent"
-    β_Sahel_dust = 2*4.22232u"percent", # β_Sahel_dust = 5.0u"percent"
-    ε_volc = 10.1533εunit,           # ε_volc = 10.0εunit
-    β_volc = 2*4.03051u"percent",      # β_volc = 10.0u"percent"
-    K_prec = 0.00848695,         # K_prec = 0.01
-    f_prec = 0.0695125,          # f_prec = 0.4
-    w₀_prec = 0.7km/yr,           # w₀_prec = 0.7km/yr
-    K_POC = 1.07351e14,          # K_POC = 3e13
-    f_POC = 0.205732,          # f_POC = 0.78
-    w₀_POC = 40.0m/d,             # w₀_POC = 40.0m/d
-    K_bSi = 1.17098e12,          # K_bSi = 3e13
-    f_bSi = 0.711062,           # f_bSi = 0.5
-    w₀_bSi = 714.069m/d,          # w₀_bSi = 714.069m/d
-    K_dust = 9.49175e14,         # K_dust = 2e15
-    f_dust = 0.0607855,        # f_dust = 0.073
-    w₀_dust = 1.0km/yr            # w₀_dust = 1.0km/yr
+    α_a = 6.79 # 6.79
+    α_c = -12.7per10000 # -12.7per10000
+    α_GRL = 1.57 # 1.57
+    σ_ε = 0.379per10000 # 0.379per10000
+    c_river = 376.0pM # 376.0pM
+    c_gw = 109.0pM # 109.0pM
+    σ_hydro = 0.792Mmol/yr # 0.792Mmol/yr
+    ε_hydro = 10.9per10000 # 10.9per10000
+    ϕ_0 = 83.7pmol/cm^2/yr # 83.7pmol/cm^2/yr
+    ϕ_∞ = 1.11pmol/cm^2/yr # 1.11pmol/cm^2/yr
+    z_0 = 170.0m # 170.0m
+    ε_EAsia_dust = -7.6per10000 # -7.6per10000
+    ε_NEAf_dust = -13.7per10000 # -13.7per10000
+    ε_NWAf_dust = -12.3per10000 # -12.3per10000
+    ε_NAm_dust = -4.25per10000 # -4.25per10000
+    ε_SAf_dust = -21.6per10000 # -21.6per10000
+    ε_SAm_dust = -3.15per10000 # -3.15per10000
+    ε_MECA_dust = 0.119per10000 # 0.119per10000
+    ε_Aus_dust = -4.03per10000 # -4.03per10000
+    ε_Sahel_dust = -11.9per10000 # -11.9per10000
+    β_EAsia_dust = 23.0per100 # 23.0per100
+    β_NEAf_dust = 23.3per100 # 23.3per100
+    β_NWAf_dust = 3.17per100 # 3.17per100
+    β_NAm_dust = 82.8per100 # 82.8per100
+    β_SAf_dust = 38.5per100 # 38.5per100
+    β_SAm_dust = 2.52per100 # 2.52per100
+    β_MECA_dust = 14.7per100 # 14.7per100
+    β_Aus_dust = 11.6per100 # 11.6per100
+    β_Sahel_dust = 2.95per100 # 2.95per100
+    ε_volc = 13.1per10000 # 13.1per10000
+    β_volc = 76.0per100 # 76.0per100
+    K_prec = 0.00576/(mol/m^3) # 0.00576/(mol/m^3)
+    f_prec = 0.124 # 0.124
+    w₀_prec = 0.7km/yr # 0.7km/yr
+    K_POC = 0.524/(mol/m^3) # 0.524/(mol/m^3)
+    f_POC = 0.312 # 0.312
+    w₀_POC = 40.0m/d # 40.0m/d
+    K_bSi = 2.56/(mol/m^3) # 2.56/(mol/m^3)
+    f_bSi = 0.784 # 0.784
+    w₀_bSi = 714.0m/d # 714.0m/d
+    K_dust = 1700.0/(kg/m^3) # 1700.0/(kg/m^3)
+    f_dust = 0.0861 # 0.0861
+    w₀_dust = 1.0km/yr
 )
 
 tp_opt = AIBECS.table(p)# table of parameters
@@ -87,7 +88,7 @@ jldsave(joinpath(archive_path, "model$(headcommit)_single_run$(run_num)_$(circna
 prob = SteadyStateProblem(fun, x, p)
 
 # solve the system
-sol = solve(prob, CTKAlg(), preprint="Nd & εNd solve ", τstop=ustrip(u"s", 1e3u"Myr")).u
+sol = solve(prob, CTKAlg(), preprint="Nd & εNd solve ", τstop=ustrip(s, 1e3Myr)).u
 
 # unpack nominal isotopes
 DNd, DRNd = unpack_tracers(sol, grd)
@@ -102,4 +103,4 @@ DNd, DRNd = unpack_tracers(sol, grd)
 # so that it can be called even from inside the GNOM environment.
 # You can then use the Plots.jl recipes exported by AIBECS, e.g.,
 #
-# julia> plotzonalaverage(εNd .|> εunit, grd, mask=ATL)
+# julia> plotzonalaverage(εNd .|> per10000, grd, mask=ATL)

@@ -53,7 +53,7 @@ function plot_εNd_sources!(fig, fun)
     cbar1.width = Relative(3/4)
     cbar1.height = 30
     cbar1.tellheight = true
-    cbar2 = fig[end, 2] = Colorbar(fig, hms[2], label="εNd ($εunit)", vertical=false, flipaxis=false, ticklabelalign=(:center, :top), ticks=εclims[1]:5:εclims[2])
+    cbar2 = fig[end, 2] = Colorbar(fig, hms[2], label="εNd ($per10000)", vertical=false, flipaxis=false, ticklabelalign=(:center, :top), ticks=εclims[1]:5:εclims[2])
     cbar2.width = Relative(3/4)
     cbar2.height = 30
     cbar2.tellheight = true

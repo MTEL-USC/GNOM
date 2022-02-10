@@ -5,7 +5,7 @@ include("../plots_setup_Nd.jl")
 #αlims = extrema(αlevs)
 
 # α curve is defined by α_quad
-α_curve(ε) = α_quad(ε * εunit |> upreferred, p)
+α_curve(ε) = α_quad(ε * per10000 |> upreferred, p)
 εs = range(εclims..., length=200)
 αs = α_curve.(εs)
 

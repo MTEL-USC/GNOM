@@ -4,7 +4,7 @@
 
 function plot_wtag_fNd!(fig)
 
-    u = u"percent"
+    u = per100
     ATL_ZA_fDNd_wtags = NamedTuple(j=>zonalaverage(ustrip.(v), grd, ATL) for (j,v) in pairs(fDNd_wtags))
 	ATL_ZA_max = max.(collect(ATL_ZA_fDNd_wtags)...)
 

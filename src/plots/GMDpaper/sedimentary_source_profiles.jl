@@ -52,10 +52,10 @@ function sed_source_profiles!(fig)
 
     # panel for alpha curve
     ax1 = fig[1,1] = Axis(fig)
-    εs = upreferred.(range(εclims..., length=1001) * εunit)
+    εs = upreferred.(range(εclims..., length=1001) * per10000)
     αs = α_quad(εs, p)
     vlines!(ax1, [ustrip.(p.α_c)], linestyle=:dash, color=:gray)
-    lines!(ax1, ustrip.(εunit, εs), αs)
+    lines!(ax1, ustrip.(per10000, εs), αs)
     ax1.xlabel = "εNd (‱)"
     ax1.ylabel = "Scaling factor α(εNd)"
     ylims!(ax1, low=0.0)
@@ -69,7 +69,7 @@ function sed_source_profiles!(fig)
     ε_eff = shifted_ε.(εs, σ_ε, α_a, α_c, ε10)
     vlines!(ax, [ustrip.(p.α_c)], linestyle=:dash, color=:gray)
     hlines!(ax, [0.0], color=:gray)
-    lines!(ax, ustrip.(εunit, εs), ustrip.(εunit, ε_eff - εs))
+    lines!(ax, ustrip.(per10000, εs), ustrip.(per10000, ε_eff - εs))
     ax.xlabel = "In situ εNd (‱)"
     ax.ylabel = "Released εNd − εNd (‱)"
     xlims!(ax, εclims)

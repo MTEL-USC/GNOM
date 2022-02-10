@@ -82,8 +82,8 @@ end
 
 function R2ε(R)
     R = ustrip.(R)
-    #return [(isnan(r) ? 0.0 : (r / R_CHUR - 1)) |> εunit for r in R]
-    return [(r / R_CHUR - 1) |> εunit for r in R]
+    #return [(isnan(r) ? 0.0 : (r / R_CHUR - 1)) |> per10000 for r in R]
+    return [(r / R_CHUR - 1) |> per10000 for r in R]
 end
 
 function myscatter!(ax, args...; kwargs...)

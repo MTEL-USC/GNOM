@@ -1,5 +1,5 @@
 # solve it once
-s = solve(prob, CTKAlg(), preprint="Nd & εNd solve ", τstop=ustrip(u"s", 1e3u"Myr"))
+sol = solve(prob, CTKAlg(), preprint="Nd & εNd solve ", τstop=ustrip(s, 1e3Myr))
 
 #================================================
 Optimization setup
@@ -41,7 +41,7 @@ println("==========================================")
 
 # Use F1 for gradient and Hessian
 λ = p2λ(p)
-τstop = ustrip(u"s", 1e3u"Myr")
+τstop = ustrip(s, 1e3Myr)
 mem = F1Method.initialize_mem(F, ∇ₓf, ∇ₓF, x, λ, CTKAlg(); preprint="mem ", τstop=τstop)
 
 function objective(λ)
@@ -61,7 +61,7 @@ results = optimize(objective, gradient, hessian, λ, NewtonTrustRegion(), opt; i
 
 p_optimized = λ2p(Params, results.minimizer)
 prob_optimized = SteadyStateProblem(fun, x, p_optimized)
-s_optimized = solve(prob_optimized, CTKAlg(), τstop=ustrip(u"s", 1e3u"Myr")).u
+s_optimized = solve(prob_optimized, CTKAlg(), τstop=ustrip(s, 1e3Myr)).u
 
 # TODO find a more generic approach to save this data... Maybe I can use datadeps?
 

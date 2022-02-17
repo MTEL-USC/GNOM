@@ -1,0 +1,70 @@
+{
+    "language": "eng",
+    "license": "MIT",
+    "upload_type": "software",
+    "title": "GNOM: An optimized steady-state model of the modern global marine neodymium cycle",
+    "creators": [
+        {
+            "orcid": "0000-0002-3838-5976",
+            "affiliation": "Earth Sciences Department, University of Southern California, Los Angeles, CA, USA; (now at) School of Mathematics and Statistics, University of New South Wales, Sydney, Australia",
+            "name": "Benoit Pasquier"
+        },
+        {
+            "orcid": "0000-0001-9357-6399",
+            "affiliation": "Lamont-Doherty Earth Observatory of Columbia University, Palisades, NY, USA; (now at) Department of Marine Chemistry and Geochemistry, Woods Hole Oceanographic Institution, Woods Hole, MA, USA",
+            "name": "Sophia K. V. Hines"
+        },
+        {
+            "orcid": "0000-0001-8975-4201",
+            "affiliation": "Earth Sciences Department, University of Southern California, Los Angeles, CA, USA",
+            "name": "Hengdi Liang"
+        },
+        {
+            "orcid": "0000-0002-3975-1368",
+            "affiliation": "Lamont-Doherty Earth Observatory of Columbia University, Palisades, NY, USA",
+            "name": "Yingzhe Wu"
+        },
+        {
+            "orcid": "0000-0001-7252-8064",
+            "affiliation": "Lamont-Doherty Earth Observatory of Columbia University, Palisades, NY, USA; Department of Earth and Environmental Sciences, Columbia University, Palisades, NY, USA",
+            "name": "Steven L. Goldstein"
+        },
+        {
+            "orcid": "0000-0002-8257-626X",
+            "affiliation": "Department of Earth Sciences, University of Southern California",
+            "name": "Seth G. John"
+        }
+    ],
+    "keywords": [
+        "julia",
+        "awesome",
+        "optimization",
+        "model",
+        "modeling",
+        "Nd",
+        "rare-earth-element",
+        "REE",
+        "rare",
+        "earth",
+        "element",
+        "neodymium",
+        "eNd",
+        "geoscientific",
+        "development",
+        "ocean",
+        "transport",
+        "oceanography",
+        "paleoceanography",
+        "global",
+        "tracer",
+        "pathways",
+        "marine",
+        "biogeochemistry",
+        "inverse-model",
+        "biogeochemical-model",
+        "ocean-circulation",
+        "fluxes",
+        "biogeochemical",
+        "marine-tracer"
+    ]
+}

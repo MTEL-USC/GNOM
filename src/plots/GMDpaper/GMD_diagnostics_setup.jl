@@ -73,7 +73,7 @@ println(" Done!")
 #  Partition according to source  #
 #=================================#
 DNdₖs = NamedTuple(k => Hf \ sₖ for (k,sₖ) in pairs(sources))
-fDNdₖs = NamedTuple(k => DNdₖ ./ DNd .|> u"percent" for (k,DNdₖ) in pairs(DNdₖs))
+fDNdₖs = NamedTuple(k => DNdₖ ./ DNd .|> per100 for (k,DNdₖ) in pairs(DNdₖs))
 
 
 
@@ -92,7 +92,7 @@ DNd_wtags = let
     tmp = NamedTuple(j => HMf \ (Mⱼ * DNd) for (j,Mⱼ) in pairs(Ms))
 	(;tmp..., U = DNd .- sum(tmp))
 end
-fDNd_wtags = NamedTuple(j => DNdⱼ ./ DNd .|> u"percent" for (j,DNdⱼ) in pairs(DNd_wtags))
+fDNd_wtags = NamedTuple(j => DNdⱼ ./ DNd .|> per100 for (j,DNdⱼ) in pairs(DNd_wtags))
 
 rediagnose = false
 

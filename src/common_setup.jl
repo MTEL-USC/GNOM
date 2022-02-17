@@ -44,7 +44,9 @@ using DataDeps
 using Downloads
 
 # Load some unit variables from unitful (for more readable code)
-using Unitful: pM, g, mg, kg, L, mol, mmol, μmol, pmol, Mmol, yr, kyr, Myr, d, m, km, cm
+using Unitful: pM, g, mg, kg, L, mol, mmol, μmol, pmol, Mmol, s, d, yr, kyr, Myr, m, km, cm
+const per10000 = u"pertenthousand"
+const per100 = u"percent"
 
 # Other paths
 output_path = joinpath(root_path, "output")

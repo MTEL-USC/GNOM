@@ -6,56 +6,56 @@ using OceanBasins
 using GeoRegions
 using NCDatasets
 using UnitfulMoles
-using UnitfulMoles: molNd
+using UnitfulMoles: molNd, molC
 
 
 #==================#
 # Model parameters #
 #==================#
-const εunit = u"pertenthousand"
+
 const Ndunit = pM
 @initial_value @units @flattenable @limits @description struct Params{Tp} <: AbstractParameters{Tp}
     α_a::Tp            |  1.0   | NoUnits      | true  |  (0,20)  | "Curvature of Nd release enhancement parabola"
-    α_c::Tp            | -10.0  | εunit        | true  | (-20,0)  | "Center of Nd release enhancement parabola"
+    α_c::Tp            | -10.0  | per10000     | true  | (-20,0)  | "Center of Nd release enhancement parabola"
     α_GRL::Tp          |  2.0   | NoUnits      | true  |   (0,∞)  | "Geenland Nd release enhancement"
-    σ_ε::Tp            |  0.5   | εunit        | true  |   (0,5)  | "Per-pixel variance (std) of εNd"
+    σ_ε::Tp            |  0.5   | per10000     | true  |   (0,5)  | "Per-pixel variance (std) of εNd"
     c_river::Tp        | 100.0  | pM           | true  |   (0,∞)  | "River effective [Nd]"
     c_gw::Tp           | 100.0  | pM           | true  |   (0,∞)  | "Surface groundwater effective [Nd]"
     σ_hydro::Tp        |  1.0   | Mmol/yr      | true  |   (0,∞)  | "Hydrothermal source magnitude"
-    ε_hydro::Tp        |  10.0  | εunit        | true  | (-10,15) | "Hydrothermal source εNd"
+    ε_hydro::Tp        |  10.0  | per10000     | true  | (-10,15) | "Hydrothermal source εNd"
     ϕ_0::Tp            |  20.0  | pmol/cm^2/yr | true  |   (0,∞)  | "Sedimentary flux at surface"
     ϕ_∞::Tp            |  10.0  | pmol/cm^2/yr | true  |   (0,∞)  | "Sedimentary flux at infinite depth"
     z_0::Tp            | 200.0  | m            | true  |   (0,∞)  | "Sedimentary flux depth attenuation"
-    ε_EAsia_dust::Tp   |  -8.0  | εunit        | true  | (-12,-2) | "EAsia dust εNd"
-    ε_NEAf_dust::Tp    | -12.0  | εunit        | true  | (-15,-9) | "NEAf dust εNd"
-    ε_NWAf_dust::Tp    | -12.0  | εunit        | true  | (-15,-9) | "NWAf dust εNd"
-    ε_NAm_dust::Tp     |  -8.0  | εunit        | true  | (-12,-4) | "NAm dust εNd"
-    ε_SAf_dust::Tp     | -10.0  | εunit        | true  | (-25,-6) | "SAf dust εNd"
-    ε_SAm_dust::Tp     |  -3.0  | εunit        | true  | ( -7, 0) | "SAm dust εNd"
-    ε_MECA_dust::Tp    |  -2.0  | εunit        | true  | ( -5, 3) | "MECA dust εNd"
-    ε_Aus_dust::Tp     |  -4.0  | εunit        | true  | ( -7,-1) | "Aus dust εNd"
-    ε_Sahel_dust::Tp   | -12.0  | εunit        | true  | (-15,-9) | "Sahel dust εNd"
-    β_EAsia_dust::Tp   |    5.0 | u"percent"   | true  |  (0,100) | "EAsia dust Nd solubility"
-    β_NEAf_dust::Tp    |    5.0 | u"percent"   | true  |  (0,100) | "NEAf dust Nd solubility"
-    β_NWAf_dust::Tp    |    5.0 | u"percent"   | true  |  (0,100) | "NWAf dust Nd solubility"
-    β_NAm_dust::Tp     |    5.0 | u"percent"   | true  |  (0,100) | "NAm dust Nd solubility"
-    β_SAf_dust::Tp     |    5.0 | u"percent"   | true  |  (0,100) | "SAf dust Nd solubility"
-    β_SAm_dust::Tp     |    5.0 | u"percent"   | true  |  (0,100) | "SAm dust Nd solubility"
-    β_MECA_dust::Tp    |    5.0 | u"percent"   | true  |  (0,100) | "MECA dust Nd solubility"
-    β_Aus_dust::Tp     |    5.0 | u"percent"   | true  |  (0,100) | "Aus dust Nd solubility"
-    β_Sahel_dust::Tp   |    5.0 | u"percent"   | true  |  (0,100) | "Sahel dust Nd solubility"
-    ε_volc::Tp         |  10.0  | εunit        | true  |  (0,15)  | "Volcanic ash εNd"
-    β_volc::Tp         |   10.0 | u"percent"   | true  |  (0,100) | "Volcanic ash Nd solubility"
-    K_prec::Tp         | 0.01   | NoUnits      | true  |   (0,∞)  | "Precipitation reaction constant"
+    ε_EAsia_dust::Tp   |  -8.0  | per10000     | true  | (-12,-2) | "EAsia dust εNd"
+    ε_NEAf_dust::Tp    | -12.0  | per10000     | true  | (-15,-9) | "NEAf dust εNd"
+    ε_NWAf_dust::Tp    | -12.0  | per10000     | true  | (-15,-9) | "NWAf dust εNd"
+    ε_NAm_dust::Tp     |  -8.0  | per10000     | true  | (-12,-4) | "NAm dust εNd"
+    ε_SAf_dust::Tp     | -10.0  | per10000     | true  | (-25,-6) | "SAf dust εNd"
+    ε_SAm_dust::Tp     |  -3.0  | per10000     | true  | ( -7, 0) | "SAm dust εNd"
+    ε_MECA_dust::Tp    |  -2.0  | per10000     | true  | ( -5, 3) | "MECA dust εNd"
+    ε_Aus_dust::Tp     |  -4.0  | per10000     | true  | ( -7,-1) | "Aus dust εNd"
+    ε_Sahel_dust::Tp   | -12.0  | per10000     | true  | (-15,-9) | "Sahel dust εNd"
+    β_EAsia_dust::Tp   |    5.0 | per100       | true  |  (0,100) | "EAsia dust Nd solubility"
+    β_NEAf_dust::Tp    |    5.0 | per100       | true  |  (0,100) | "NEAf dust Nd solubility"
+    β_NWAf_dust::Tp    |    5.0 | per100       | true  |  (0,100) | "NWAf dust Nd solubility"
+    β_NAm_dust::Tp     |    5.0 | per100       | true  |  (0,100) | "NAm dust Nd solubility"
+    β_SAf_dust::Tp     |    5.0 | per100       | true  |  (0,100) | "SAf dust Nd solubility"
+    β_SAm_dust::Tp     |    5.0 | per100       | true  |  (0,100) | "SAm dust Nd solubility"
+    β_MECA_dust::Tp    |    5.0 | per100       | true  |  (0,100) | "MECA dust Nd solubility"
+    β_Aus_dust::Tp     |    5.0 | per100       | true  |  (0,100) | "Aus dust Nd solubility"
+    β_Sahel_dust::Tp   |    5.0 | per100       | true  |  (0,100) | "Sahel dust Nd solubility"
+    ε_volc::Tp         |  10.0  | per10000     | true  |  (0,15)  | "Volcanic ash εNd"
+    β_volc::Tp         |   10.0 | per100       | true  |  (0,100) | "Volcanic ash Nd solubility"
+    K_prec::Tp         | 0.01   | (mol/m^3)^-1 | true  |   (0,∞)  | "Precipitation reaction constant"
     f_prec::Tp         | 0.4    | NoUnits      | true  |   (0,1)  | "Fraction of non-buried precipitated Nd"
     w₀_prec::Tp        | 0.7    | km/yr        | false |   (0,∞)  | "Settling velocity of precipitated Nd"
-    K_POC::Tp          | 3e13   | NoUnits      | true  |   (0,∞)  | "POC-scavenging reaction constant"
+    K_POC::Tp          | 0.2    | (mol/m^3)^-1 | true  |   (0,∞)  | "POC-scavenging reaction constant"
     f_POC::Tp          | 0.78   | NoUnits      | true  |   (0,1)  | "Fraction of non-buried POC-scavenged Nd"
     w₀_POC::Tp         | 40.0   | m/d          | false |   (0,∞)  | "Settling velocity of POC-scavenged Nd"
-    K_bSi::Tp          | 3e13   | NoUnits      | true  |   (0,∞)  | "bSi-scavenging reaction constant"
+    K_bSi::Tp          | 22.5   | (mol/m^3)^-1 | true  |   (0,∞)  | "bSi-scavenging reaction constant"
     f_bSi::Tp          |  0.5   | NoUnits      | true  |   (0,1)  | "Fraction of non-buried bSi-scavenged Nd"
     w₀_bSi::Tp         | 714.069| m/d          | false |   (0,∞)  | "Settling velocity of bSi-scavenged Nd"
-    K_dust::Tp         | 2e15   | NoUnits      | true  |   (0,∞)  | "Dust-scavenging reaction constant"
+    K_dust::Tp         | 1.7    | (g/m^3)^-1   | true  |   (0,∞)  | "Dust-scavenging reaction constant"
     f_dust::Tp         | 0.073  | NoUnits      | true  |   (0,1)  | "Fraction of non-buried dust-scavenged Nd"
     w₀_dust::Tp        | 1.0    | km/yr        | false |   (0,∞)  | "Settling velocity of dust-scavenged Nd"
 end
@@ -98,9 +98,10 @@ const POC = let
     AO_lon = vec(ao["ao"]["lon"])
     AO_depth = vec(ao["ao"]["depth"])
     AO_POC_3D = matread(joinpath(AO_path, "AWESOME-OCIM-master", "data", "WJ18", "POC_WJ18.mat"))["POC_WJ18"]
-    POC_3D = regrid(AO_POC_3D, AO_lat, AO_lon, AO_depth, grd)
-    POC = vectorize(POC_3D, grd)
-    vnormalize(POC) # TODO: remove normalization?
+    AO_POC_unit = mmol/m^3 # Make sure! (see https://github.com/MTEL-USC/AWESOME-OCIM/issues/11)
+    POC_3D = regrid(AO_POC_3D, AO_lat, AO_lon, AO_depth, grd) * AO_POC_unit
+    POC = vectorize(ustrip.(upreferred.(POC_3D)), grd) # converts to mol/m^3
+    #vnormalize(POC) # TODO: remove normalization?
 end
 # Dust from Chien et al available from AIBECS
 const DustNd = 40.0mg/kg
@@ -115,9 +116,9 @@ const AEOL_Chienetal = let
         ϕ_2D_annual_regridded = regrid(ϕ_2D_annual, s_A_2D[:lat], s_A_2D[:lon], grd)
         # Paint the top layer only, with units
         OneHot3rdDim = reshape(grd.depth .== grd.depth[1], (1,1,size(grd)[3]))
-        v_3D = (ϕ_2D_annual_regridded * u"kg/m^2/s" * DustNd / grd.δdepth[1]) .* OneHot3rdDim
+        v_3D = (ϕ_2D_annual_regridded * kg/m^2/s * DustNd / grd.δdepth[1]) .* OneHot3rdDim
         # Convert to moles of Nd and vectorize
-        v = vectorize(ustrip.(u"molNd/m^3/s", v_3D), grd)
+        v = vectorize(ustrip.(molNd/m^3/s, v_3D), grd)
         push!(tmp, (k, v))
     end
     Dict(tmp)
@@ -127,26 +128,36 @@ const AEOL_Koketal = let
     s_A_2D = AeolianSources.load("Kok")
     tmp = Any[]
     for r in AeolianSources.Kok_REGIONS_NAMES
-        v_2D = s_A_2D[r]
+        ϕ_2D = s_A_2D[r]
         # Permute dims
-        v_2D_annual = permutedims(v_2D, (2,1))
+        ϕ_2D = permutedims(ϕ_2D, (2,1))
         # Regrid to OCIM2 grid
-        v_2D_annual_regridded = regrid(v_2D_annual, s_A_2D[:lat], s_A_2D[:lon], grd)
-        # Paint the top layer only, with units
+        ϕ_2D_regridded = regrid(ϕ_2D, s_A_2D[:lat], s_A_2D[:lon], grd)
+        # Paint the top layer only, with units (assuming dissolution in top layer)
         OneHot3rdDim = reshape(grd.depth .== grd.depth[1], (1,1,size(grd)[3]))
-        v_3D = (v_2D_annual_regridded * u"kg/m^2/yr" * DustNd / grd.δdepth[1]) .* OneHot3rdDim
+        χ_3D = (ϕ_2D_regridded * kg/m^2/yr * DustNd / grd.δdepth[1]) .* OneHot3rdDim
         # Convert to moles of Nd and vectorize
-        v = vectorize(ustrip.(u"molNd/m^3/s", v_3D), grd)
-        push!(tmp, (r, v))
+        χ = vectorize(ustrip.(molNd/m^3/s, χ_3D), grd)
+        push!(tmp, (r, χ))
     end
     Dict(tmp)
 end
-# For dust particles, use the Kok et al data (from all regions)
-const dustparticles = let # Repeat the dust field throughout the water column
-    dust_tot_Kok = sum(v for (r,v) in pairs(AEOL_Koketal))
-    dust3D = repeat(rearrange_into_3Darray(dust_tot_Kok, grd)[:,:,1], outer=(1,1,24))
-    vnormalize(vectorize(dust3D, grd))
+# For scavenging by dust particles, we reuse the Kok et al data (from all regions)
+const ϕ_dustg = let # Repeat the dust field throughout the water column
+    s_A_2D = AeolianSources.load("Kok")
+    # Sum over all regions
+    ϕ_2D = sum(s_A_2D[r] for r in AeolianSources.Kok_REGIONS_NAMES)
+    # reshape
+    ϕ_2D = permutedims(ϕ_2D, (2,1))
+    # Regrid to OCIM2 grid
+    ϕ_2D_regridded = regrid(ϕ_2D, s_A_2D[:lat], s_A_2D[:lon], grd)
+    # Repeat flux over each layer
+    ϕ_3D = (ϕ_2D_regridded * kg/m^2/yr) .* ones(1, 1, size(grd)[3])
+    ϕ = vectorize(ϕ_3D, grd)
 end
+# Assuming w₀_dust = 1km/yr too and is not optimized,
+const dustparticles = ustrip.(g/m^3, ϕ_dustg / (1km/yr))
+
 # Opal (bSi) from side Si-cycle model
 const bSi = let
     Si_model_file = if false # use local output file if you want to update the Si-cycle model
@@ -163,7 +174,7 @@ const bSi = let
     end
     # Then open JLD2 file and load the particulate Si variable, PSi
     jldopen(Si_model_file) do file
-        vnormalize(file["PSi"])
+        file["PSi"] # mol/m^3
     end
 end
 # Instead of simply building the matrices with tranposrtoperator, to speed things up, these are constant
@@ -297,7 +308,7 @@ const ε_sed = let
     OCN = oceanpolygons()
     idx = ispacific2(latvec(grd), lonvec(grd), OCN) .& (eNd_vec .< -5)
     eNd_vec[idx] .= -5.0
-    ustrip.(upreferred.(eNd_vec * εunit))
+    ustrip.(upreferred.(eNd_vec * per10000))
 end
 
 # bundle the 1/δz and f_topo together to convert from
@@ -305,7 +316,7 @@ end
 const v_sed_multiplier = f_topo ./ ustrip.(vectorize(grd.δz_3D, grd))
 
 # Reactivity α as a quadratic function of ε
-const ε10 = upreferred(10εunit)
+const ε10 = upreferred(10per10000)
 function α_quad(ε, p)
     @unpack α_a, α_c = p
     @. α_a * ((ε - α_c) / ε10)^2 + 1
@@ -402,7 +413,7 @@ end
 #    Z3D = zeros(size(grd))
 #    Z3D[:,:,1] .= Z2D
 #    εNd_gw_tmp = vectorize(Z3D, grd)
-#    R.(ustrip.(upreferred.(εNd_gw_tmp * εunit)))
+#    R.(ustrip.(upreferred.(εNd_gw_tmp * per10000)))
 #end
 s_gw_iso(p) = R_sed(p) .* s_gw(p)
 

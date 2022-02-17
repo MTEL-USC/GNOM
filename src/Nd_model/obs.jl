@@ -70,7 +70,7 @@ const DNdobs, εNdobs = let
                Symbol("εNd") => (x->Float64.(x)) => :εNd
             )
             X = X[(-999 .< X.εNd) .& (-999 .< X.depth .< 6000) .& (-999 .< X.lon) .& (-999 .< X.lat), :]
-            select(X, :lat, :lon=>(x->mod.(x,360))=>:lon, :depth=>(x->x*u"m")=>:depth, :εNd=>(x->x*εunit)=>:εNd)
+            select(X, :lat, :lon=>(x->mod.(x,360))=>:lon, :depth=>(x->x*u"m")=>:depth, :εNd=>(x->x*per10000)=>:εNd)
         end
         # Add data source column
         DNdobs2.source = fill("van de Flierdt", size(DNdobs2,1))
@@ -163,7 +163,7 @@ const DNdobs, εNdobs = let
 
         # Make a DataFrame
         DNdobs3 = DataFrame(lat=lat, lon=mod.(lon, 360), depth=depth*u"m", Nd=DNdobs3*u"pmol/kg")
-        εNdobs3 = DataFrame(lat=εlat, lon=mod.(εlon, 360), depth=εdepth*u"m", εNd=εNdobs3*εunit)
+        εNdobs3 = DataFrame(lat=εlat, lon=mod.(εlon, 360), depth=εdepth*u"m", εNd=εNdobs3*per10000)
         # Add data source column
         DNdobs3.source = fill("post IDP17", size(DNdobs3,1))
         εNdobs3.source = fill("post IDP17", size(εNdobs3,1))

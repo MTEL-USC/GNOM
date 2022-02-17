@@ -16,18 +16,17 @@ let
                   :tot => "Total")
 
     # units
-    uout = u"Mmol/yr"
-    uin = u"mol/m^3/s"
-    upc = u"percent"
+    uout = Mmol/yr
+    uin = mol/m^3/s
 
     # make a table
     df = DataFrame(
         Symbol("Symbol")=>[symbol2latex(Symbol("σ_$k")) for k in keys(sources)],
         Symbol("Source type")=>[ktostr[k] for k in keys(sources)],
         Symbol("($uout)")=>[∫dV(sₖ*uin,grd)|>uout|>ustrip for sₖ in collect(sources)],
-        Symbol("(%source)")=>[∫dV(sₖ,grd)/∫dV(sources.tot,grd)|>upc|>ustrip for sₖ in collect(sources)],
+        Symbol("(%source)")=>[∫dV(sₖ,grd)/∫dV(sources.tot,grd)|>per100|>ustrip for sₖ in collect(sources)],
         Symbol("(pM)")=>[totalaverage(DNdₖ*upreferred(uDNd).|>uDNd,grd)|>ustrip for DNdₖ in collect(DNdₖs)],
-        Symbol("(%Nd)")=>[∫dV(DNdₖ,grd)/∫dV(DNd,grd)|>upc|>ustrip for DNdₖ in collect(DNdₖs)],
+        Symbol("(%Nd)")=>[∫dV(DNdₖ,grd)/∫dV(DNd,grd)|>per100|>ustrip for DNdₖ in collect(DNdₖs)],
         Symbol("Γ (yr)")=>[∫dV(DNdₖ,grd)/∫dV(sₖ,grd)*u"s"|>u"yr"|>ustrip for (DNdₖ,sₖ) in zip(collect(DNdₖs), collect(sources))]
     )
     @show df

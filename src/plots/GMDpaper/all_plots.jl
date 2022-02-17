@@ -8,7 +8,8 @@ include("jointPDF_Nd.jl")
 include("transects_Nd.jl")
 include("transects_eNd.jl")
 #include("transects_extended.jl")
-#include("transects_mismatch.jl")
+#include("transects_Nd_mismatches.jl")
+#include("transects_eNd_mismatches.jl")
 include("profiles_v2.jl")
 #include("profiles_mismatch.jl")
 include("horizontal_Nd_and_eNd_maps.jl")
@@ -31,6 +32,9 @@ include("obs_maps.jl")
 
 # parameters
 include("parameters_grouped.jl")
+
+# Parameters from our optimized runs on USC cluster (dirty)
+include("parameters_trajectories_dirty.jl")
 
 # Si model
 include("jointPDF_Si.jl")

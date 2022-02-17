@@ -62,11 +62,15 @@ function myjointpdf_Si!(fig)
     fig[1:1, 1] = sublayout
     colsize!(sublayout, 1, Aspect(1,1))
 
+    # Root mean square error
+    RMSE = sqrt(mean((x - y).^2))
+    Label(fig, bbox = ax.scene.px_area, sprintf1("RMSE = %.1f $ux", RMSE), textsize=12, halign=:right, valign=:bottom, padding=(10,10,10,10), font=labelfont, color=:black)
+
     fig
 end
 
 # Create the plot
-fig = Figure(resolution=(450, 350))
+fig = Figure(resolution=(450, 450))
 myjointpdf_Si!(fig)
 
 #save(joinpath(archive_path, "jointPDF_$(lastcommit)_run$(run_num).png"), fig, px_per_unit=4)

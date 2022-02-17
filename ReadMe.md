@@ -69,7 +69,7 @@ although the actual numerical values might be different.
 These are the ε<sub>Nd</sub> values that you can convert to parts per ten thousand (‱) by typing, e.g.,
 
 ```julia
-julia> εNd .|> εunit
+julia> εNd .|> per10000
 200160-element Vector{Quantity{Float64, NoDims, Unitful.FreeUnits{(‱,), NoDims, nothing}}}:
   -6.020528949600701 ‱
  -5.9509796884171795 ‱
@@ -78,7 +78,7 @@ julia> εNd .|> εunit
   -13.64787766450326 ‱
 ```
 
-where `εunit` is the ‱ unit.
+where `per10000` is the ‱ unit.
 
 Similarly, you can convert `DNd` to pM by doing:
 
@@ -119,7 +119,7 @@ The vectors of tracers, such as `DNd` and `εNd`, can be easily plotted with the
 For example, after running the single run above, you can use
 
 ```julia
-julia> plotverticalmean(εNd .|> εunit, grd, c=:balance)
+julia> plotverticalmean(εNd .|> per10000, grd, c=:balance)
 ```
 
 which will output something like
@@ -156,7 +156,7 @@ Although AIBECS.jl does *not* provide recipes for Makie.jl, there are a number o
 For example, in line with the Plots.jl recipe used above for the vertical mean of ε<sub>Nd</sub>, you can get the 2D array of the vertical mean with
 
 ```julia
-julia> verticalmean(εNd .|> εunit, grd)
+julia> verticalmean(εNd .|> per10000, grd)
 91×180 Matrix{Quantity{Float64, NoDims, Unitful.FreeUnits{(‱,), NoDims, nothing}}}:
       NaN ‱      NaN ‱  …       NaN ‱       NaN ‱
       NaN ‱      NaN ‱          NaN ‱       NaN ‱

@@ -47,6 +47,10 @@ function myjointpdf!(fig)
         # Add label
         Label(fig, bbox = ax.scene.px_area, label, textsize=20, halign=:left, valign=:top, padding=(10,10,5,5), font=labelfont, color=:black)
 
+        # Root mean square error
+        RMSE = sqrt(mean((x - y).^2))
+        Label(fig, bbox = ax.scene.px_area, sprintf1("RMSE = %.2f $ux", RMSE), textsize=15, halign=:right, valign=:bottom, padding=(10,10,10,10), font=labelfont, color=:black)
+
         push!(axs, ax)
         push!(cos, co)
     end
@@ -111,6 +115,10 @@ function myjointpdf2!(fig)
 
         # Add label
         Label(fig, bbox = ax.scene.px_area, label, textsize=20, halign=:left, valign=:top, padding=(10,10,5,5), font=labelfont, color=:black)
+
+        # Root mean square error
+        RMSE = sqrt(mean((x - y).^2))
+        Label(fig, bbox = ax.scene.px_area, sprintf1("RMSE = %.2f $ux", RMSE), textsize=15, halign=:right, valign=:bottom, padding=(10,10,10,10), font=labelfont, color=:black)
 
         push!(axs, ax)
         push!(cos, co)

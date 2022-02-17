@@ -55,7 +55,7 @@ const Ndunit = pM
     K_bSi::Tp          | 22.5   | (mol/m^3)^-1 | true  |   (0,∞)  | "bSi-scavenging reaction constant"
     f_bSi::Tp          |  0.5   | NoUnits      | true  |   (0,1)  | "Fraction of non-buried bSi-scavenged Nd"
     w₀_bSi::Tp         | 714.069| m/d          | false |   (0,∞)  | "Settling velocity of bSi-scavenged Nd"
-    K_dust::Tp         | 1700.0 | (kg/m^3)^-1  | true  |   (0,∞)  | "Dust-scavenging reaction constant"
+    K_dust::Tp         | 1.7    | (g/m^3)^-1   | true  |   (0,∞)  | "Dust-scavenging reaction constant"
     f_dust::Tp         | 0.073  | NoUnits      | true  |   (0,1)  | "Fraction of non-buried dust-scavenged Nd"
     w₀_dust::Tp        | 1.0    | km/yr        | false |   (0,∞)  | "Settling velocity of dust-scavenged Nd"
 end
@@ -143,7 +143,7 @@ const AEOL_Koketal = let
     Dict(tmp)
 end
 # For scavenging by dust particles, we reuse the Kok et al data (from all regions)
-const ϕ_dustkg = let # Repeat the dust field throughout the water column
+const ϕ_dustg = let # Repeat the dust field throughout the water column
     s_A_2D = AeolianSources.load("Kok")
     # Sum over all regions
     ϕ_2D = sum(s_A_2D[r] for r in AeolianSources.Kok_REGIONS_NAMES)
@@ -156,7 +156,7 @@ const ϕ_dustkg = let # Repeat the dust field throughout the water column
     ϕ = vectorize(ϕ_3D, grd)
 end
 # Assuming w₀_dust = 1km/yr too and is not optimized,
-const dustparticles = ustrip.(upreferred.(ϕ_dustkg / (1km/yr)))
+const dustparticles = ustrip.(g/m^3, ϕ_dustg / (1km/yr))
 
 # Opal (bSi) from side Si-cycle model
 const bSi = let

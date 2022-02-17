@@ -130,13 +130,14 @@ end
 
 # Make vector of model value where obs are and reassign them to the model?
 # TODO, maybe comput the mismatch using the nearest neighbor
-function mismatch_along_transect(x, grd::OceanGrid, t::Transect)
-    itpx = OceanGrids.interpolate(x, grd)
-    pros = [mismatch_profile(itpx, p) for p in t.profiles]
+function mismatch_along_transect(x::AbstractVector{T}, grd::OceanGrid, t::Transect) where {T}
+    unitx = Unitful.unit(T)
+    itpx = OceanGrids.interpolate(ustrip.(x), grd)
+    pros = [mismatch_profile(itpx, unitx, p) for p in t.profiles]
     Transect(tracer=replace(t.tracer, "Observed"=>"model-obs"), cruise=t.cruise, profiles=pros)
 end
-function mismatch_profile(itpx, p)
-    values = itpx(p.station.lat, p.station.lon, p.depths) .- p.values
+function mismatch_profile(itpx, unitx, p)
+    values = itpx(p.station.lat, p.station.lon, p.depths) * unitx .- p.values
     ikeep = findall(!isnan, values)
     DepthProfile(depths=p.depths[ikeep], station=p.station, values=values[ikeep])
 end
@@ -327,7 +328,7 @@ end
 
 
 # parameters
-function plot_param!(ax, p, s, powers_of_ten=0; color=:black, density_color=:lightgray)
+function plot_param!(ax, p, s, powers_of_ten=0; color=:black, density_color=:lightgray, plotval=true)
     param_unit = units(p, s)
     param_value = getproperty(p, s)
     param_dist = prior(p, s) #/ (ustrip(param_unit, 1.0upreferred(param_unit)))
@@ -337,17 +338,33 @@ function plot_param!(ax, p, s, powers_of_ten=0; color=:black, density_color=:lig
     xs = range(xleft, xright, length=1001)
     ys = pdf.(param_dist, xs)
     band!(ax, xs ./ exp10(powers_of_ten), zeros(length(xs)), ys, color=density_color)
-    vlines!(ax, param_value / exp10(powers_of_ten); color)
+    plotval && vlines!(ax, param_value / exp10(powers_of_ten); color)
     ylims!(ax; low=0.0)
     pow_str = (powers_of_ten==0) ? "" : "×10" * Unitful.superscript(powers_of_ten)
     u_str = (param_unit==NoUnits) ? "" : param_unit
-    paren_str = (u_str=="" && pow_str=="") ? "" : "($pow_str$u_str)"
+    paren_str = (u_str=="" && pow_str=="") ? "" : (u_str=="" || pow_str=="") ? "($pow_str$u_str)" : "($pow_str $u_str)"
     ax.xlabel = "$s $paren_str"
     #hideydecorations!(ax)
     (u_str == "‱") && xlims!(ax, s == :σ_ε ? (0,20) : (-35,15))
     #(u_str == "pM") && xlims!(ax, (0,300))
+    return maximum(ys)
 end
 
+function plot_param_dirty!(ax, p, s, initialparms, finalparams, run_num, powers_of_ten=0; color=:black, density_color=:lightgray)
+    ymax = plot_param!(ax, p, s, powers_of_ten; color, density_color, plotval=false)
+    runs = keys(initialparams)
+    refrun = Symbol("run", run_num)
+
+    for run in runs
+        initialparam_value = getproperty(getproperty(initialparms, run), s)
+        finalparam_value = getproperty(getproperty(finalparams, run), s)
+        lines!(ax, kron([finalparam_value, initialparam_value], [1, 1]) / exp10(powers_of_ten), range(0, 1.1ymax, length=4);
+            color=(run==refrun ? RGBA(0,0,1,0.3) : RGBA(0,0,0,0.1)),
+            linewidth=(run==refrun ? 3 : 1))
+    end
+
+    ylims!(ax, (0, 1.1ymax))
+end
 
 
 

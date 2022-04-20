@@ -7,7 +7,7 @@
 #SBATCH --nodes=1
 #SBATCH --mem=64GB
 
-# Note: This file is specific to Benoit Pasquier's USC HPC cluster directory structure.
+# Note: This file is specific to Sophie Hines' WHOI HPC cluster directory structure.
 # You will likely need to ensure Julia is available and
 # edit the paths to access Julia and the GNOM code
 

@@ -21,7 +21,7 @@ const Ndunit = pM
     σ_ε::Tp            |  0.5   | per10000     | true  |   (0,5)  | "Per-pixel variance (std) of εNd"
     c_river::Tp        | 100.0  | pM           | true  |   (0,∞)  | "River effective [Nd]"
     c_gw::Tp           | 100.0  | pM           | true  |   (0,∞)  | "Surface groundwater effective [Nd]"
-    σ_hydro::Tp        |  1.0   | Mmol/yr      | true  |   (0,∞)  | "Hydrothermal source magnitude"
+    σ_hydro::Tp        |  0     | Mmol/yr      | false |   (0,∞)  | "Hydrothermal source magnitude"
     ε_hydro::Tp        |  10.0  | per10000     | true  | (-10,15) | "Hydrothermal source εNd"
     ϕ_0::Tp            |  20.0  | pmol/cm^2/yr | true  |   (0,∞)  | "Sedimentary flux at surface"
     ϕ_∞::Tp            |  10.0  | pmol/cm^2/yr | true  |   (0,∞)  | "Sedimentary flux at infinite depth"
@@ -35,16 +35,16 @@ const Ndunit = pM
     ε_MECA_dust::Tp    |  -2.0  | per10000     | true  | ( -5, 3) | "MECA dust εNd"
     ε_Aus_dust::Tp     |  -4.0  | per10000     | true  | ( -7,-1) | "Aus dust εNd"
     ε_Sahel_dust::Tp   | -12.0  | per10000     | true  | (-15,-9) | "Sahel dust εNd"
-    β_EAsia_dust::Tp   |    5.0 | per100       | true  |  (0,100) | "EAsia dust Nd solubility"
-    β_NEAf_dust::Tp    |    5.0 | per100       | true  |  (0,100) | "NEAf dust Nd solubility"
-    β_NWAf_dust::Tp    |    5.0 | per100       | true  |  (0,100) | "NWAf dust Nd solubility"
-    β_NAm_dust::Tp     |    5.0 | per100       | true  |  (0,100) | "NAm dust Nd solubility"
-    β_SAf_dust::Tp     |    5.0 | per100       | true  |  (0,100) | "SAf dust Nd solubility"
-    β_SAm_dust::Tp     |    5.0 | per100       | true  |  (0,100) | "SAm dust Nd solubility"
-    β_MECA_dust::Tp    |    5.0 | per100       | true  |  (0,100) | "MECA dust Nd solubility"
-    β_Aus_dust::Tp     |    5.0 | per100       | true  |  (0,100) | "Aus dust Nd solubility"
-    β_Sahel_dust::Tp   |    5.0 | per100       | true  |  (0,100) | "Sahel dust Nd solubility"
-    ε_volc::Tp         |  10.0  | per10000     | true  |  (0,15)  | "Volcanic ash εNd"
+    β_EAsia_dust::Tp   |    2.0 | per100       | true  |  (0,5)   | "EAsia dust Nd solubility"
+    β_NEAf_dust::Tp    |    2.0 | per100       | true  |  (0,5)   | "NEAf dust Nd solubility"
+    β_NWAf_dust::Tp    |    2.0 | per100       | true  |  (0,5)   | "NWAf dust Nd solubility"
+    β_NAm_dust::Tp     |    2.0 | per100       | true  |  (0,5)   | "NAm dust Nd solubility"
+    β_SAf_dust::Tp     |    2.0 | per100       | true  |  (0,5)   | "SAf dust Nd solubility"
+    β_SAm_dust::Tp     |    2.0 | per100       | true  |  (0,5)   | "SAm dust Nd solubility"
+    β_MECA_dust::Tp    |    2.0 | per100       | true  |  (0,5)   | "MECA dust Nd solubility"
+    β_Aus_dust::Tp     |    2.0 | per100       | true  |  (0,5)   | "Aus dust Nd solubility"
+    β_Sahel_dust::Tp   |    2.0 | per100       | true  |  (0,5)   | "Sahel dust Nd solubility"
+    ε_volc::Tp         |  6.0   | per10000     | true  |  (0,10)  | "Volcanic ash εNd"
     β_volc::Tp         |   10.0 | per100       | true  |  (0,100) | "Volcanic ash Nd solubility"
     K_prec::Tp         | 0.01   | (mol/m^3)^-1 | true  |   (0,∞)  | "Precipitation reaction constant"
     f_prec::Tp         | 0.4    | NoUnits      | true  |   (0,1)  | "Fraction of non-buried precipitated Nd"
@@ -104,7 +104,7 @@ const POC = let
     #vnormalize(POC) # TODO: remove normalization?
 end
 # Dust from Chien et al available from AIBECS
-const DustNd = 40.0mg/kg
+const DustNd = 27.0mg/kg
 const AEOL_Chienetal = let
     s_A_2D = AeolianSources.load("Chien")
     tmp = Any[]

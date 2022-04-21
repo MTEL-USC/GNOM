@@ -21,7 +21,7 @@ const Ndunit = pM
     σ_ε::Tp            |  0.5   | per10000     | true  |   (0,5)  | "Per-pixel variance (std) of εNd"
     c_river::Tp        | 100.0  | pM           | true  |   (0,∞)  | "River effective [Nd]"
     c_gw::Tp           | 100.0  | pM           | true  |   (0,∞)  | "Surface groundwater effective [Nd]"
-    σ_hydro::Tp        |  0     | Mmol/yr      | false |   (0,∞)  | "Hydrothermal source magnitude"
+    σ_hydro::Tp        |  0.0   | Mmol/yr      | false |   (0,∞)  | "Hydrothermal source magnitude"
     ε_hydro::Tp        |  10.0  | per10000     | true  | (-10,15) | "Hydrothermal source εNd"
     ϕ_0::Tp            |  20.0  | pmol/cm^2/yr | true  |   (0,∞)  | "Sedimentary flux at surface"
     ϕ_∞::Tp            |  10.0  | pmol/cm^2/yr | true  |   (0,∞)  | "Sedimentary flux at infinite depth"

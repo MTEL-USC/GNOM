@@ -12,8 +12,7 @@
 # edit the paths to access Julia and the GNOM code
 
 # Load the julia module
-export PATH=~/cm/shared/whoi/applications/julia-1.6.5/bin:$PATH
-export LD_LIBRARY_PATH=~/cm/shared/whoi/applications/julia-1.6.5/lib
+module load julia-1.6.5
 
 # Cd to the root folder
 cd /vortexfs1/home/shines/GNOM

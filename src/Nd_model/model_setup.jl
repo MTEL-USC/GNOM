@@ -45,7 +45,7 @@ const Ndunit = pM
     β_Aus_dust::Tp     |    2.0 | per100       | true  |  (0,5)   | "Aus dust Nd solubility"
     β_Sahel_dust::Tp   |    2.0 | per100       | true  |  (0,5)   | "Sahel dust Nd solubility"
     ε_volc::Tp         |  6.0   | per10000     | true  |  (0,10)  | "Volcanic ash εNd"
-    β_volc::Tp         |   10.0 | per100       | true  |  (0,100) | "Volcanic ash Nd solubility"
+    β_volc::Tp         |   10.0 | per100       | true  |  (0,5)   | "Volcanic ash Nd solubility"
     K_prec::Tp         | 0.01   | (mol/m^3)^-1 | true  |   (0,∞)  | "Precipitation reaction constant"
     f_prec::Tp         | 0.4    | NoUnits      | true  |   (0,1)  | "Fraction of non-buried precipitated Nd"
     w₀_prec::Tp        | 0.7    | km/yr        | false |   (0,∞)  | "Settling velocity of precipitated Nd"

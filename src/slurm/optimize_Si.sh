@@ -12,7 +12,7 @@
 # edit the paths to access Julia and the GNOM code
 
 # Load the julia module
-module load julia-1.6.5
+module load julia
 
 # Cd to the root folder
 cd /vortexfs1/home/shines/GNOM

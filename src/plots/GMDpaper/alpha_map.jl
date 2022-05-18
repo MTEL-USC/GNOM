@@ -12,7 +12,8 @@ include("../plots_setup_Nd.jl")
 # α curve vs ε values
 function αcurve(fig)
     ax = fig[1,1] = Axis(fig)
-    lines!(ax, εs, αs, ylims=(0,NaN))
+    lines!(ax, εs, αs)
+    ylims!(ax, low=0)
     ax.xlabel = "εNd (‱)"
     ax.ylabel = "Reactivity scaling factor α"
     ax.xticks = range(εclims..., step=5)

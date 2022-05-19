@@ -12,13 +12,14 @@ include("../plots_setup_Nd.jl")
 # α curve vs ε values
 function αcurve(fig)
     ax = fig[1,1] = Axis(fig)
-    lines!(ax, εs, αs, ylims=(0,NaN))
+    lines!(ax, εs, αs)
+    ylims!(ax, low=0)
     ax.xlabel = "εNd (‱)"
     ax.ylabel = "Reactivity scaling factor α"
     ax.xticks = range(εclims..., step=5)
     ax.yticks = 0:1:maximum(αs)
-    topscene = Scene(fig.scene)
-    Label(topscene, bbox = ax.scene.px_area, panellabels[1], textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:black)
+
+    Label(fig, bbox = ax.scene.px_area, panellabels[1], textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:black)
 end
 
 
@@ -50,8 +51,8 @@ function plot_alpha_map!(fig)
     cbar.tellheight = true
 
     # label
-    topscene = Scene(fig.scene)
-    Label(topscene, bbox = ax.scene.px_area, panellabels[2], textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:black)
+
+    Label(fig, bbox = ax.scene.px_area, panellabels[2], textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:black)
     nothing
 end
 fig = Figure(resolution = (700, 1000), backgroundcolor=:white)
@@ -93,8 +94,8 @@ function plot_alpha_map!(fig)
     cbar.tellheight = true
 
     # label
-    topscene = Scene(fig.scene)
-    Label(topscene, bbox = ax.scene.px_area, panellabels[2], textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:black)
+
+    Label(fig, bbox = ax.scene.px_area, panellabels[2], textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:black)
     nothing
 end
 fig = Figure(resolution = (700, 1000), backgroundcolor=:white)

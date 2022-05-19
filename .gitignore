@@ -3,6 +3,7 @@
 *bson
 *svg
 *png
+*.DS_Store
 output/
 cluster_output/
 data/

@@ -21,7 +21,7 @@ const Ndunit = pM
     σ_ε::Tp            |  0.5   | per10000     | true  |   (0,5)  | "Per-pixel variance (std) of εNd"
     c_river::Tp        | 100.0  | pM           | true  |   (0,∞)  | "River effective [Nd]"
     c_gw::Tp           | 100.0  | pM           | true  |   (0,∞)  | "Surface groundwater effective [Nd]"
-    σ_hydro::Tp        |  1.0   | Mmol/yr      | true  |   (0,∞)  | "Hydrothermal source magnitude"
+    σ_hydro::Tp        |  1e-10 | Mmol/yr      | true  |   (0,∞)  | "Hydrothermal source magnitude"
     ε_hydro::Tp        |  10.0  | per10000     | true  | (-10,15) | "Hydrothermal source εNd"
     ϕ_0::Tp            |  20.0  | pmol/cm^2/yr | true  |   (0,∞)  | "Sedimentary flux at surface"
     ϕ_∞::Tp            |  10.0  | pmol/cm^2/yr | true  |   (0,∞)  | "Sedimentary flux at infinite depth"
@@ -35,17 +35,17 @@ const Ndunit = pM
     ε_MECA_dust::Tp    |  -2.0  | per10000     | true  | ( -5, 3) | "MECA dust εNd"
     ε_Aus_dust::Tp     |  -4.0  | per10000     | true  | ( -7,-1) | "Aus dust εNd"
     ε_Sahel_dust::Tp   | -12.0  | per10000     | true  | (-15,-9) | "Sahel dust εNd"
-    β_EAsia_dust::Tp   |    5.0 | per100       | true  |  (0,100) | "EAsia dust Nd solubility"
-    β_NEAf_dust::Tp    |    5.0 | per100       | true  |  (0,100) | "NEAf dust Nd solubility"
-    β_NWAf_dust::Tp    |    5.0 | per100       | true  |  (0,100) | "NWAf dust Nd solubility"
-    β_NAm_dust::Tp     |    5.0 | per100       | true  |  (0,100) | "NAm dust Nd solubility"
-    β_SAf_dust::Tp     |    5.0 | per100       | true  |  (0,100) | "SAf dust Nd solubility"
-    β_SAm_dust::Tp     |    5.0 | per100       | true  |  (0,100) | "SAm dust Nd solubility"
-    β_MECA_dust::Tp    |    5.0 | per100       | true  |  (0,100) | "MECA dust Nd solubility"
-    β_Aus_dust::Tp     |    5.0 | per100       | true  |  (0,100) | "Aus dust Nd solubility"
-    β_Sahel_dust::Tp   |    5.0 | per100       | true  |  (0,100) | "Sahel dust Nd solubility"
-    ε_volc::Tp         |  10.0  | per10000     | true  |  (0,15)  | "Volcanic ash εNd"
-    β_volc::Tp         |   10.0 | per100       | true  |  (0,100) | "Volcanic ash Nd solubility"
+    β_EAsia_dust::Tp   |    2.0 | per100       | true  |  (0,5)   | "EAsia dust Nd solubility"
+    β_NEAf_dust::Tp    |    2.0 | per100       | true  |  (0,5)   | "NEAf dust Nd solubility"
+    β_NWAf_dust::Tp    |    2.0 | per100       | true  |  (0,5)   | "NWAf dust Nd solubility"
+    β_NAm_dust::Tp     |    2.0 | per100       | true  |  (0,5)   | "NAm dust Nd solubility"
+    β_SAf_dust::Tp     |    2.0 | per100       | true  |  (0,5)   | "SAf dust Nd solubility"
+    β_SAm_dust::Tp     |    2.0 | per100       | true  |  (0,5)   | "SAm dust Nd solubility"
+    β_MECA_dust::Tp    |    2.0 | per100       | true  |  (0,5)   | "MECA dust Nd solubility"
+    β_Aus_dust::Tp     |    2.0 | per100       | true  |  (0,5)   | "Aus dust Nd solubility"
+    β_Sahel_dust::Tp   |    2.0 | per100       | true  |  (0,5)   | "Sahel dust Nd solubility"
+    ε_volc::Tp         |    5.4 | per10000     | true  |(2.7,8.0) | "Volcanic ash εNd"
+    β_volc::Tp         |    2.0 | per100       | true  |  (0,5)   | "Volcanic ash Nd solubility"
     K_prec::Tp         | 0.01   | (mol/m^3)^-1 | true  |   (0,∞)  | "Precipitation reaction constant"
     f_prec::Tp         | 0.4    | NoUnits      | true  |   (0,1)  | "Fraction of non-buried precipitated Nd"
     w₀_prec::Tp        | 0.7    | km/yr        | false |   (0,∞)  | "Settling velocity of precipitated Nd"
@@ -104,7 +104,7 @@ const POC = let
     #vnormalize(POC) # TODO: remove normalization?
 end
 # Dust from Chien et al available from AIBECS
-const DustNd = 40.0mg/kg
+const DustNd = 27.0mg/kg
 const AEOL_Chienetal = let
     s_A_2D = AeolianSources.load("Chien")
     tmp = Any[]
@@ -365,7 +365,7 @@ s_sed_iso(p) = R_sed(p) .* α_quad(p) .* α_GRL(p) .* v_sed_multiplier .* ϕ_bot
 # load the He flux from OCIM2
 # and regrid it to the circulation.
 const ϕ_He = let
-    grd_OCIM2, _, ϕ_He, _ = OCIM2.load()
+    grd_OCIM2, _, ϕ_He, _ = OCIM2.load(HeFluxes=true)
     (debug || Circulation ≠ OCIM2) ? ϕ_He = regrid(ϕ_He, latvec(grd_OCIM2), lonvec(grd_OCIM2), depthvec(grd_OCIM2), grd) : ϕ_He
 end
 const v_hydro = vnormalize(@. ϕ_He * (z_top > 0)) # Remove the air–sea gas exchange (from the OCIM2 product)
@@ -438,10 +438,9 @@ p = Params()
 x = ustrip.(u"mol/m^3", 10u"pM") * ones(nb)
 x = [x; x]
 # state function and its Jacobian
-fun = AIBECSFunction(T_D, Gs, nb, Params)
-F, ∇ₓF = F_and_∇ₓF(fun)
+F = AIBECSFunction(T_D, Gs, nb, Params)
 # problem
-prob = SteadyStateProblem(fun, x, p)
+prob = SteadyStateProblem(F, x, p)
 
 resetup = false # flag for plotting to avoid resetting everything up
 

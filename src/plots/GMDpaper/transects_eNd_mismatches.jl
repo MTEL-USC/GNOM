@@ -32,8 +32,8 @@ maptransects!(ax, cts, ts, tcol, wlon)
 xlims!(ax, clon .+ (-180,180))
 ylims!(ax, (-90,90))
 #mapit!(ax, clon, mypolys(clon), color=:transparent, strokecolor=:black)
-topscene = Scene(fig.scene)
-Label(topscene, bbox = ax.scene.px_area, panellabels[1], textsize=20, halign=:left, valign=:bottom, padding=(10,10,5,10), font=labelfont, color=labelcol)
+
+Label(fig, bbox = ax.scene.px_area, panellabels[1], textsize=20, halign=:left, valign=:bottom, padding=(10,10,5,10), font=labelfont, color=labelcol)
 hidedecorations!(ax)
 hidespines!(ax)
 # Legend

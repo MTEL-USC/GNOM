@@ -21,7 +21,7 @@ const Ndunit = pM
     σ_ε::Tp            |  0.5   | per10000     | true  |   (0,5)  | "Per-pixel variance (std) of εNd"
     c_river::Tp        | 100.0  | pM           | true  |   (0,∞)  | "River effective [Nd]"
     c_gw::Tp           | 100.0  | pM           | true  |   (0,∞)  | "Surface groundwater effective [Nd]"
-    σ_hydro::Tp        |  0.0   | Mmol/yr      | false |   (0,∞)  | "Hydrothermal source magnitude"
+    σ_hydro::Tp        |  1e-10 | Mmol/yr      | true  |   (0,∞)  | "Hydrothermal source magnitude"
     ε_hydro::Tp        |  10.0  | per10000     | true  | (-10,15) | "Hydrothermal source εNd"
     ϕ_0::Tp            |  20.0  | pmol/cm^2/yr | true  |   (0,∞)  | "Sedimentary flux at surface"
     ϕ_∞::Tp            |  10.0  | pmol/cm^2/yr | true  |   (0,∞)  | "Sedimentary flux at infinite depth"
@@ -365,7 +365,7 @@ s_sed_iso(p) = R_sed(p) .* α_quad(p) .* α_GRL(p) .* v_sed_multiplier .* ϕ_bot
 # load the He flux from OCIM2
 # and regrid it to the circulation.
 const ϕ_He = let
-    grd_OCIM2, _, ϕ_He, _ = OCIM2.load()
+    grd_OCIM2, _, ϕ_He, _ = OCIM2.load(HeFluxes=true)
     (debug || Circulation ≠ OCIM2) ? ϕ_He = regrid(ϕ_He, latvec(grd_OCIM2), lonvec(grd_OCIM2), depthvec(grd_OCIM2), grd) : ϕ_He
 end
 const v_hydro = vnormalize(@. ϕ_He * (z_top > 0)) # Remove the air–sea gas exchange (from the OCIM2 product)
@@ -438,10 +438,9 @@ p = Params()
 x = ustrip.(u"mol/m^3", 10u"pM") * ones(nb)
 x = [x; x]
 # state function and its Jacobian
-fun = AIBECSFunction(T_D, Gs, nb, Params)
-F, ∇ₓF = F_and_∇ₓF(fun)
+F = AIBECSFunction(T_D, Gs, nb, Params)
 # problem
-prob = SteadyStateProblem(fun, x, p)
+prob = SteadyStateProblem(F, x, p)
 
 resetup = false # flag for plotting to avoid resetting everything up
 

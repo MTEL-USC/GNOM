@@ -17,7 +17,7 @@ function plot_εNd_sinks!(fig, fun)
     ypro = reduce(vcat, [zt, zb] for (zt, zb) in zip(ztop, zbot))
     for (i, t) in enumerate(instances(ScavenginParticle))
         Tx = T_D(t, p) * DNd * u"mol/m^3/s" # each sink is the vertical integral of Tx
-        # Might freeze if DNd is a view of a SciLM solution because it dispatches to dense matmul
+        # Might freeze if DNd is a view of a SciML solution because it dispatches to dense matmul
         ∫dzsink = ∫dz(Tx, grd)
         ∫dxdysink = ∫dxdy(Tx, grd)
         # replace negative values from numerical noise when doing T * x
@@ -46,11 +46,11 @@ function plot_εNd_sinks!(fig, fun)
         # # TODO maybe replace scavenging in ∫dxdy by the particle concentration instead? (good sanity check too)
     end
     # annotations (must come after?)
-    topscene = Scene(fig.scene)
+
     for (i, t) in enumerate(instances(ScavenginParticle))
-        Label(topscene, bbox = axs[i,1].scene.px_area, panellabels[i], textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:white)
-        Label(topscene, bbox = axs[i,2].scene.px_area, panellabels[i+length(instances(ScavenginParticle))], textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:black)
-        Label(topscene, bbox = axs[i,1].scene.px_area, string(t)[2:end], textsize=20, halign=:left, valign=:top, padding=(70,0,0,50), font=labelfont, color=:white)
+        Label(fig, bbox = axs[i,1].scene.px_area, panellabels[i], textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:white)
+        Label(fig, bbox = axs[i,2].scene.px_area, panellabels[i+length(instances(ScavenginParticle))], textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:black)
+        Label(fig, bbox = axs[i,1].scene.px_area, string(t)[2:end], textsize=20, halign=:left, valign=:top, padding=(70,0,0,50), font=labelfont, color=:white)
     end
     # colorbars
     label = islog ? "log₁₀(scavₖ / ($u))" : "sₖ ($u)"

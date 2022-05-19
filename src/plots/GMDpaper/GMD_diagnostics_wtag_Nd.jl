@@ -68,9 +68,9 @@ function plot_wtag_fNd!(fig)
 
     # labels
     labels = ("Nd from N", "Nd from S", "Nd not from N or S", "Dominant fraction")
-    topscene = Scene(fig.scene)
+
     for i in 1:4
-        Label(topscene, bbox = axs[i].scene.px_area, string(panellabels[i], "  ", labels[i]), textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:white)
+        Label(fig, bbox = axs[i].scene.px_area, string(panellabels[i], "  ", labels[i]), textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:white)
     end
 
 

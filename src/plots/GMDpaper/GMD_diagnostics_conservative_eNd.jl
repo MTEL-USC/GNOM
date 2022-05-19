@@ -55,9 +55,9 @@ function plot_conservative_ε!(fig)
     nothing
 
     # labels
-    topscene = Scene(fig.scene)
+
     for i in 1:3
-        Label(topscene, bbox = axs[i].scene.px_area, string(panellabels[i], "   ", labels[i]), textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:white)
+        Label(fig, bbox = axs[i].scene.px_area, string(panellabels[i], "   ", labels[i]), textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:white)
     end
 
     nothing

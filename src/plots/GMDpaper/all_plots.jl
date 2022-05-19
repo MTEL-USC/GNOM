@@ -34,7 +34,7 @@ include("obs_maps.jl")
 include("parameters_grouped.jl")
 
 # Parameters from our optimized runs on USC cluster (dirty)
-include("parameters_trajectories_dirty.jl")
+# include("parameters_trajectories_dirty.jl")
 
-# Si model
-include("jointPDF_Si.jl")
+# Si model (will only work if you have optimized it yourself)
+# include("jointPDF_Si.jl")

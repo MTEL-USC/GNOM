@@ -85,7 +85,7 @@ tp_opt = AIBECS.table(p)# table of parameters
 jldsave(joinpath(archive_path, "model$(headcommit)_single_run$(run_num)_$(circname).jld2"); headcommit, tp_opt)
 
 # Set the problem with the parameters above
-prob = SteadyStateProblem(fun, x, p)
+prob = SteadyStateProblem(F, x, p)
 
 # solve the system
 sol = solve(prob, CTKAlg(), preprint="Nd & εNd solve ", τstop=ustrip(s, 1e3Myr)).u

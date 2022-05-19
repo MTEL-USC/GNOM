@@ -384,7 +384,7 @@ nan_color = :transparent ; #:gray20
 land_color = :gray40
 seafloor_color = :gray20
 continent_color = :gray50
-water_color = RGBf0(0.8, 0.8, 1.0)
+water_color = RGBf(0.8, 0.8, 1.0)
 markersize = 7
 markersize_maps = 4
 

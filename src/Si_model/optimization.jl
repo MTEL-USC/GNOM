@@ -42,7 +42,7 @@ Optimization run
 results = optimize(objective, gradient, hessian, λ, NewtonTrustRegion(), opt; inplace=false)
 
 p_optimized = λ2p(SiParams, results.minimizer)
-prob_optimized = SteadyStateProblem(fun, x0, p_optimized)
+prob_optimized = SteadyStateProblem(F, x0, p_optimized)
 s_optimized = solve(prob_optimized, CTKAlg(), τstop=ustrip(s, 1e3Myr)).u
 
 # TODO find a more generic approach to save this data... Maybe I can use datadeps?

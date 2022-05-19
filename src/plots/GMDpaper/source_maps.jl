@@ -40,12 +40,11 @@ function plot_εNd_sources!(fig, fun)
         hms[2].colorrange = εclims
     end
     # annotations (must come after?)
-    topscene = Scene(fig.scene)
     for (i, (s1,s2)) in enumerate(zip(sources, sources_iso))
-        Label(topscene, bbox = axs[i,1].scene.px_area, string(panellabels[i]), textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:white)
-        Label(topscene, bbox = axs[i,2].scene.px_area, string(panellabels[i+length(sources)]), textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:white)
-        Label(topscene, bbox = axs[i,1].scene.px_area, string(s1)[3:end] * " Nd", textsize=20, halign=:left, valign=:top, padding=(70,0,0,50), font=labelfont, color=:white)
-        Label(topscene, bbox = axs[i,2].scene.px_area, string(s1)[3:end] * " εNd", textsize=20, halign=:left, valign=:top, padding=(70,0,0,50), font=labelfont, color=:white)
+        Label(fig, bbox = axs[i,1].scene.px_area, string(panellabels[i]), textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:white)
+        Label(fig, bbox = axs[i,2].scene.px_area, string(panellabels[i+length(sources)]), textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:white)
+        Label(fig, bbox = axs[i,1].scene.px_area, string(s1)[3:end] * " Nd", textsize=20, halign=:left, valign=:top, padding=(70,0,0,50), font=labelfont, color=:white)
+        Label(fig, bbox = axs[i,2].scene.px_area, string(s1)[3:end] * " εNd", textsize=20, halign=:left, valign=:top, padding=(70,0,0,50), font=labelfont, color=:white)
     end
     # colorbars
     label = islog ? "log₁₀(Nd source flux / ($u))" : "Nd source flux ($u)"

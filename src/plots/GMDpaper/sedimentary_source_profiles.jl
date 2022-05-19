@@ -52,7 +52,7 @@ function sed_source_profiles!(fig)
 
     # panel for alpha curve
     ax1 = fig[1,1] = Axis(fig)
-    εs = upreferred.(range(εclims..., length=1001) * per10000)
+    εs = upreferred.(collect(range(εclims..., length=1001) * per10000))
     αs = α_quad(εs, p)
     vlines!(ax1, [ustrip.(p.α_c)], linestyle=:dash, color=:gray)
     lines!(ax1, ustrip.(per10000, εs), αs)
@@ -80,7 +80,7 @@ function sed_source_profiles!(fig)
     α2D = permutedims(rearrange_into_3Darray(α_quad(p), grd)[:,:,1])
     innan = findall(.!isnan.(α2D))
     colorrange = extrema(α2D[innan]) .* (0,1)
-    ax = fig[3:4,:] = Axis(fig, backgroundcolor=:gray20, aspectratio=DataAspect())
+    ax = fig[3:4,:] = Axis(fig, backgroundcolor=:gray20)
     mapit!(ax, clon, mypolys(clon), color=:gray50)
     hm = heatmap!(ax, sclons, lats, view(α2D, ilon, :), colormap=αcmap; nan_color, colorrange)#, colorrange=αlims)
     mapit!(ax, clon, mypolys(clon), color=:transparent, strokecolor=:black, strokewidth=1)
@@ -93,8 +93,8 @@ function sed_source_profiles!(fig)
     cbar.tellheight = true
 
     # label
-    topscene = Scene(fig.scene)
-    Label(topscene, bbox = ax.scene.px_area, panellabels[5]; label_opts...)
+
+    Label(fig, bbox = ax.scene.px_area, panellabels[5]; label_opts...)
     #textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:black)
 
     nothing

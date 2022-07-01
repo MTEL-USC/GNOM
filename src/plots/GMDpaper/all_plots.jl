@@ -24,7 +24,7 @@ include("sink_maps.jl")
 include("GMD_diagnostics_masks_map.jl")
 include("GMD_diagnostics_conservative_eNd.jl")
 include("GMD_diagnostics_wtag_Nd.jl")
-include("GMD_diagnostics_tables.jl")
+#include("GMD_diagnostics_tables.jl")
 
 # model-output-independent plots
 include("obs_maps.jl")

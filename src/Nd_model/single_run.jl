@@ -64,18 +64,18 @@ p = Params(
     β_Sahel_dust = 0.95per100, # 2.95per100
     ε_volc = 6.94per10000, # 13.1per10000
     β_volc = 4.42per100, # 76.0per100
-    K_prec = 0.000726/(mol/m^3), # 0.00576/(mol/m^3)
-    f_prec = 0.402, # 0.124
+    K_prec = 0.0002/(mol/m^3), # 0.00576/(mol/m^3)
+    f_prec = 0.0, # 0.124
     w₀_prec = 0.7km/yr, # 0.7km/yr
-    K_POC = 0.01900/(mol/m^3), # 0.524/(mol/m^3)
-    f_POC = 0.773, # 0.312
+    K_POC = 3.0/(mol/m^3), # 0.524/(mol/m^3)
+    f_POC = 0.0, # 0.312
     w₀_POC = 40.0m/d, # 40.0m/d
-    K_bSi = 0.76576/(mol/m^3), # 2.56/(mol/m^3)
-    f_bSi = 0.603, # 0.784
+    K_bSi = 10.0/(mol/m^3), # 2.56/(mol/m^3)
+    f_bSi = 0.0, # 0.784
     w₀_bSi = 714.069m/d, # 714.0m/d
-    K_dust = 0.1178/(g/m^3), # 1.7/(g/m^3)
-    f_dust = 0.157, # 0.0861
-    w₀_dust = 0.10km/yr, # 1.0km/yr
+    K_dust = 0.001/(g/m^3), # 1.7/(g/m^3)
+    f_dust = 0.0, # 0.0861
+    w₀_dust = 1.0km/yr, # 1.0km/yr
 )
 
 tp_opt = AIBECS.table(p)# table of parameters
@@ -104,3 +104,10 @@ DNd, DRNd = unpack_tracers(sol, grd)
 # You can then use the Plots.jl recipes exported by AIBECS, e.g.,
 #
 # julia> plotzonalaverage(εNd .|> per10000, grd, mask=ATL)
+
+# To help manually adjust parameters, below is a little loop
+# to check how much Nd each scavenging particle type removes
+println("Scavenging removal:")
+for t in instances(ScavenginParticle)
+    println("- $(string(t)[2:end]): ", ∫dV(T_D(t, p) * 1/s * DNd * mol/m^3, grd) |> Mmol/yr)
+end

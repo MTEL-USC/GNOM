@@ -383,7 +383,7 @@ end
 const river_injection_invsec = let
     RIVERS = Rivers.load()
     rivers = regrid(RIVERS, grd)
-    rivers_pervolume = rivers ./ (volvec * u"m^3")
+    rivers_pervolume = rivers ./ (volvec * m^3)
     smooth_operator(grd, T) * ustrip.(upreferred.(rivers_pervolume)) # S smoothes the singular river source points
 end
 # Riverine source scaled by global magnitude σ
@@ -399,7 +399,7 @@ s_river_iso(p) = R_sed(p) .* s_river(p)
 const groundwater_injection_invsec = let
     GROUNDWATERS = GroundWaters.load()
     groundwaters = regrid(GROUNDWATERS, grd)
-    groundwaters_pervolume = groundwaters ./ (volvec * u"m^3")
+    groundwaters_pervolume = groundwaters ./ (volvec * m^3)
     smooth_operator(grd, T) * ustrip.(upreferred.(groundwaters_pervolume)) # S smoothes the singular river source points
 end
 function s_gw(p)
@@ -435,7 +435,7 @@ Gs = (G_Nd, G_Nd_iso)
 # Initialize parameters with initial values
 p = Params()
 # initial guess
-x = ustrip.(u"mol/m^3", 10u"pM") * ones(nb)
+x = ustrip.(mol/m^3, 10pM) * ones(nb)
 x = [x; x]
 # state function and its Jacobian
 F = AIBECSFunction(T_D, Gs, nb, Params)

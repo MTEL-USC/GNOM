@@ -1,5 +1,6 @@
 # This file is machine-generated - editing it directly is not advised
 
+julia_version = "1.7.3"
 manifest_format = "2.0"
 
 [[deps.AIBECS]]
@@ -500,9 +501,9 @@ uuid = "9fa8497b-333b-5362-9e8d-4d0656e87820"
 
 [[deps.GEOTRACES]]
 deps = ["DataFrames", "Dates", "Match", "Measurements", "NCDatasets", "OceanographyCruises", "Unitful"]
-git-tree-sha1 = "1708f21cfdddb479e08662eb9a994f47fe6cbfa6"
+git-tree-sha1 = "4017ec7d709f15368b0aa5b79248b8f72bb6ca30"
 uuid = "0fd43d8d-f157-424e-aaf7-32776c24e0de"
-version = "0.3.1"
+version = "0.3.2"
 
 [[deps.GLFW]]
 deps = ["GLFW_jll"]

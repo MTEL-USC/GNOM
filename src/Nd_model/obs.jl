@@ -81,7 +81,7 @@ const DNdobs, εNdobs = let
         DNdobs2, εNdobs2
     end
 
-    println("Adding GEOTRACES IDP17 data...")
+    println("Adding GEOTRACES IDP21 data...")
     DNdobs1, εNdobs1 = let
         DNdobs1 = GEOTRACES.observations("Nd")
         εNdobs1 = GEOTRACES.observations("εNd")

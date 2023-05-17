@@ -54,7 +54,7 @@ function plot_profiles_v2!(fig)
             ibasin == 1 && (ax.ylabel = "Depth (m)")
             text!(ax, 0, 0, text=reshape(panellabels[1:8], (4,2))[ibasin, itracer], fontsize=20, align=(:left,:bottom), space=:relative, offset=(4,4), font=labelfont, color=:black)
             numobs =  count(isbasin(xobs.lat[iobswet], xobs.lon[iobswet], OCEANS))
-            Label(ax, 1, 0, text=string(basins[ibasin], " ($numobs obs)"), align=(:right,:bottom), space=:relative, offset=(-4,4), font=labelfont, color=colors[ibasin])
+            text!(ax, 1, 0, text=string(basins[ibasin], " ($numobs obs)"), align=(:right,:bottom), space=:relative, offset=(-4,4), font=labelfont, color=colors[ibasin])
         end
     end
     return axs

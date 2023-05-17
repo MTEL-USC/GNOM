@@ -15,15 +15,17 @@ Thanks to Julia's excellent built-in package manager and the [DataDeps.jl](https
 
 Check the table of contents (there should be a button on the top left) to navigate this file efficiently.
 
+GNOM v2 does not really improve on GNOM v1 except for compatibility with Julia v1.9. Incrementing the version number seemed appropriate since the GNOM v2 update fixes many breaking changes from updated dependencies.
+
 ## Installation
 
-1. Download and install the latest stable version of Julia from [julialang.org](https://julialang.org/) (v1.6.2 as of 1 Sep 2021).
+1. Download and install the latest stable version of Julia from [julialang.org](https://julialang.org/) (v1.9 as of 17 May 2023).
 1. Download or clone this repository on your local machine.
 1. (Optional) If you want to use the observational dataset used in GNOM v1.0, you must manually download the neodymium data from the GEOTRACES Intermediate Data Product 2017 (IDP17). (This is the only piece of data that cannot be programmatically downloaded for this project.)
-    Head over to [www.geotraces.org](https://www.geotraces.org/) to download the IDP17 discrete sample dataset and, following the [GEOTRACES.jl](https://github.com/briochemc/GEOTRACES.jl) recommendation, you should preferably save the NetCDF file locally at
+    Head over to [www.geotraces.org](https://www.geotraces.org/) to download the IDP21 discrete sample dataset and, following the [GEOTRACES.jl](https://github.com/briochemc/GEOTRACES.jl) recommendation, you should preferably save the NetCDF file locally at
 
     ```bash
-    $HOME/Data/GEOTRACES/GEOTRACES_IDP2017_v2/discrete_sample_data/netcdf/GEOTRACES_IDP2017_v2_Discrete_Sample_Data.nc
+    $HOME/Data/GEOTRACES/GEOTRACES_IDP2021/discrete_sample_data/netcdf/GEOTRACES_IDP2021_Discrete_Sample_Data.nc # name may not be accurate
     ```
 
     where `$HOME` is your "home" directory.
@@ -169,7 +171,7 @@ julia> verticalmean(εNd .|> per10000, grd)
 
 Such functions are extensively used by the plotting scripts in [`src/plots/GMDpaper/`](src/plots/GMDpaper/), which you can directly use to reproduce the plots in [*Pasquier, Hines, et al.* (2022)](https://gmd.copernicus.org/articles/15/4625/2022/).
 
-
+Most of these plotting functions have been updated with GNOM v2 for compatibility with Julia v1.9 and its improved latency for first plots.
 
 
 ## Optimization
@@ -228,3 +230,8 @@ You can use the journal's citation tools, directly grab the contents of our [CIT
 
 
 
+## TODO
+
+- Update observations scripts. Currently doiwnloads post IDP17 data, but should be using IDP21 at the same time, so there will be some (many?) duplicates. Also there has been no QC on the IDP21 from the GNOM authors. 
+- Check that the optimization routines still work with GNOM v2 (updated for Julia v1.9)
+- Improve the conecptual model. 

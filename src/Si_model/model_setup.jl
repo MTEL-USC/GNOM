@@ -19,13 +19,13 @@ using WorldOceanAtlasTools
 #==================#
 @initial_value @units @flattenable @limits @description struct SiParams{Tp} <: AbstractParameters{Tp}
     f::Tp       |   1.0 | NoUnits  | false | (0,1)  | "Fraction of non-buried bSi"
-    w::Tp       | 200.0 | m/d      | true  | (0,∞)  | "Settling velocity of bSi" 
-    τ_up::Tp    |  30.0 | d        | true  | (0,∞)  | "Si(OH)₄ restoring timescale" 
-    α_up::Tp    |   1.0 | NoUnits  | true  | (0,∞)  | "Si(OH)₄ scaling for restoring" 
-    τ_rem::Tp   |   1.0 | d        | true  | (0,∞)  | "bSi remineralization timescale" 
-    DSi_geo::Tp |  80.0 | mmol/m^3 | true  | (0,∞)  | "Si(OH)₄ geological restoring target" 
-    τ_geo::Tp   |   1.0 | Myr      | false | (0,∞)  | "Si(OH)₄ geological restoring timescale" 
-    z₀::Tp      |  80.0 | m        | false | (0,∞)  | "Depth of euphotic zone" 
+    w::Tp       | 200.0 | m/d      | true  | (0,∞)  | "Settling velocity of bSi"
+    τ_up::Tp    |  30.0 | d        | true  | (0,∞)  | "Si(OH)₄ restoring timescale"
+    α_up::Tp    |   1.0 | NoUnits  | true  | (0,∞)  | "Si(OH)₄ scaling for restoring"
+    τ_rem::Tp   |   1.0 | d        | true  | (0,∞)  | "bSi remineralization timescale"
+    DSi_geo::Tp |  80.0 | mmol/m^3 | true  | (0,∞)  | "Si(OH)₄ geological restoring target"
+    τ_geo::Tp   |   1.0 | Myr      | false | (0,∞)  | "Si(OH)₄ geological restoring timescale"
+    z₀::Tp      |  80.0 | m        | false | (0,∞)  | "Depth of euphotic zone"
 end
 
 
@@ -76,10 +76,9 @@ p = SiParams()
 # initial guess
 x0 = ustrip(upreferred(10mmol/m^3)) * ones(2nb)
 # state function and its Jacobian
-fun = AIBECSFunction((T_DSi, T_PSi), (RHS_DSi, RHS_PSi), nb, SiParams)
-F, ∇ₓF = F_and_∇ₓF(fun)
+F = AIBECSFunction((T_DSi, T_PSi), (RHS_DSi, RHS_PSi), nb, SiParams)
 # problem
-prob = SteadyStateProblem(fun, x0, p)
+prob = SteadyStateProblem(F, x0, p)
 
 
 

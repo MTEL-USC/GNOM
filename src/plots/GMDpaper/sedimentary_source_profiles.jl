@@ -38,7 +38,7 @@ function sed_source_profiles!(fig)
     # panel for integrated source
     ax = fig[2,2] = Axis(fig)
     u∫dxdy = u"kmol/m/yr"
-    ∫dxdy_s_sed = ∫dxdy(s_sed(p) * upreferred(uDNd) / u"s", grd) .|> u∫dxdy
+    ∫dxdy_s_sed = ∫dxdy(s_sed(p) * upreferred(uDNd) / s, grd) .|> u∫dxdy
     x = vcat(0, repeat(ustrip.(∫dxdy_s_sed), inner=2), 0)
     #lines!(ax, x, vcat(0, y, maximum(zbot)))
     poly!(ax, Point2f0.(zip(x, vcat(0, y, maximum(zbot)))), color=ColorSchemes.colorschemes[:tableau_colorblind][1])
@@ -52,7 +52,7 @@ function sed_source_profiles!(fig)
 
     # panel for alpha curve
     ax1 = fig[1,1] = Axis(fig)
-    εs = upreferred.(range(εclims..., length=1001) * per10000)
+    εs = upreferred.(collect(range(εclims..., length=1001) * per10000))
     αs = α_quad(εs, p)
     vlines!(ax1, [ustrip.(p.α_c)], linestyle=:dash, color=:gray)
     lines!(ax1, ustrip.(per10000, εs), αs)

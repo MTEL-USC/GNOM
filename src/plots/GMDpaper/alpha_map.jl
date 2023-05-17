@@ -18,8 +18,8 @@ function αcurve(fig)
     ax.ylabel = "Reactivity scaling factor α"
     ax.xticks = range(εclims..., step=5)
     ax.yticks = 0:1:maximum(αs)
-    # Label(topscene, bbox = ax.scene.px_area, panellabels[1], fontsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:black)
-    text!(ax, panellabels[1], fontsize=20, align = (:left, :top), offset = (4, -2), space = :relative, font=labelfont, color=:black)
+    topscene = Scene(fig.scene)
+    Label(topscene, bbox = ax.scene.px_area, panellabels[1], textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:black)
 end
 
 
@@ -51,7 +51,8 @@ function plot_alpha_map!(fig)
     cbar.tellheight = true
 
     # label
-    text!(ax, panellabels[2], fontsize=20, align = (:left, :top), offset = (4, -2), space = :relative, font=labelfont, color=:black)
+    topscene = Scene(fig.scene)
+    Label(topscene, bbox = ax.scene.px_area, panellabels[2], textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:black)
     nothing
 end
 fig = Figure(resolution = (700, 1000), backgroundcolor=:white)
@@ -92,18 +93,17 @@ end
 #     cbar.height = 30
 #     cbar.tellheight = true
 
-#     # label
-#     topscene = Scene(fig.scene)
-#     text!(ax, panellabels[2], fontsize=20, align = (:left, :top), offset = (4, -2), space = :relative, font=labelfont, color=:black)
-#     nothing
-# end
-# fig = Figure(resolution = (700, 1000), backgroundcolor=:white)
-# plot_alpha_map!(fig)
-# trim!(fig.layout)
-# # if use_GLMakie
-# #     display(fig) # show the output wiht GLMakie
-# # else
-# #     save(joinpath(archive_path, "alpha_map_$(lastcommit)_run$(run_num).pdf"), fig)
-# #     nothing # just so that no output is spat out
-# # end
-# fig
+    # label
+    topscene = Scene(fig.scene)
+    Label(topscene, bbox = ax.scene.px_area, panellabels[2], textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:black)
+    nothing
+end
+fig = Figure(resolution = (700, 1000), backgroundcolor=:white)
+plot_alpha_map!(fig)
+trim!(fig.layout)
+if use_GLMakie
+    display(fig) # show the output wiht GLMakie
+else
+    save(joinpath(archive_path, "alpha_map_$(lastcommit)_run$(run_num).pdf"), fig)
+    nothing # just so that no output is spat out
+end

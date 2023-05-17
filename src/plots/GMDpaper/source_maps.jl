@@ -40,7 +40,6 @@ function plot_εNd_sources!(fig, fun)
         hms[2].colorrange = εclims
     end
     # annotations (must come after?)
-    topscene = Scene(fig.scene)
     for (i, (s1,s2)) in enumerate(zip(sources, sources_iso))
         text!(axs[i,1], 0, 0, text=string(panellabels[i]), align = (:left, :bottom), offset = (2, 2), space = :relative, fontsize=20, font=labelfont, color=:white)
         text!(axs[i,2], 0, 0, text=string(panellabels[i+length(sources)]), align = (:left, :bottom), offset = (2, 2), space = :relative, fontsize=20, font=labelfont, color=:white)

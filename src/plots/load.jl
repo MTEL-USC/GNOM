@@ -78,7 +78,7 @@ EXT = :png
 
 fig_path = output_path
 # convert model and obs to match units
-uDNd = u"pM"
+uDNd = pM
 DNdmodel = uconvert.(uDNd, DNd * upreferred(uDNd))
 uεNd = u"pertenthousand"
 εNdmodel = uconvert.(uεNd, εNd * upreferred(uεNd))

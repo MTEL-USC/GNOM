@@ -24,7 +24,7 @@ include("sink_maps.jl")
 include("GMD_diagnostics_masks_map.jl")
 include("GMD_diagnostics_conservative_eNd.jl")
 include("GMD_diagnostics_wtag_Nd.jl")
-include("GMD_diagnostics_tables.jl")
+#include("GMD_diagnostics_tables.jl")
 
 # model-output-independent plots
 include("obs_maps.jl")
@@ -34,7 +34,7 @@ include("obs_maps.jl")
 include("parameters_grouped.jl")
 
 # Parameters from our optimized runs on USC cluster (dirty)
-include("parameters_trajectories_dirty.jl")
+# include("parameters_trajectories_dirty.jl")
 
-# Si model
-include("jointPDF_Si.jl")
+# Si model (will only work if you have optimized it yourself)
+# include("jointPDF_Si.jl")

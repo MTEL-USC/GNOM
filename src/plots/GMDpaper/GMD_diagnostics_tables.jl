@@ -27,7 +27,7 @@ let
         Symbol("(%source)")=>[∫dV(sₖ,grd)/∫dV(sources.tot,grd)|>per100|>ustrip for sₖ in collect(sources)],
         Symbol("(pM)")=>[totalaverage(DNdₖ*upreferred(uDNd).|>uDNd,grd)|>ustrip for DNdₖ in collect(DNdₖs)],
         Symbol("(%Nd)")=>[∫dV(DNdₖ,grd)/∫dV(DNd,grd)|>per100|>ustrip for DNdₖ in collect(DNdₖs)],
-        Symbol("Γ (yr)")=>[∫dV(DNdₖ,grd)/∫dV(sₖ,grd)*u"s"|>u"yr"|>ustrip for (DNdₖ,sₖ) in zip(collect(DNdₖs), collect(sources))]
+        Symbol("Γ (yr)")=>[∫dV(DNdₖ,grd)/∫dV(sₖ,grd)*s|>yr|>ustrip for (DNdₖ,sₖ) in zip(collect(DNdₖs), collect(sources))]
     )
     @show df
 

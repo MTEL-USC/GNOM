@@ -58,7 +58,7 @@ const DNdobs, εNdobs = let
                Symbol("Nd [pmol/kg]") => (x->Float64.(x)) => :Nd,
             )
             X = X[(-999 .< X.Nd .< 75) .& (-999 .< X.depth .< 6000) .& (-999 .< X.lon) .& (-999 .< X.lat), :]
-            select(X, :lat, :lon=>(x->mod.(x,360))=>:lon, :depth=>(x->x*u"m")=>:depth, :Nd=>(x->x*u"pmol/kg")=>:Nd)
+            select(X, :lat, :lon=>(x->mod.(x,360))=>:lon, :depth=>(x->x*m)=>:depth, :Nd=>(x->x*pmol/kg)=>:Nd)
         end
         εNdobs2 = let
             X = select(df,
@@ -68,7 +68,7 @@ const DNdobs, εNdobs = let
                Symbol("εNd") => (x->Float64.(x)) => :εNd
             )
             X = X[(-999 .< X.εNd) .& (-999 .< X.depth .< 6000) .& (-999 .< X.lon) .& (-999 .< X.lat), :]
-            select(X, :lat, :lon=>(x->mod.(x,360))=>:lon, :depth=>(x->x*u"m")=>:depth, :εNd=>(x->x*per10000)=>:εNd)
+            select(X, :lat, :lon=>(x->mod.(x,360))=>:lon, :depth=>(x->x*m)=>:depth, :εNd=>(x->x*per10000)=>:εNd)
         end
         # Add data source column
         DNdobs2.source = fill("van de Flierdt", size(DNdobs2,1))
@@ -79,7 +79,7 @@ const DNdobs, εNdobs = let
         DNdobs2, εNdobs2
     end
 
-    println("Adding GEOTRACES IDP17 data...")
+    println("Adding GEOTRACES IDP21 data...")
     DNdobs1, εNdobs1 = let
         DNdobs1 = GEOTRACES.observations("Nd")
         εNdobs1 = GEOTRACES.observations("εNd")
@@ -156,8 +156,8 @@ const DNdobs, εNdobs = let
         εdepth = vcat(εdepth...)
 
         # Make a DataFrame
-        DNdobs3 = DataFrame(lat=lat, lon=mod.(lon, 360), depth=depth*u"m", Nd=DNdobs3*u"pmol/kg")
-        εNdobs3 = DataFrame(lat=εlat, lon=mod.(εlon, 360), depth=εdepth*u"m", εNd=εNdobs3*per10000)
+        DNdobs3 = DataFrame(lat=lat, lon=mod.(lon, 360), depth=depth*m, Nd=DNdobs3*u"pmol/kg")
+        εNdobs3 = DataFrame(lat=εlat, lon=mod.(εlon, 360), depth=εdepth*m, εNd=εNdobs3*per10000)
         # Add data source column
         DNdobs3.source = fill("post IDP17", size(DNdobs3,1))
         εNdobs3.source = fill("post IDP17", size(εNdobs3,1))

@@ -42,14 +42,14 @@ println("==========================================")
 # Use F1 for gradient and Hessian
 λ = p2λ(p)
 τstop = ustrip(s, 1e3Myr)
-mem = F1Method.initialize_mem(F, ∇ₓf, ∇ₓF, x, λ, CTKAlg(); preprint="mem ", τstop=τstop)
+mem = F1Method.initialize_mem(F, ∇ₓf, x, λ, CTKAlg(); preprint="mem ", τstop=τstop)
 
 function objective(λ)
     p = λ2p(Params, λ) ; @show p
-    F1Method.objective(f, F, ∇ₓF, mem, λ, CTKAlg(), preprint="obj ", τstop=τstop)
+    F1Method.objective(f, F, mem, λ, CTKAlg(), preprint="obj ", τstop=τstop)
 end
-gradient(λ) = F1Method.gradient(f, F, ∇ₓf, ∇ₓF, mem, λ, CTKAlg(), preprint="grad", τstop=τstop)
-hessian(λ) = F1Method.hessian(f, F, ∇ₓf, ∇ₓF, mem, λ, CTKAlg(), preprint="hess ", τstop=τstop)
+gradient(λ) = F1Method.gradient(f, F, ∇ₓf, mem, λ, CTKAlg(), preprint="grad", τstop=τstop)
+hessian(λ) = F1Method.hessian(f, F, ∇ₓf, mem, λ, CTKAlg(), preprint="hess ", τstop=τstop)
 
 # Reduced g_tol for optimization
 opt = Optim.Options(store_trace=false, show_trace=true, extended_trace=false, g_tol=1e-4)
@@ -60,7 +60,7 @@ Optimization run
 results = optimize(objective, gradient, hessian, λ, NewtonTrustRegion(), opt; inplace=false)
 
 p_optimized = λ2p(Params, results.minimizer)
-prob_optimized = SteadyStateProblem(fun, x, p_optimized)
+prob_optimized = SteadyStateProblem(F, x, p_optimized)
 s_optimized = solve(prob_optimized, CTKAlg(), τstop=ustrip(s, 1e3Myr)).u
 
 # TODO find a more generic approach to save this data... Maybe I can use datadeps?

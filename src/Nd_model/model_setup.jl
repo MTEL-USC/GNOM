@@ -365,7 +365,7 @@ s_sed_iso(p) = R_sed(p) .* α_quad(p) .* α_GRL(p) .* v_sed_multiplier .* ϕ_bot
 # load the He flux from OCIM2
 # and regrid it to the circulation.
 const ϕ_He = let
-    grd_OCIM2, _, ϕ_He, _ = OCIM2.load(HeFluxes=trueHeFluxes=true)
+    grd_OCIM2, _, ϕ_He, _ = OCIM2.load(HeFluxes=true)
     (debug || Circulation ≠ OCIM2) ? ϕ_He = regrid(ϕ_He, latvec(grd_OCIM2), lonvec(grd_OCIM2), depthvec(grd_OCIM2), grd) : ϕ_He
 end
 const v_hydro = vnormalize(@. ϕ_He * (z_top > 0)) # Remove the air–sea gas exchange (from the OCIM2 product)
@@ -439,7 +439,6 @@ x = ustrip.(mol/m^3, 10pM) * ones(nb)
 x = [x; x]
 # state function and its Jacobian
 fun = AIBECSFunction(T_D, Gs, nb, Params)
-F, ∇ₓF = F_and_∇ₓF(fun)
 # problem
 prob = SteadyStateProblem(F, x, p)
 

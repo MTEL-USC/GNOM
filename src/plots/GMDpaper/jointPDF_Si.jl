@@ -3,10 +3,11 @@ Joint PDF
 ================================================#
 include("../plots_setup_Nd.jl")
 
+# This function is required to read tp_opt_Si because
+# of a breaking change in DataFrames that JLD2 cannot handle otherwise
 function Base.convert(::Type{DataFrame}, nt::NamedTuple)
     return DataFrame(nt.columns, nt.colindex)
 end
-
 tp_opt_Si = load(joinpath(output_path, "optimized_Simodel_$circname.jld2"), "tp_opt";
     typemap = Dict("DataFrames.DataFrame" => JLD2.Upgrade(DataFrame))
 )
@@ -70,7 +71,7 @@ function myjointpdf_Si!(fig)
 
     # Root mean square error
     RMSE = sqrt(mean((x - y).^2))
-    Label(fig, bbox = ax.scene.px_area, sprintf1("RMSE = %.1f $ux", RMSE), fontsize=12, halign=:right, valign=:bottom, padding=(10,10,10,10), font=labelfont, color=:black)
+    text!(ax, 0, 1, text=sprintf1("RMSE = %.1f $ux", RMSE), fontsize=12, align=(:right,:bottom), offset=(4,4), space=:relative, font=labelfont, color=:black)
 
     fig
 end

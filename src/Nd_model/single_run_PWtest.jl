@@ -3,7 +3,7 @@
 
 # This lines sets up the model (and `F`) only once,
 # so that you rerunning this file will not repeat the entire model setup
-!isdefined(Main, :fun) && include("model_setup.jl")
+!isdefined(Main, :F) && include("model_setup.jl")
 
 # This should create a new run name every time you run the file
 # And add an empty runXXX file to the single_runs folder
@@ -52,16 +52,16 @@ p = Params(
     ε_SAm_dust = -3.15per10000, # -3.15per10000
     ε_MECA_dust = 0.119per10000, # 0.119per10000
     ε_Aus_dust = -4.03per10000, # -4.03per10000
-    ε_Sahel_dust = -11.9per10000, # -11.9per10000
-    β_EAsia_dust = 23.0per100, # 23.0per100
-    β_NEAf_dust = 23.3per100, # 23.3per100
-    β_NWAf_dust = 3.17per100, # 3.17per100
-    β_NAm_dust = 82.8per100, # 82.8per100
-    β_SAf_dust = 38.5per100, # 38.5per100
-    β_SAm_dust = 2.52per100, # 2.52per100
-    β_MECA_dust = 14.7per100, # 14.7per100
-    β_Aus_dust = 11.6per100, # 11.6per100
-    β_Sahel_dust = 2.95per100, # 2.95per100
+    ε_Sahel_dust = -1.19per10000, # -11.9per10000
+    β_EAsia_dust = 2.30per100, # 23.0per100
+    β_NEAf_dust = 2.33per100, # 23.3per100
+    β_NWAf_dust = 0.317per100, # 3.17per100
+    β_NAm_dust = 8.28per100, # 82.8per100
+    β_SAf_dust = 3.85per100, # 38.5per100
+    β_SAm_dust = 0.252per100, # 2.52per100
+    β_MECA_dust = 1.47per100, # 14.7per100
+    β_Aus_dust = 1.16per100, # 11.6per100
+    β_Sahel_dust = 0.295per100, # 2.95per100
     ε_volc = 13.1per10000, # 13.1per10000
     β_volc = 76.0per100, # 76.0per100
     K_prec = 0.00576/(mol/m^3), # 0.00576/(mol/m^3)
@@ -73,7 +73,7 @@ p = Params(
     K_bSi = 2.56/(mol/m^3), # 2.56/(mol/m^3)
     f_bSi = 0.784, # 0.784
     w₀_bSi = 714.0m/d, # 714.0m/d
-    K_dust = 1.7e-3/(g/m^3), # 1.7/(g/m^3)
+    K_dust = 1.7/(g/m^3), # 1.7/(g/m^3)
     f_dust = 0.0861, # 0.0861
     w₀_dust = 1.0km/yr, # 1.0km/yr
 )

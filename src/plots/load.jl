@@ -33,7 +33,7 @@ using NearestNeighbors
 # Chose the plotting backend (CairoMakie for PDFs, GLMakie for "live" windows)
 if use_GLMakie
     using GLMakie; GLMakie.activate!()
-    GLMakie.WINDOW_CONFIG.vsync[] = false
+    # GLMakie.WINDOW_CONFIG.vsync[] = false
 else
     using CairoMakie; CairoMakie.activate!()
 end

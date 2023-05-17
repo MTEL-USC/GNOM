@@ -36,20 +36,20 @@ function myjointpdf!(fig)
         Dcum[idx] .= 100cumsum(Q_sorted)
 
         ax = fig[1, itracer] = Axis(fig, aspect = AxisAspect(1))
-        co = contourf!(ax, D.x, D.y, Dcum, levels=10:10:100, colormap=cmap2)
+        co = Makie.contourf!(ax, D.x, D.y, Dcum, levels=10:10:100, colormap=cmap2)
         lines!(ax, collect(boundary), collect(boundary), linestyle=:dash, color=:black)
         #scatter!(ax, x, y, markersize=1)
-        xlims!(ax, boundary)
-        ylims!(ax, boundary)
+        Makie.xlims!(ax, boundary)
+        Makie.ylims!(ax, boundary)
         ax.xlabel = "Observed " * tracer_name * " ($ux)"
         ax.ylabel = "Modelled " * tracer_name * " ($ux)"
 
         # Add label
-        Label(fig, bbox = ax.scene.px_area, label, textsize=20, halign=:left, valign=:top, padding=(10,10,5,5), font=labelfont, color=:black)
+        Label(fig, bbox = ax.scene.px_area, label, fontsize=20, halign=:left, valign=:top, padding=(10,10,5,5), font=labelfont, color=:black)
 
         # Root mean square error
         RMSE = sqrt(mean((x - y).^2))
-        Label(fig, bbox = ax.scene.px_area, sprintf1("RMSE = %.2f $ux", RMSE), textsize=15, halign=:right, valign=:bottom, padding=(10,10,10,10), font=labelfont, color=:black)
+        Label(fig, bbox = ax.scene.px_area, sprintf1("RMSE = %.2f $ux", RMSE), fontsize=15, halign=:right, valign=:bottom, padding=(10,10,10,10), font=labelfont, color=:black)
 
         push!(axs, ax)
         push!(cos, co)
@@ -105,20 +105,20 @@ function myjointpdf2!(fig)
         Dcum[idx] .= 100cumsum(Q_sorted)
 
         ax = fig[itracer, 1] = Axis(fig, aspect = AxisAspect(1))
-        co = contourf!(ax, D.x, D.y, Dcum, levels=10:10:100, colormap=cmap2)
+        co = Makie.contourf!(ax, D.x, D.y, Dcum, levels=10:10:100, colormap=cmap2)
         lines!(ax, collect(boundary), collect(boundary), linestyle=:dash, color=:black)
         #scatter!(ax, x, y, markersize=1)
-        xlims!(ax, boundary)
-        ylims!(ax, boundary)
+        Makie.xlims!(ax, boundary)
+        Makie.ylims!(ax, boundary)
         ax.xlabel = "Observed " * tracer_name * " ($ux)"
         ax.ylabel = "Modelled " * tracer_name * " ($ux)"
 
         # Add label
-        Label(fig, bbox = ax.scene.px_area, label, textsize=20, halign=:left, valign=:top, padding=(10,10,5,5), font=labelfont, color=:black)
+        Label(fig, bbox = ax.scene.px_area, label, fontsize=20, halign=:left, valign=:top, padding=(10,10,5,5), font=labelfont, color=:black)
 
         # Root mean square error
         RMSE = sqrt(mean((x - y).^2))
-        Label(fig, bbox = ax.scene.px_area, sprintf1("RMSE = %.2f $ux", RMSE), textsize=15, halign=:right, valign=:bottom, padding=(10,10,10,10), font=labelfont, color=:black)
+        Label(fig, bbox = ax.scene.px_area, sprintf1("RMSE = %.2f $ux", RMSE), fontsize=15, halign=:right, valign=:bottom, padding=(10,10,10,10), font=labelfont, color=:black)
 
         push!(axs, ax)
         push!(cos, co)

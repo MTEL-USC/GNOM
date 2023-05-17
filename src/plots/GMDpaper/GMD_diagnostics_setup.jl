@@ -1,5 +1,4 @@
 
-use_GLMakie = false
 include("../plots_setup_Nd.jl")
 
 
@@ -45,9 +44,9 @@ end
 
 
 
-#===========================#
-#    Operators H and M      #
-#===========================#
+#==============================#
+#    Operators H and sum(Ms)   #
+#==============================#
 # H for simple partition according to source
 H = if !isdefined(Main, :neph_sink)
     sum(T_D(p).ops)
@@ -57,16 +56,15 @@ end
 print("│ Factorizing H...")
 Hf = factorize(H)
 println(" Done!")
-# M for partitions according to region of origin
+# Ms for partitions according to region of origin
 Ms = NamedTuple(i => sparse(Diagonal(mᵢ)) for (i,mᵢ) in pairs(masks))
-M = sum(Ms)
-# H + M for Nd transport + relaxation in Ω
-print("│ Factorizing H + M...")
-HMf = factorize(H + M)
+# H + sum(Ms) for Nd transport + relaxation in Ω
+print("│ Factorizing H + sum(Ms)...")
+HMf = factorize(H + sum(Ms))
 println(" Done!")
-# T + M for water transport + relaxation in Ω
-print("│ Factorizing T + M...")
-TMf = factorize(T + M)
+# T + sum(Ms) for water transport + relaxation in Ω
+print("│ Factorizing T + sum(Ms)...")
+TMf = factorize(T + sum(Ms))
 println(" Done!")
 
 #=================================#
@@ -82,7 +80,7 @@ fDNdₖs = NamedTuple(k => DNdₖ ./ DNd .|> per100 for (k,DNdₖ) in pairs(DNd�
 #=================================#
 #   Diagnosis 1: Conservative ε   #
 #=================================#
-ε_conservative = TMf \ (M * εNd)
+ε_conservative = TMf \ (sum(Ms) * εNd)
 
 #============================================#
 #   Diagnosis 2: Nd water-tagged partition   #

@@ -3,9 +3,15 @@ Joint PDF
 ================================================#
 include("../plots_setup_Nd.jl")
 
-DSi, tp_opt_Si = jldopen(joinpath(output_path, "optimized_Simodel_$circname.jld2")) do f
-    f["DSi"], f["tp_opt"]
+function Base.convert(::Type{DataFrame}, nt::NamedTuple)
+    return DataFrame(nt.columns, nt.colindex)
 end
+
+tp_opt_Si = load(joinpath(output_path, "optimized_Simodel_$circname.jld2"), "tp_opt";
+    typemap = Dict("DataFrames.DataFrame" => JLD2.Upgrade(DataFrame))
+)
+DSi = load(joinpath(output_path, "optimized_Simodel_$circname.jld2"), "DSi")
+
 uDSi = mmol/m^3
 DSimodel = uconvert.(uDSi, DSi * upreferred(uDSi))
 using WorldOceanAtlasTools
@@ -41,11 +47,11 @@ function myjointpdf_Si!(fig)
     Dcum[idx] .= 100cumsum(Q_sorted)
 
     ax = fig[1, 1] = Axis(fig, aspect = AxisAspect(1))
-    co = contourf!(ax, D.x, D.y, Dcum, levels=10:10:100, colormap=cmap2)
+    co = Makie.contourf!(ax, D.x, D.y, Dcum, levels=10:10:100, colormap=cmap2)
     lines!(ax, collect(boundary), collect(boundary), linestyle=:dash, color=:black)
     #scatter!(ax, x, y, markersize=1)
-    xlims!(ax, boundary)
-    ylims!(ax, boundary)
+    Makie.xlims!(ax, boundary)
+    Makie.ylims!(ax, boundary)
     ax.xlabel = "Observed " * tracer_name * " ($ux)"
     ax.ylabel = "Modelled " * tracer_name * " ($ux)"
 
@@ -64,7 +70,7 @@ function myjointpdf_Si!(fig)
 
     # Root mean square error
     RMSE = sqrt(mean((x - y).^2))
-    Label(fig, bbox = ax.scene.px_area, sprintf1("RMSE = %.1f $ux", RMSE), textsize=12, halign=:right, valign=:bottom, padding=(10,10,10,10), font=labelfont, color=:black)
+    Label(fig, bbox = ax.scene.px_area, sprintf1("RMSE = %.1f $ux", RMSE), fontsize=12, halign=:right, valign=:bottom, padding=(10,10,10,10), font=labelfont, color=:black)
 
     fig
 end
@@ -92,10 +98,10 @@ tpSi = select(tp_opt_Si,
              Symbol("Initial value"),
              :Prior=>ByRow(latexify)=>:Range,
              :Unit=>ByRow(latexify)=>:Unit,
-             :Description=>ByRow(latexeNd)=>:Description)
-             #:Optimizable=>ByRow(latexbool)=>:Optimized)
+             :Description=>ByRow(latexeNd)=>:Description,
+             :Optimizable=>ByRow(latexbool)=>:Optimized)
 formatters = (v,i,j) -> j ∈ [2,3] ? string("\$", numformat(sprintf1("%.3g", v)), "\$") : (j == 4) ? string("\$", v, "\$") : v
 
 println("Latex param table")
 
-println(pretty_table(tpSi, tf=tf_latex_simple, formatters=formatters, nosubheader=true))
+println(pretty_table(tpSi, backend = Val(:latex), formatters=formatters, nosubheader=true))

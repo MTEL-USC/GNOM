@@ -33,5 +33,5 @@ let
 
     # Make a LaTeX table
     formatters = (v,i,j) -> (j ≥ 3) ? string("\$", (v ≥ 10 ? Int : identity)(parse(Float64, sprintf1("%.2g", v))), "\$") : v
-    @show pretty_table(df, tf=tf_latex_simple, formatters=formatters, nosubheader=true)
+    @show pretty_table(df, backend = Val(:latex), formatters=formatters, nosubheader=true)
 end

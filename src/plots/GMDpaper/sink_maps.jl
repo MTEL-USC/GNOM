@@ -25,7 +25,7 @@ function plot_εNd_sinks!(fig, fun)
         fun∫dzsink = fun.(ustrip.(u, permutedims(∫dzsink, (2,1))))
         ax = axs[i,1] = fig[i,1] = Axis(fig, backgroundcolor=seafloor_color)
         mapit!(ax, clon, mypolys(clon), color=continent_color)
-        hms[1] = heatmap!(ax, sclons, lats, view(fun∫dzsink, ilon, :),
+        hms[1] = Makie.heatmap!(ax, sclons, lats, view(fun∫dzsink, ilon, :),
                           colormap = islog ? logσcmap : σcmap,
                           colorrange = islog ? logσclims : σclims,
                           nan_color=nan_color)
@@ -35,11 +35,16 @@ function plot_εNd_sinks!(fig, fun)
         # Profiles on the side
         ax = axs[i,2] = fig[i,2] = Axis(fig, width=300)
         x = vcat(0, repeat(ustrip.(u∫dxdy_s, ∫dxdysink), inner=2), 0)
-        poly!(ax, Point2f0.(zip(x, vcat(0, ypro, maximum(zbot)))), color=ColorSchemes.colorschemes[:tableau_colorblind][1])
-        ylims!(ax, (6000, -50))
+        poly!(ax, Point2f0.(zip(max.(x, 0), vcat(0, ypro, maximum(zbot)))), color=ColorSchemes.colorschemes[:tableau_colorblind][2])
+        poly!(ax, Point2f0.(zip(min.(x, 0), vcat(0, ypro, maximum(zbot)))), color=ColorSchemes.colorschemes[:tableau_colorblind][1])
+
+
+
+        Makie.ylims!(ax, (6000, -50))
         ax.yticks = 0:1000:6000
         ax.ylabel = "depth (m)"
         ax.xlabel = "$(u∫dxdy_s)"
+
         # Do not hide x ticks because different scales? Use log? (Should not use logscaled bars though)
         #i≠length(instances(ScavenginParticle)) && hidexdecorations!(ax, ticks=false, grid=false)
         # Cannot hide x ticks if axes are not linked...
@@ -48,9 +53,9 @@ function plot_εNd_sinks!(fig, fun)
     # annotations (must come after?)
     topscene = Scene(fig.scene)
     for (i, t) in enumerate(instances(ScavenginParticle))
-        Label(topscene, bbox = axs[i,1].scene.px_area, panellabels[i], textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:white)
-        Label(topscene, bbox = axs[i,2].scene.px_area, panellabels[i+length(instances(ScavenginParticle))], textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:black)
-        Label(topscene, bbox = axs[i,1].scene.px_area, string(t)[2:end], textsize=20, halign=:left, valign=:top, padding=(70,0,0,50), font=labelfont, color=:white)
+        text!(axs[i,1], 0, 0, text=panellabels[i], fontsize=20, align=(:left,:bottom), offset=(4,4), space=:relative, font=labelfont, color=:white)
+        text!(axs[i,2], 0, 0, text=panellabels[i+length(instances(ScavenginParticle))], fontsize=20, align=(:left,:bottom), offset=(4,4), space=:relative, font=labelfont, color=:black)
+        text!(axs[i,1], 60, 45, text=string(t)[2:end], fontsize=20, align=(:left, :bottom), font=labelfont, color=:white)
     end
     # colorbars
     label = islog ? "log₁₀(scavₖ / ($u))" : "sₖ ($u)"

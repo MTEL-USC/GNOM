@@ -17,7 +17,7 @@ include("horizontal_Nd_and_eNd_maps.jl")
 include("dust_regions_eNd.jl")
 include("source_maps.jl")
 include("sedimentary_source_profiles.jl")
-include("alpha_map.jl")
+# include("alpha_map.jl")
 include("sink_maps.jl")
 
 # Diagnostics

@@ -43,7 +43,7 @@ mapit!(ax, cl0, mypolys(cl0), color=:gray50)
 # Plot polygons of dust regions
 for r in keys(AEOL_Koketal)
     poly!(ax, mypoly(r), color=get(εcmap, myεNd(r), εclims))
-    text!(ax, string(r, "\n", round(myεNd(r), digits=1)), position = mycenter(r), align = (:center, :center), textsize=15)
+    text!(ax, string(r, "\n", round(myεNd(r), digits=1)), position = mycenter(r), align = (:center, :center), fontsize=15)
 end
 # polygons of land again (no fill)
 mapit!(ax, cl0, mypolys(cl0), color=:transparent, strokecolor=RGBA(0,0,0,0.25), strokewidth=1)

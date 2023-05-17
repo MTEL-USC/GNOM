@@ -53,7 +53,7 @@ ge = gce[4, 1] = GridLayout()
 for (i,s) in enumerate(ε_params)
     local ax = ga[i,1] = Axis(fig)
     plot_param!(ax, p, s; density_color=density_colors[1])
-    xlims!(ax, (-35, 15))
+    Makie.xlims!(ax, (-35, 15))
     ax.ylabel = split(string(s), "_")[2]
     hideydecorations!(ax, label=false)
     i≠9 ? hidexdecorations!(ax, grid=false) : ax.xlabel="ε (‱)"
@@ -61,7 +61,7 @@ end
 for (i,s) in enumerate(β_params)
     local ax = ga[i,2] = Axis(fig)
     plot_param!(ax, p, s; density_color=density_colors[1])
-    xlims!(ax, (0,100))
+    Makie.xlims!(ax, (0,100))
     hideydecorations!(ax)
     ax.xticks=0:20:100
     i≠9 ? hidexdecorations!(ax, grid=false) : ax.xlabel="β (%)"
@@ -71,7 +71,7 @@ end
 let
     local ax = gb[1,1] = Axis(fig)
     plot_param!(ax, p, :ε_volc; density_color=density_colors[2])
-    xlims!(ax, (-35, 15))
+    Makie.xlims!(ax, (-35, 15))
     ax.xlabel="ε (‱)"
     ax.ylabel = "volc"
     hideydecorations!(ax, label=false)
@@ -79,7 +79,7 @@ end
 let
     local ax = gb[1,2] = Axis(fig)
     plot_param!(ax, p, :β_volc; density_color=density_colors[2])
-    xlims!(ax, (0,100))
+    Makie.xlims!(ax, (0,100))
     hideydecorations!(ax)
     ax.xticks=0:20:100
     ax.xlabel="β (%)"
@@ -131,7 +131,7 @@ named_labels = ["Dust", "Volcanic ash", "Enhanced Nd release", "River and ground
 for (label, layout, nlab) in zip(panellabels, [ga, gb, gc, gd, ge, gf, gg], named_labels)
     Label(layout[1, :, Top()], nlab * " parameters", valign = :bottom, padding = (0, 0, 5, 0))
     Label(layout[1, 1, TopLeft()], label,
-        textsize = 18,
+        fontsize = 18,
         font = labelfont,
         padding = (0, 5, 5, 0),
         halign = :right)
@@ -161,8 +161,8 @@ formatters = (v,i,j) -> j ∈ [2,3] ? string("\$", numformat(sprintf1("%.3g", v)
 
 println("Latex param table")
 
-println(pretty_table(tp2, tf=tf_latex_simple, formatters=formatters, nosubheader=true))
+println(pretty_table(tp2, backend = Val(:latex), formatters=formatters, nosubheader=true))
 #open(joinpath(archive_path, "optimized_parameters.tex"), "w") do f
-#    pretty_table(f, tp2, tf=tf_latex_simple, formatters=formatters, nosubheader=true)
+#    pretty_table(f, tp2, backend = Val(:latex), formatters=formatters, nosubheader=true)
 #end
 

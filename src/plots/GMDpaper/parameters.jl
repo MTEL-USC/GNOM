@@ -76,8 +76,8 @@ formatters = (v,i,j) -> j ∈ [2,3] ? string("\$", numformat(sprintf1("%.3g", v)
 
 println("Latex param table")
 
-println(pretty_table(tp2, tf=tf_latex_simple, formatters=formatters, nosubheader=true))
+println(pretty_table(tp2, backend = Val(:latex), formatters=formatters, nosubheader=true))
 #open(joinpath(archive_path, "optimized_parameters.tex"), "w") do f
-#    pretty_table(f, tp2, tf=tf_latex_simple, formatters=formatters, nosubheader=true)
+#    pretty_table(f, tp2, backend = Val(:latex), formatters=formatters, nosubheader=true)
 #end
 

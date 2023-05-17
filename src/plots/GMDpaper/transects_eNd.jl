@@ -26,9 +26,10 @@ fig[1,1] = subl
 mapit!(ax, clon, mypolys(clon), color=land_color)
 cts = Any[]
 maptransects!(ax, cts, ts, tcol, wlon)
-xlims!(ax, clon .+ (-180,180))
-ylims!(ax, (-90,90))
-Label(fig, bbox = ax.scene.px_area, panellabels[1], textsize=20, halign=:left, valign=:bottom, padding=(10,10,5,10), font=labelfont, color=labelcol)
+Makie.xlims!(ax, clon .+ (-180,180))
+Makie.ylims!(ax, (-90,90))
+#mapit!(ax, clon, mypolys(clon), color=:transparent, strokecolor=:black)
+text!(ax, panellabels[1], fontsize=20, align = (:left, :top), offset = (4, -2), space = :relative, font=labelfont, color=labelcol)
 hidedecorations!(ax)
 hidespines!(ax)
 # Legend
@@ -49,15 +50,15 @@ for it in eachindex(ts)
     sc = makiescattertransect!(ax, t, markersize=markersize, colormap=εcmap)
     push!(scs, hm)
     sc.plots[end].colorrange = εclims # color of last overlaid scatter
-    ylims!(ax, (6000,0))
+    Makie.ylims!(ax, (6000,0))
     dis = ustrip(km, maximum(scattertransect(t)[1]))
     if dis > 1500
-        Label(fig, bbox = axs[it].scene.px_area, t.cruise, textsize=20, halign=:right, valign=:bottom, padding=(0,35,5,0), font=labelfont, color=labelcol)
-        Label(fig, bbox = axs[it].scene.px_area, panellabels[it+1], textsize=20, halign=:left, valign=:bottom, padding=(10,10,5,10), font=labelfont, color=labelcol)
-        Label(fig, bbox = axs[it].scene.px_area, "■", textsize=20, halign=:right, valign=:bottom, padding=(0,10,5,0), font=labelfont, color=tcol[it])
+        Label(fig, bbox = axs[it].scene.px_area, t.cruise, fontsize=20, halign=:right, valign=:bottom, padding=(0,35,5,0), font=labelfont, color=labelcol)
+        Label(fig, bbox = axs[it].scene.px_area, panellabels[it+1], fontsize=20, halign=:left, valign=:bottom, padding=(10,10,5,10), font=labelfont, color=labelcol)
+        Label(fig, bbox = axs[it].scene.px_area, "■", fontsize=20, halign=:right, valign=:bottom, padding=(0,10,5,0), font=labelfont, color=tcol[it])
     else # special treatment for tiny transects (labels don't fit)
-        Label(fig, bbox = axs[it].scene.px_area, string(panellabels[it+1], " ", t.cruise), textsize=20, halign=:right, valign=:bottom, padding=(0,-115,5,0), font=labelfont, color=labelcol)
-        Label(fig, bbox = axs[it].scene.px_area, "■", textsize=20, halign=:right, valign=:bottom, padding=(0,-140,5,0), font=labelfont, color=tcol[it])
+        Label(fig, bbox = axs[it].scene.px_area, string(panellabels[it+1], " ", t.cruise), fontsize=20, halign=:right, valign=:bottom, padding=(0,-115,5,0), font=labelfont, color=labelcol)
+        Label(fig, bbox = axs[it].scene.px_area, "■", fontsize=20, halign=:right, valign=:bottom, padding=(0,-140,5,0), font=labelfont, color=tcol[it])
     end
     ax.xlabel="Distance (km)"
     ax.ylabel="Depth (m)"
@@ -66,8 +67,8 @@ for it in eachindex(ts)
     tightlimits!(ax, Bottom())
     ax.xticks = 0:1000:maximum(dis)
     ax.width = 700 * (dis+2t_ext) / 8000
-    xlims!(ax, (-t_ext, dis+t_ext))
-    ylims!(ax, (6001, -1))
+    Makie.xlims!(ax, (-t_ext, dis+t_ext))
+    Makie.ylims!(ax, (6001, -1))
     hidespines!(ax, :t, :r)
 end
 # colorbar (need to use scs[1].plots[end] because doubly-overlaid-scatter plot)

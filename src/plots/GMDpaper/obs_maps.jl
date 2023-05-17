@@ -32,11 +32,10 @@ function plot_obs_maps!(fig)
     mapit!(ax, clon, mypolys(clon), color=:transparent, strokewidth=1, strokecolor=:black)
     mylatlons!(ax, latticks45, lonticks60)
     # annotations (must come after?)
-
-    Label(fig, bbox = axs[1,1].scene.px_area, string("(a)"), textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font="Dejavu Sans", color=:white)
-    Label(fig, bbox = axs[2,1].scene.px_area, string("(b)"), textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font="Dejavu Sans", color=:white)
-    Label(fig, bbox = axs[1,1].scene.px_area, "Nd obs", textsize=20, halign=:left, valign=:top, padding=(50,0,0,50), font="Dejavu Sans", color=:white)
-    Label(fig, bbox = axs[2,1].scene.px_area, "εNd obs", textsize=20, halign=:left, valign=:top, padding=(50,0,0,50), font="Dejavu Sans", color=:white)
+    text!(axs[1,1], 0, 0, text=string("(a)"), fontsize=20, align=(:left,:bottom), space=:relative, offset=(4,4), font="Dejavu Sans", color=:white)
+    text!(axs[2,1], 0, 0, text=string("(b)"), fontsize=20, align=(:left,:bottom), space=:relative, offset=(4,4), font="Dejavu Sans", color=:white)
+    text!(axs[1,1], 60, 45, text="Nd obs", fontsize=20, align=(:left,:bottom), font="Dejavu Sans", color=:white)
+    text!(axs[2,1], 60, 45, text="εNd obs", fontsize=20, align=(:left,:bottom), font="Dejavu Sans", color=:white)
     nothing
 
     # Legend

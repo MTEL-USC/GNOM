@@ -17,7 +17,7 @@ end
 # A recipe for edgy heatmaps
 
 # my recipe for unitful content transects
-@recipe(MakieTransect, x1D, ct) do scene
+Makie.@recipe(MakieTransect, x1D, ct) do scene
     Theme()
 end
 midpoints(x) = [(x[i] + x[i+1])/2 for i in eachindex(x)[1:end-1]]
@@ -38,11 +38,11 @@ function Makie.plot!(p::MakieTransect)
     y_extended = sort([y;ey])
     z_extended = [z_itp(y,x) for y in y_extended, x in x_extended]
     z_extended[2:2:end, 2:2:end] .= z
-    contourf!(p, x_extended, y_extended, permutedims(z_extended); p.attributes...)
+    Makie.contourf!(p, x_extended, y_extended, permutedims(z_extended); p.attributes...)
     #contour!(p, x, y, permutedims(z); color=:black, linestyle=:dashed, linewidth=0.5, levels=p.attributes.levels[][1:5:end])
     p
 end
-@recipe(MakieScatterTransect, t) do scene
+Makie.@recipe(MakieScatterTransect, t) do scene
     Theme()
 end
 function Makie.plot!(p::MakieScatterTransect)
@@ -60,8 +60,8 @@ end
 mypolys(cl) = [y for s in shp for x in polyvectors(s) for y in polysplit(x, cl)]
 function mapit!(ax, cl::Number, polys; kwargs...)
     [poly!(ax, x; kwargs...) for x in polys]
-    xlims!(ax, cl .+ (-180,180))
-    ylims!(ax, (-90,90))
+    Makie.xlims!(ax, cl .+ (-180,180))
+    Makie.ylims!(ax, (-90,90))
     ax
 end
 
@@ -71,11 +71,11 @@ function maptransects!(ax, cts, ts, tcol, wlon)
         ct = sort(OceanographyCruises.shiftlon(CruiseTrack(ts[it]), baselon=wlon))
         ctlon, ctlat = [s.lon for s in ct.stations], [s.lat for s in ct.stations]
         tmp = Makie.lines!(ax, ctlon, ctlat, color=(tcol[it], 0.5), linewidth=4)
-        tmp = scatter!(ax, ctlon, ctlat, color=tcol[it], markersize=2)
-        tmp = scatter!(ax, ctlon, ctlat, color=tcol[it], markersize=2, strokewidth=0)
-        tmp = scatter!(ax, [ctlon[1]], [ctlat[1]], color=tcol[it])
-        #text!(ax, ts[it].cruise, position=(ctlon[1]-10, ctlat[1]), textsize=10, font="DejaVu Sans", align=(:right,:center))
-        #Label(fig, bbox = ax.scene.px_area, "a", textsize=20, halign=:left, valign=:bottom, padding=(10,10,5,10), font=labelfont, color=labelcol)
+        tmp = Makie.scatter!(ax, ctlon, ctlat, color=tcol[it], markersize=2)
+        tmp = Makie.scatter!(ax, ctlon, ctlat, color=tcol[it], markersize=2, strokewidth=0)
+        tmp = Makie.scatter!(ax, [ctlon[1]], [ctlat[1]], color=tcol[it])
+        #text!(ax, ts[it].cruise, position=(ctlon[1]-10, ctlat[1]), fontsize=10, font="DejaVu Sans", align=(:right,:center))
+        #Label(fig, bbox = ax.scene.px_area, "a", fontsize=20, halign=:left, valign=:bottom, padding=(10,10,5,10), font=labelfont, color=labelcol)
         push!(cts, tmp)
     end
 end
@@ -87,8 +87,8 @@ function R2ε(R)
 end
 
 function myscatter!(ax, args...; kwargs...)
-    out = scatter!(ax, args...; kwargs...)
-    scatter!(ax, args...; kwargs..., strokewidth=0)
+    out = Makie.scatter!(ax, args...; kwargs...)
+    Makie.scatter!(ax, args...; kwargs..., strokewidth=0)
     out
 end
 
@@ -101,7 +101,7 @@ end
 #    isempty(X) && return nothing
 #    σribbon = poly!(ax, Point2f0.(zip(X,Y)); color=(color, 0.3), strokewidth=0)
 #    μline = lines!(ax, μ, y; color=strokecolor, linewidth=linewidth, kwargs...)
-#    ylims!(ax, ylims)
+#    Makie.ylims!(ax, ylims)
 #    return nothing
 #end
 function xribbon!(ax, μ::Vector{T}, σ, y; color=:red, strokecolor=color, linewidth = 10, ylims=(maximum(bottomdepthvec(grd)),0), αribbon=0.3, kwargs...) where T
@@ -115,7 +115,7 @@ function xribbon!(ax, μ::Vector{T}, σ, y; color=:red, strokecolor=color, linew
     isempty(X) && return u
     σribbon = poly!(ax, Point2f0.(zip(X,Y)); color=(color, αribbon), strokewidth=0)
     μline = lines!(ax, μ, y; color=strokecolor, linewidth=linewidth, kwargs...)
-    ylims!(ax, ylims) # as tuple, rever
+    Makie.ylims!(ax, ylims) # as tuple, rever
     return u
 end
 
@@ -153,16 +153,17 @@ end
 function generic_ZA!(ax, x2D::Array{T,2}, lat, depth; kwargs...) where T
     u = Unitful.unit(T)
     x2D = ustrip.(x2D)
-    #hm = heatmap!(ax, lat, depth, x2D; kwargs...)
+    #hm = Makie.heatmap!(ax, lat, depth, x2D; kwargs...)
     kwargsf = if haskey(kwargs, :filllevels)
         (;kwargs..., levels=kwargs[:filllevels])
     else
         kwargs
     end
-    hm = contourf!(ax, lat, depth, x2D; kwargsf...)
-    heatmap!(ax, lat, depth, x2D; kwargs...)
-    ylims!(ax, get(kwargs, :ylims, (6000,0)))
-    contour!(ax, lat, depth, x2D; kwargs..., color=:black)
+    Makie.contourf!(ax, lat, depth, x2D; kwargs...)
+    hmkwargs = (; [k=>v for (k,v) in pairs(kwargs) if k∉(:levels, :filllevels, :extendlow, :extendhigh, :mask)]...)
+    hm = Makie.heatmap!(ax, lat, depth, x2D; hmkwargs...)
+    Makie.ylims!(ax, get(kwargs, :ylims, (6000,0)))
+    Makie.contour!(ax, lat, depth, x2D; kwargs..., color=:black)
     return u, hm
 end
 function generic_ZA!(ax, v::Vector{T}, grd; mask=1, kwargs...) where T
@@ -339,14 +340,14 @@ function plot_param!(ax, p, s, powers_of_ten=0; color=:black, density_color=:lig
     ys = pdf.(param_dist, xs)
     band!(ax, xs ./ exp10(powers_of_ten), zeros(length(xs)), ys, color=density_color)
     plotval && vlines!(ax, param_value / exp10(powers_of_ten); color)
-    ylims!(ax; low=0.0)
+    Makie.ylims!(ax; low=0.0)
     pow_str = (powers_of_ten==0) ? "" : "×10" * Unitful.superscript(powers_of_ten)
     u_str = (param_unit==NoUnits) ? "" : param_unit
     paren_str = (u_str=="" && pow_str=="") ? "" : (u_str=="" || pow_str=="") ? "($pow_str$u_str)" : "($pow_str $u_str)"
     ax.xlabel = "$s $paren_str"
     #hideydecorations!(ax)
-    (u_str == "‱") && xlims!(ax, s == :σ_ε ? (0,20) : (-35,15))
-    #(u_str == "pM") && xlims!(ax, (0,300))
+    (u_str == "‱") && Makie.xlims!(ax, s == :σ_ε ? (0,20) : (-35,15))
+    #(u_str == "pM") && Makie.xlims!(ax, (0,300))
     return maximum(ys)
 end
 
@@ -363,7 +364,7 @@ function plot_param_dirty!(ax, p, s, initialparms, finalparams, run_num, powers_
             linewidth=(run==refrun ? 3 : 1))
     end
 
-    ylims!(ax, (0, 1.1ymax))
+    Makie.ylims!(ax, (0, 1.1ymax))
 end
 
 

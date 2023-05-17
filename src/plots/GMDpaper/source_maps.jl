@@ -21,7 +21,7 @@ function plot_εNd_sources!(fig, fun)
         axs[i,1] = fig[i,1] = Axis(fig, backgroundcolor=seafloor_color)
         ax = axs[i,1]
         mapit!(ax, clon, mypolys(clon), color=continent_color)
-        hms[1] = heatmap!(ax, sclons, lats, view(∫Nd, ilon, :),
+        hms[1] = Makie.heatmap!(ax, sclons, lats, view(∫Nd, ilon, :),
                           colormap = islog ? logσcmap : σcmap, nan_color=nan_color)
         mapit!(ax, clon, mypolys(clon), color=:transparent, strokecolor=:black, strokewidth=1)
         mylatlons!(ax, latticks45, lonticks60)
@@ -32,7 +32,7 @@ function plot_εNd_sources!(fig, fun)
         axs[i,2] = fig[i,2] = Axis(fig, backgroundcolor=seafloor_color)
         ax = axs[i,2]
         mapit!(ax, clon, mypolys(clon), color=continent_color)
-        hms[2] = heatmap!(ax, sclons, lats, view(∫εNd, ilon, :), colormap=εcmap, nan_color=nan_color)
+        hms[2] = Makie.heatmap!(ax, sclons, lats, view(∫εNd, ilon, :), colormap=εcmap, nan_color=nan_color)
         mapit!(ax, clon, mypolys(clon), color=:transparent, strokecolor=:black, strokewidth=1)
         mylatlons!(ax, latticks45, lonticks60)
         i≠length(sources) && hidexdecorations!(ax, ticks=false, grid=false)
@@ -41,10 +41,10 @@ function plot_εNd_sources!(fig, fun)
     end
     # annotations (must come after?)
     for (i, (s1,s2)) in enumerate(zip(sources, sources_iso))
-        Label(fig, bbox = axs[i,1].scene.px_area, string(panellabels[i]), textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:white)
-        Label(fig, bbox = axs[i,2].scene.px_area, string(panellabels[i+length(sources)]), textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:white)
-        Label(fig, bbox = axs[i,1].scene.px_area, string(s1)[3:end] * " Nd", textsize=20, halign=:left, valign=:top, padding=(70,0,0,50), font=labelfont, color=:white)
-        Label(fig, bbox = axs[i,2].scene.px_area, string(s1)[3:end] * " εNd", textsize=20, halign=:left, valign=:top, padding=(70,0,0,50), font=labelfont, color=:white)
+        text!(axs[i,1], 0, 0, text=string(panellabels[i]), align = (:left, :bottom), offset = (2, 2), space = :relative, fontsize=20, font=labelfont, color=:white)
+        text!(axs[i,2], 0, 0, text=string(panellabels[i+length(sources)]), align = (:left, :bottom), offset = (2, 2), space = :relative, fontsize=20, font=labelfont, color=:white)
+        text!(axs[i,1], 60, 45, text=string(s1)[3:end] * " Nd", fontsize=20, align=(:left,:bottom), offset = (4, -2), font=labelfont, color=:white)
+        text!(axs[i,2], 60, 45, text=string(s1)[3:end] * " εNd", fontsize=20, align=(:left,:bottom), offset = (4, -2), font=labelfont, color=:white)
     end
     # colorbars
     label = islog ? "log₁₀(Nd source flux / ($u))" : "Nd source flux ($u)"

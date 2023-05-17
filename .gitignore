@@ -7,5 +7,6 @@
 output/
 cluster_output/
 data/
+.vscode/settings.json
 
 src/plots/private/*

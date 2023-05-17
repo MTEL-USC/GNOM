@@ -35,9 +35,7 @@ const DNdobs, εNdobs = let
             post_fetch_method = x -> mv(x, "rsta20150293_si_001.xlsx")
         ))
         # Then you can access the file via
-        df = XLSX.openxlsx(joinpath(datadep"Flierdt_etal_2016_Nd", "rsta20150293_si_001.xlsx")) do f
-            DataFrame(XLSX.gettable(f["Nd isotope database"])...)
-        end
+        df = DataFrame(XLSX.readtable(joinpath(datadep"Flierdt_etal_2016_Nd", "rsta20150293_si_001.xlsx"), "Nd isotope database"))
         # Note some Nd values are negative, some depths are not... numbers... or too deep...
         # Preprocess and remove them here
         # Also remove arctic and mediterranean obs
@@ -81,7 +79,7 @@ const DNdobs, εNdobs = let
         DNdobs2, εNdobs2
     end
 
-    println("Adding GEOTRACES IDP17 data...")
+    println("Adding GEOTRACES IDP21 data...")
     DNdobs1, εNdobs1 = let
         DNdobs1 = GEOTRACES.observations("Nd")
         εNdobs1 = GEOTRACES.observations("εNd")
@@ -125,9 +123,7 @@ const DNdobs, εNdobs = let
         εdepth = Vector{Float64}[]
         for f in readdir(data3_dir)
             print("  $f")
-            Nd_df = XLSX.openxlsx(joinpath(data3_dir, f)) do xf
-                DataFrame(XLSX.gettable(xf["Nd_LLD"])...)
-            end
+            Nd_df = DataFrame(XLSX.readtable(joinpath(data3_dir, f), "Nd_LLD"))
             Nd_label = names(Nd_df)[findfirst(occursin.("Nd", names(Nd_df)))]
             Ndlat, Ndlon, Nddepth = Float64.(Nd_df.Lat), Float64.(Nd_df.Lon), Float64.(Nd_df.Depth)
             obs_Nd_unit = uparse(split(Nd_label, '(')[2][1:end-1])
@@ -140,9 +136,7 @@ const DNdobs, εNdobs = let
             push!(depth, Nddepth[ikeep])
             print(" +$(length(Nd[ikeep])) Nd obs,")
 
-            εNd_df = XLSX.openxlsx(joinpath(data3_dir, f)) do xf
-                DataFrame(XLSX.gettable(xf["eNd_LLD"])...)
-            end
+            εNd_df = DataFrame(XLSX.readtable(joinpath(data3_dir, f), "eNd_LLD"))
             εNd_label = names(εNd_df)[findfirst(occursin.("εNd", names(εNd_df)))]
             εNdlat, εNdlon, εNddepth = Float64.(εNd_df.Lat), Float64.(εNd_df.Lon), Float64.(εNd_df.Depth)
             εNd = Float64.(εNd_df[!, εNd_label])

@@ -438,7 +438,7 @@ p = Params()
 x = ustrip.(mol/m^3, 10pM) * ones(nb)
 x = [x; x]
 # state function and its Jacobian
-F = AIBECSFunction(T_D, Gs, nb, Params)
+fun = AIBECSFunction(T_D, Gs, nb, Params)
 # problem
 prob = SteadyStateProblem(F, x, p)
 

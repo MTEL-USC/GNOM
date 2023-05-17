@@ -16,7 +16,7 @@ function sed_source_profiles!(fig)
     ztop = sort(unique(topdepthvec(grd)))
     yticks = vcat(0, zbot)
     y = reduce(vcat, [zt, zb] for (zt, zb) in zip(ztop, zbot))
-    label_opts = (textsize=20, halign=:left, valign=:bottom, padding=(10,10,5,5), font=labelfont, color=:black)
+    label_opts = (fontsize=20, align=(:left,:bottom), offset=(4,4), space=:relative, font=labelfont, color=:black)
 
     # left panel is just ϕ(z)
     ax = fig[1,2] = Axis(fig)
@@ -27,13 +27,13 @@ function sed_source_profiles!(fig)
 
     # Rearrange as a step function to match model source
     lines!(ax, v, z)
-    ylims!(ax, (6000, -50))
+    Makie.ylims!(ax, (6000, -50))
     #xlims!(ax, (0, 1.05maximum(v)))
-    xlims!(ax, (0, maximum(ax.finallimits[])[1]))
+    Makie.xlims!(ax, (0, maximum(ax.finallimits[])[1]))
     ax.yticks = 0:1000:6000
     ax.xlabel = "Base sed. flux, ϕ(z) ($(u))"
     ax.ylabel = "depth (m)"
-    Label(fig, bbox = ax.scene.px_area, panellabels[3]; label_opts...)
+    text!(ax, 0, 0, text=panellabels[3]; label_opts...)
 
     # panel for integrated source
     ax = fig[2,2] = Axis(fig)
@@ -42,13 +42,13 @@ function sed_source_profiles!(fig)
     x = vcat(0, repeat(ustrip.(∫dxdy_s_sed), inner=2), 0)
     #lines!(ax, x, vcat(0, y, maximum(zbot)))
     poly!(ax, Point2f0.(zip(x, vcat(0, y, maximum(zbot)))), color=ColorSchemes.colorschemes[:tableau_colorblind][1])
-    ylims!(ax, (6000, -50))
-    xlims!(ax, (0, maximum(ax.finallimits[])[1]))
+    Makie.ylims!(ax, (6000, -50))
+    Makie.xlims!(ax, (0, maximum(ax.finallimits[])[1]))
     ax.yticks = 0:1000:6000
     ax.ylabel = "Depth (m)"
     ax.xlabel = "∫dxdy sed. source ($(u∫dxdy))"
     #hideydecorations!(ax, grid=false)
-    Label(fig, bbox = ax.scene.px_area, panellabels[4], ; label_opts...)
+    text!(ax, 0, 0, text=panellabels[4]; label_opts...)
 
     # panel for alpha curve
     ax1 = fig[1,1] = Axis(fig)
@@ -58,9 +58,9 @@ function sed_source_profiles!(fig)
     lines!(ax1, ustrip.(per10000, εs), αs)
     ax1.xlabel = "εNd (‱)"
     ax1.ylabel = "Scaling factor α(εNd)"
-    ylims!(ax1, low=0.0)
-    xlims!(ax1, εclims)
-    Label(fig, bbox = ax1.scene.px_area, panellabels[1], ; label_opts...)
+    Makie.ylims!(ax1, low=0.0)
+    Makie.xlims!(ax1, εclims)
+    text!(ax1, 0, 0, text=panellabels[1]; label_opts...)
 
 
     # panel for shifted epsilon
@@ -72,17 +72,18 @@ function sed_source_profiles!(fig)
     lines!(ax, ustrip.(per10000, εs), ustrip.(per10000, ε_eff - εs))
     ax.xlabel = "In situ εNd (‱)"
     ax.ylabel = "Released εNd − εNd (‱)"
-    xlims!(ax, εclims)
-    Label(fig, bbox = ax.scene.px_area, panellabels[2], ; label_opts...)
+    Makie.xlims!(ax, εclims)
+    text!(ax, 0, 0, text=panellabels[2]; label_opts...)
 
 
     # α map
     α2D = permutedims(rearrange_into_3Darray(α_quad(p), grd)[:,:,1])
     innan = findall(.!isnan.(α2D))
     colorrange = extrema(α2D[innan]) .* (0,1)
+    # ax = fig[3:4,:] = Axis(fig, backgroundcolor=:gray20, aspectratio=DataAspect())
     ax = fig[3:4,:] = Axis(fig, backgroundcolor=:gray20)
     mapit!(ax, clon, mypolys(clon), color=:gray50)
-    hm = heatmap!(ax, sclons, lats, view(α2D, ilon, :), colormap=αcmap; nan_color, colorrange)#, colorrange=αlims)
+    hm = Makie.heatmap!(ax, sclons, lats, view(α2D, ilon, :), colormap=αcmap; nan_color, colorrange)#, colorrange=αlims)
     mapit!(ax, clon, mypolys(clon), color=:transparent, strokecolor=:black, strokewidth=1)
     # Better lat/lon ticks
     mylatlons!(ax, latticks30, lonticks60)
@@ -93,9 +94,8 @@ function sed_source_profiles!(fig)
     cbar.tellheight = true
 
     # label
-
-    Label(fig, bbox = ax.scene.px_area, panellabels[5]; label_opts...)
-    #textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:black)
+    text!(ax, 0, 0, text=panellabels[5]; label_opts...)
+    #fontsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:black)
 
     nothing
 end

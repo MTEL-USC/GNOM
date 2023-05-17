@@ -52,9 +52,9 @@ function plot_profiles_v2!(fig)
             itracer == 1 && (ax.xlabel = "[Nd] ($(uDNd))")
             itracer == 2 && (ax.xlabel = "εNd ($(uεNd))")
             ibasin == 1 && (ax.ylabel = "Depth (m)")
-            Label(fig, bbox = ax.scene.px_area, reshape(panellabels[1:8], (4,2))[ibasin, itracer], textsize=20, halign=:left, valign=:bottom, padding=(10,10,10,10), font=labelfont, color=:black)
+            text!(ax, 0, 0, text=reshape(panellabels[1:8], (4,2))[ibasin, itracer], fontsize=20, align=(:left,:bottom), space=:relative, offset=(4,4), font=labelfont, color=:black)
             numobs =  count(isbasin(xobs.lat[iobswet], xobs.lon[iobswet], OCEANS))
-            Label(fig, bbox = ax.scene.px_area, string(basins[ibasin], " ($numobs obs)"), halign=:right, valign=:bottom, padding=(10,10,10,10), font=labelfont, color=colors[ibasin])
+            text!(ax, 1, 0, text=string(basins[ibasin], " ($numobs obs)"), align=(:right,:bottom), space=:relative, offset=(-4,4), font=labelfont, color=colors[ibasin])
         end
     end
     return axs
@@ -103,7 +103,7 @@ linkxaxes!(axs[2,:]...)
 
 # Supertitle
 #supertitle = layout[0, :] = LText(scene, "Vertical profiles of Nd concentrations & εNd values, basin averaged",
-#    textsize = 30, font = "Noto Sans Bold", color = :black)
+#    fontsize = 30, font = "Noto Sans Bold", color = :black)
 
 
 

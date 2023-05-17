@@ -49,15 +49,15 @@ function plot_conservative_ε!(fig)
     cbar1.tellwidth = true
     cbar2 = fig[3, end] = Colorbar(fig, δεhm; label="Δ(εNd) ($uεNd)", vertical=true, ticks=δεlevels2)
     cbar2.height = Relative(1)
-    cbar2.tickformat = x -> map(x -> x > 0 ? string("+", round(Int, x)) : string(round(Int, x)), x)
+    myformat(x) = sprintf1("%+.0f", x)
+    cbar2.tickformat = x -> map(x -> myformat(x), collect(x))
     cbar2.width = 20
     cbar2.tellwidth = true
     nothing
 
     # labels
-
     for i in 1:3
-        Label(fig, bbox = axs[i].scene.px_area, string(panellabels[i], "   ", labels[i]), textsize=20, halign=:left, valign=:bottom, padding=(10,0,5,0), font=labelfont, color=:white)
+        text!(axs[i], 0, 0, text=string(panellabels[i], "   ", labels[i]), fontsize=20, align=(:left,:bottom), space=:relative, offset=(4,4), font=labelfont, color=:white)
     end
 
     nothing

@@ -440,7 +440,7 @@ x = [x; x]
 # state function and its Jacobian
 fun = AIBECSFunction(T_D, Gs, nb, Params)
 # problem
-prob = SteadyStateProblem(F, x, p)
+prob = SteadyStateProblem(fun, x, p)
 
 resetup = false # flag for plotting to avoid resetting everything up
 

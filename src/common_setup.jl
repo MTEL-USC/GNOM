@@ -15,7 +15,7 @@ ENV["DATADEPS_ALWAYS_ACCEPT"] = true
 # to avoid surprises!
 root_path = let
     current_split_dir = splitpath(@__DIR__)
-    iroot = findfirst((current_split_dir .== "GNOM") .| (current_split_dir .== "GNOM-main"))
+    iroot = findlast(startswith.(current_split_dir, "GNOM"))
     joinpath(current_split_dir[1:iroot]...)
 end
 # Now we activate the environment

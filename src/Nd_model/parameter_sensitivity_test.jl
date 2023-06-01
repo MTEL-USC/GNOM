@@ -28,11 +28,9 @@ reload = false # prevents loading other runs
 use_GLMakie = true # Set to true for interactive mode if plotting with Makie later
 
 
-# Chose your parameter values here. Optimized parameters
-# — as published in Pasquier, Hines, et al. (2021) —
-# are shown in comment (leave them there
-# if you want to refer back to them)
-p = Params(
+# Chose your "base" parameter values here.
+# Note that here I am not using the `Params` function, but a simple "Tuple"
+p0 = (
     α_a = 6.79, # 6.79
     α_c = -12.7per10000, # -12.7per10000
     α_GRL = 1.57, # 1.57
@@ -78,38 +76,39 @@ p = Params(
     w₀_dust = 1.0km/yr, # 1.0km/yr
 )
 
-tp_opt = AIBECS.table(p)# table of parameters
-# "opt" is a misnomer but it is simpler for plotting scripts
+# Now let's run a loop where we perturb parameters one at a time.
+# To start, I only loop through scavenging constants...
+# ... But you can list whatever you want!
+for k in [:K_dust, :K_POC, :K_prec, :K_bSi]
 
-# Save model parameters table and headcommit for safekeeping
-jldsave(joinpath(archive_path, "model$(headcommit)_single_run$(run_num)_$(circname).jld2"); headcommit, tp_opt)
+    println("\nIncreasing $k by 10%")
+    p = Params(; p0..., k => 1.1 * getfield(p0, k))
 
-# Set the problem with the parameters above
-prob = SteadyStateProblem(fun, x, p)
+    tp_opt = AIBECS.table(p)# table of parameters
+    # "opt" is a misnomer but it is simpler for plotting scripts
 
-# solve the system
-sol = solve(prob, CTKAlg(), preprint="Nd & εNd solve ", τstop=ustrip(s, 1e3Myr)).u
+    # Set the problem with the parameters above
+    prob = SteadyStateProblem(fun, x, p)
 
-# unpack nominal isotopes
-DNd, DRNd = unpack_tracers(sol, grd)
-DNdmodel = uconvert.(uDNd, DNd * upreferred(uDNd))
+    # solve the system
+    sol = solve(prob, CTKAlg(), preprint="Nd & εNd solve ", τstop=ustrip(s, 1e3Myr)).u
 
-# compute εNd
-εNd = ε.(DRNd ./ DNd)
-εNdmodel = uconvert.(uεNd, εNd * upreferred(uεNd))
+    # unpack nominal isotopes
+    DNd, DRNd = unpack_tracers(sol, grd)
+    DNdmodel = uconvert.(uDNd, DNd * upreferred(uDNd))
 
-# For plotting, you can either
-# follow the plotting scripts from the GNOM repository and use Makie
-# or use Plots.jl (not a dependency of GNOM)
-# I would recommend installing Plots.jl in your default environment anyway,
-# so that it can be called even from inside the GNOM environment.
-# You can then use the Plots.jl recipes exported by AIBECS, e.g.,
-#
-# julia> plotzonalaverage(εNd .|> per10000, grd, mask=ATL)
+    # compute εNd
+    εNd = ε.(DRNd ./ DNd)
+    εNdmodel = uconvert.(uεNd, εNd * upreferred(uεNd))
 
-# To help manually adjust parameters, below is a little loop
-# to check how much Nd each scavenging particle type removes
-println("Scavenging removal:")
-for t in instances(ScavenginParticle)
-    println("- $(string(t)[2:end]): ", ∫dV(T_D(t, p) * 1/s * DNd * mol/m^3, grd) |> Mmol/yr)
+    # Here add whatever analysis you want
+
+    # I left this little loop below as a check
+    # that modelled DNd is modified along with param k:
+    #hPrint jow much Nd each scavenging particle type removes
+    println("Scavenging removal:")
+    for t in instances(ScavenginParticle)
+        println("- $(string(t)[2:end]): ", round(Mmol/yr, ∫dV(T_D(t, p) * 1/s * DNd * mol/m^3, grd), digits=1))
+    end
+
 end

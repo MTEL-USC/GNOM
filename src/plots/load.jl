@@ -78,9 +78,7 @@ EXT = :png
 
 fig_path = output_path
 # convert model and obs to match units
-uDNd = pM
 DNdmodel = uconvert.(uDNd, DNd * upreferred(uDNd))
-uεNd = u"pertenthousand"
 εNdmodel = uconvert.(uεNd, εNd * upreferred(uεNd))
 # TODO maybe use `Transects` to convert `obs` directly
 # instead of reloading through GEOTRACES

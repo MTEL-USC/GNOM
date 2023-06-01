@@ -12,8 +12,9 @@ using UnitfulMoles: molNd, molC
 #==================#
 # Model parameters #
 #==================#
+const uεNd = per10000
+const uDNd = pM
 
-const Ndunit = pM
 @initial_value @units @flattenable @limits @description struct Params{Tp} <: AbstractParameters{Tp}
     α_a::Tp            |  1.0   | NoUnits      | true  |  (0,20)  | "Curvature of Nd release enhancement parabola"
     α_c::Tp            | -10.0  | per10000     | true  | (-20,0)  | "Center of Nd release enhancement parabola"

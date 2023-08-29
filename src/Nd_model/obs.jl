@@ -32,7 +32,6 @@ const DNdobs, εNdobs = let
             """,
             "https://ndownloader.figshare.com/files/6294558",
             "ba250b1b64b8c43d1130a7aee39674e9ee5936ebb49050c4c224c740bff588b0",
-            post_fetch_method = x -> mv(x, "rsta20150293_si_001.xlsx")
         ))
         # Then you can access the file via
         df = DataFrame(XLSX.readtable(joinpath(datadep"Flierdt_etal_2016_Nd", "rsta20150293_si_001.xlsx"), "Nd isotope database"))

@@ -1,6 +1,6 @@
 name = "GNOM"
 authors = ["Benoit Pasquier <briochemc@gmail.com>"]
-version = "2.0.0"
+version = "2.0.1"
 
 [deps]
 AIBECS = "ace601d6-714c-11e9-04e5-89b7fad23838"

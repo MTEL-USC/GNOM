@@ -439,9 +439,9 @@ p = Params()
 x = ustrip.(mol/m^3, 10pM) * ones(nb)
 x = [x; x]
 # state function and its Jacobian
-fun = AIBECSFunction(T_D, Gs, nb, Params)
+F = AIBECSFunction(T_D, Gs, nb, Params)
 # problem
-prob = SteadyStateProblem(fun, x, p)
+prob = SteadyStateProblem(F, x, p)
 
 resetup = false # flag for plotting to avoid resetting everything up
 

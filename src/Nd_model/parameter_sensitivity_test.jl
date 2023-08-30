@@ -3,7 +3,7 @@
 
 # This lines sets up the model (and `F`) only once,
 # so that you rerunning this file will not repeat the entire model setup
-!isdefined(Main, :fun) && include("model_setup.jl")
+!isdefined(Main, :F) && include("model_setup.jl")
 
 # This should create a new run name every time you run the file
 # And add an empty runXXX file to the single_runs folder
@@ -88,7 +88,7 @@ for k in [:K_dust, :K_POC, :K_prec, :K_bSi]
     # "opt" is a misnomer but it is simpler for plotting scripts
 
     # Set the problem with the parameters above
-    prob = SteadyStateProblem(fun, x, p)
+    prob = SteadyStateProblem(F, x, p)
 
     # solve the system
     sol = solve(prob, CTKAlg(), preprint="Nd & εNd solve ", τstop=ustrip(s, 1e3Myr)).u

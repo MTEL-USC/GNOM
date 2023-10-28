@@ -75,7 +75,7 @@ const Circulation = OCIM2
 # if debug=true, use an unpublished coarse OCIM (faster)
 # Note to external users: You will not be able to use this debug version
 # because the matrix exists in my local data and is not public (and not mine to share!)
-const debug = false # set to false to run with full circulation
+const debug = true # set to false to run with full circulation
 const grd, T = let
     if debug
         circ_file = joinpath("/Users/benoitpasquier/Data/OceanGrids/OCIM0.1-lowres.jld2")

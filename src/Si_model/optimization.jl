@@ -24,14 +24,14 @@ f, ∇ₓf = f_and_∇ₓf(ωs, ωp, grd, modify, Si_obs_tuple, SiParams)
 # Use F1 for gradient and Hessian
 λ = p2λ(p)
 τstop = ustrip(s, 1e3Myr)
-mem = F1Method.initialize_mem(F, ∇ₓf, ∇ₓF, x0, λ, CTKAlg(); preprint="mem ", τstop=τstop)
+mem = F1Method.initialize_mem(F, ∇ₓf, x0, λ, CTKAlg(); preprint="mem ", τstop=τstop)
 
 function objective(λ)
     p = λ2p(SiParams, λ) ; @show p
-    F1Method.objective(f, F, ∇ₓF, mem, λ, CTKAlg(), preprint="obj ", τstop=τstop)
+    F1Method.objective(f, F, mem, λ, CTKAlg(), preprint="obj ", τstop=τstop)
 end
-gradient(λ) = F1Method.gradient(f, F, ∇ₓf, ∇ₓF, mem, λ, CTKAlg(), preprint="grad", τstop=τstop)
-hessian(λ) = F1Method.hessian(f, F, ∇ₓf, ∇ₓF, mem, λ, CTKAlg(), preprint="hess ", τstop=τstop)
+gradient(λ) = F1Method.gradient(f, F, ∇ₓf, mem, λ, CTKAlg(), preprint="grad", τstop=τstop)
+hessian(λ) = F1Method.hessian(f, F, ∇ₓf, mem, λ, CTKAlg(), preprint="hess ", τstop=τstop)
 
 # Reduced g_tol for optimization
 opt = Optim.Options(store_trace=false, show_trace=true, extended_trace=false, g_tol=1e-5)

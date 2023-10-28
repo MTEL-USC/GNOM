@@ -44,8 +44,30 @@ println("==========================================")
 τstop = ustrip(s, 1e3Myr)
 mem = F1Method.initialize_mem(F, ∇ₓf, x, λ, CTKAlg(); preprint="mem ", τstop=τstop)
 
+# Printing function to help diagnose the state
+# of the Nd model while the optimization runs
+function print_Ndmodel_info(sol, p)
+    DNd, ⁱDNd  = unpack_tracers(sol, grd)
+    DNd, εNd = modify(DNd, ⁱDNd)
+    vtot = ∫dV(1, grd)
+    println("Global means:")
+    println("- DNd: ", sprintf1("%.2g ", ustrip(uDNd, ∫dV(DNd * mol/m^3, grd) / vtot)), uDNd)
+    println("- εNd: ", sprintf1("%.2g ", ustrip(uεNd, ∫dV(εNd, grd) / vtot)), uεNd)
+    println("Sinks (removal by scavenging):")
+    for t in instances(ScavenginParticle)
+        println("- $(string(t)[2:end]): ", sprintf1("%.2g ", ustrip(Mmol/yr, ∫dV(T_D(t, p) * 1/s * DNd[:] * mol/m^3, grd))), Mmol/yr)
+    end
+    println("Sources:")
+    for sₖ in (s_dust, s_volc, s_sed, s_river, s_gw, s_hydro)
+        println("- $(string(sₖ)): ", sprintf1("%.2g ", ustrip(Mmol/yr, ∫dV(sₖ(p) * mol/m^3/s, grd))), Mmol/yr)
+    end
+end
+print_Ndmodel_info(mem::F1Method.Mem, p) = print_Ndmodel_info(mem.s, p)
+
 function objective(λ)
-    p = λ2p(Params, λ) ; @show p
+    p = λ2p(Params, λ)
+    @show p
+    print_Ndmodel_info(mem, p)
     F1Method.objective(f, F, mem, λ, CTKAlg(), preprint="obj ", τstop=τstop)
 end
 gradient(λ) = F1Method.gradient(f, F, ∇ₓf, mem, λ, CTKAlg(), preprint="grad", τstop=τstop)

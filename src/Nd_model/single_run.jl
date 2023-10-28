@@ -111,5 +111,5 @@ DNdmodel = uconvert.(uDNd, DNd * upreferred(uDNd))
 # to check how much Nd each scavenging particle type removes
 println("Scavenging removal:")
 for t in instances(ScavenginParticle)
-    println("- $(string(t)[2:end]): ", ∫dV(T_D(t, p) * 1/s * DNd * mol/m^3, grd) |> Mmol/yr)
+    println("- $(string(t)[2:end]): ", ∫dV(T_D(t, p) * 1/s * DNd[:] * mol/m^3, grd) |> Mmol/yr)
 end

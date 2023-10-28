@@ -7,6 +7,7 @@ using GeoRegions
 using NCDatasets
 using UnitfulMoles
 using UnitfulMoles: molNd, molC
+using Formatting
 
 
 #==================#
@@ -47,16 +48,16 @@ const uDNd = pM
     β_Sahel_dust::Tp   |    2.0 | per100       | true  |  (0,5)   | "Sahel dust Nd solubility"
     ε_volc::Tp         |    5.4 | per10000     | true  |(2.7,8.0) | "Volcanic ash εNd"
     β_volc::Tp         |    2.0 | per100       | true  |  (0,5)   | "Volcanic ash Nd solubility"
-    K_prec::Tp         | 0.01   | (mol/m^3)^-1 | true  |   (0,∞)  | "Precipitation reaction constant"
+    K_prec::Tp         | 2e-3   | (mol/m^3)^-1 | true  |   (0,∞)  | "Precipitation reaction constant"
     f_prec::Tp         | 0.4    | NoUnits      | true  |   (0,1)  | "Fraction of non-buried precipitated Nd"
     w₀_prec::Tp        | 0.7    | km/yr        | false |   (0,∞)  | "Settling velocity of precipitated Nd"
-    K_POC::Tp          | 0.2    | (mol/m^3)^-1 | true  |   (0,∞)  | "POC-scavenging reaction constant"
+    K_POC::Tp          | 4.0    | (mol/m^3)^-1 | true  |   (0,∞)  | "POC-scavenging reaction constant"
     f_POC::Tp          | 0.78   | NoUnits      | true  |   (0,1)  | "Fraction of non-buried POC-scavenged Nd"
     w₀_POC::Tp         | 40.0   | m/d          | false |   (0,∞)  | "Settling velocity of POC-scavenged Nd"
-    K_bSi::Tp          | 22.5   | (mol/m^3)^-1 | true  |   (0,∞)  | "bSi-scavenging reaction constant"
+    K_bSi::Tp          |  1.0   | (mol/m^3)^-1 | true  |   (0,∞)  | "bSi-scavenging reaction constant"
     f_bSi::Tp          |  0.5   | NoUnits      | true  |   (0,1)  | "Fraction of non-buried bSi-scavenged Nd"
     w₀_bSi::Tp         | 714.069| m/d          | false |   (0,∞)  | "Settling velocity of bSi-scavenged Nd"
-    K_dust::Tp         | 1.7    | (g/m^3)^-1   | true  |   (0,∞)  | "Dust-scavenging reaction constant"
+    K_dust::Tp         | 1e-3   | (g/m^3)^-1   | true  |   (0,∞)  | "Dust-scavenging reaction constant"
     f_dust::Tp         | 0.073  | NoUnits      | true  |   (0,1)  | "Fraction of non-buried dust-scavenged Nd"
     w₀_dust::Tp        | 1.0    | km/yr        | false |   (0,∞)  | "Settling velocity of dust-scavenged Nd"
 end

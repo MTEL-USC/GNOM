@@ -223,15 +223,27 @@ Similarly, there is also a batch script for optimizing the Si-cycle model, [`src
 
 ## Citation
 
-To cite the GNOM v1 model, please cite [*Pasquier, Hines, et al.* (2022)](https://gmd.copernicus.org/articles/15/4625/2022/).
-You can use the journal's citation tools, directly grab the contents of our [CITATION.bib](CITATION.bib) file or simply use:
+This code is © Benoît Pasquier (2025) and contributors, and it is made available under the MIT license enclosed with the software.
 
-> Pasquier, B., Hines, S. K. V., Liang, H., Wu, Y., Goldstein, S. L., and John, S. G.: *GNOM v1.0: an optimized steady-state model of the modern marine neodymium cycle*, Geosci. Model Dev., 15, 4625–4656, https://doi.org/10.5194/gmd-15-4625-2022, 2022. 
+Over and above the legal restrictions imposed by this license, if you use this software for an academic publication then you are obliged to provide proper attribution.
+This can be to this code directly,
+
+> Benoît Pasquier, Sophia K. V. Hines2, Hengdi Liang, Yingzhe Wu, Steven L. Goldstein, and Seth G. John (2023). GNOM: An optimized steady-state model of the modern global marine neodymium cycle. Zenodo. doi: [10.5281/zenodo.5651295](https://doi.org/10.5281/zenodo.5651295).
+
+or to the paper that describes it,
+
+> Benoît Pasquier, Sophia K. V. Hines2, Hengdi Liang, Yingzhe Wu, Steven L. Goldstein, and Seth G. John (2022). GNOM v1.0: an optimized steady-state model of the modern marine neodymium cycle. doi: [10.5194/gmd-15-4625-2022](https://gmd.copernicus.org/articles/15/4625/2022/)
+
+or (ideally) both.
+You can also find the citation(s) in BibTeX format in the [CITATION.bib](./CITATION.bib) file.
+
+If you want to do research using the GNOM or AIBECS, and you think I could help, do not hesitate to contact me directly (contacts on my [website](www.bpasquier.com)), I would be happy to contribute and collaborate!
+
 
 
 
 ## TODO
 
-- Update observations scripts. Currently doiwnloads post IDP17 data, but should be using IDP21 at the same time, so there will be some (many?) duplicates. Also there has been no QC on the IDP21 from the GNOM authors. 
+- Update observations scripts. Currently doiwnloads post IDP17 data, but should be using IDP21 at the same time, so there will be some (many?) duplicates. Also there has been no QC on the IDP21 from the GNOM authors.
 - Check that the optimization routines still work with GNOM v2 (updated for Julia v1.9)
-- Improve the conecptual model. 
+- Improve the conceptual model.
